@@ -1,0 +1,126 @@
+<template>
+  <div>
+    <!-- Hero -->
+    <section class="relative py-32 bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700">
+      <div class="container-custom relative z-10">
+        <div class="max-w-3xl">
+          <span class="text-primary-300 font-semibold text-sm uppercase tracking-wider mb-4 block">Servicio Especializado</span>
+          <h1 class="text-white mb-6">Impermeabilización de Piscinas</h1>
+          <p class="text-xl text-white/80">
+            Sistemas profesionales de impermeabilización para garantizar la estanqueidad total 
+            de tu piscina y eliminar filtraciones definitivamente.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Content -->
+    <section class="section-padding bg-white">
+      <div class="container-custom">
+        <div class="grid lg:grid-cols-3 gap-12">
+          <div class="lg:col-span-2 prose max-w-none">
+            <h2>Importancia de la Impermeabilización</h2>
+            <p>
+              Una piscina mal impermeabilizada puede causar problemas graves: pérdida de agua, 
+              daños estructurales, humedades en zonas cercanas y un gasto continuo en productos 
+              químicos y agua.
+            </p>
+
+            <img 
+              src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1475&q=80" 
+              alt="Impermeabilización de piscina"
+              class="rounded-2xl"
+            />
+
+            <h2>Sistemas de Impermeabilización</h2>
+            
+            <h3>Lámina Armada PVC</h3>
+            <p>
+              El sistema más avanzado del mercado. Crea una barrera 100% estanca que se adapta 
+              a cualquier forma de vaso.
+            </p>
+
+            <h3>Poliurea</h3>
+            <p>
+              Ideal para piscinas con formas complejas o zonas de difícil acceso. 
+              Se aplica por proyección y forma una membrana continua.
+            </p>
+
+            <h3>Morteros Impermeabilizantes</h3>
+            <p>
+              Solución económica para casos específicos, como reparaciones puntuales 
+              o preparación de superficies.
+            </p>
+
+            <h2>¿Cuándo Necesitas Impermeabilizar?</h2>
+            <ul>
+              <li>Construcción de nueva piscina</li>
+              <li>Fugas o filtraciones detectadas</li>
+              <li>Renovación del revestimiento</li>
+              <li>Cambio de gresite a lámina</li>
+              <li>Daños por movimientos estructurales</li>
+            </ul>
+
+            <h2>Nuestro Proceso</h2>
+            <ol>
+              <li><strong>Inspección:</strong> Identificamos el origen de las filtraciones.</li>
+              <li><strong>Diagnóstico:</strong> Evaluamos el mejor sistema para tu caso.</li>
+              <li><strong>Preparación:</strong> Acondicionamos la superficie.</li>
+              <li><strong>Aplicación:</strong> Instalamos el sistema de impermeabilización.</li>
+              <li><strong>Verificación:</strong> Comprobamos la estanqueidad total.</li>
+            </ol>
+          </div>
+
+          <!-- Sidebar -->
+          <div class="lg:col-span-1">
+            <div class="sticky top-24 space-y-6">
+              <div class="card p-6 bg-primary-50 border-2 border-primary-100">
+                <h3 class="text-xl font-bold text-neutral-900 mb-4">¿Problemas de filtraciones?</h3>
+                <p class="text-neutral-600 mb-6">
+                  Te ayudamos a identificar el origen y te proponemos la mejor solución.
+                </p>
+                <RouterLink to="/contacto" class="btn btn-primary w-full">
+                  Consultar
+                </RouterLink>
+              </div>
+
+              <div class="card p-6">
+                <h4 class="font-bold text-neutral-900 mb-4">Garantizamos:</h4>
+                <ul class="space-y-3">
+                  <li class="flex items-center text-neutral-600">
+                    <svg class="w-5 h-5 text-primary-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Estanqueidad 100%
+                  </li>
+                  <li class="flex items-center text-neutral-600">
+                    <svg class="w-5 h-5 text-primary-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Garantía por escrito
+                  </li>
+                  <li class="flex items-center text-neutral-600">
+                    <svg class="w-5 h-5 text-primary-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Materiales certificados
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script setup>
+import { useSeo } from '@/composables/useSeo'
+
+useSeo({
+  title: 'Impermeabilización de Piscinas',
+  description: 'Sistemas profesionales de impermeabilización de piscinas. Eliminamos filtraciones definitivamente con lámina armada, poliurea y morteros especiales.',
+  keywords: 'impermeabilización piscinas, filtraciones piscina, sellado piscinas, estanqueidad piscinas'
+})
+</script>
