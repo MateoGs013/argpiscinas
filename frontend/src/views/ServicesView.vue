@@ -12,7 +12,7 @@
       </div>
       <div class="container-custom relative z-10">
         <div class="max-w-3xl">
-          <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">Nuestros Servicios</span>
+          <span class="text-white/70 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">Nuestros Servicios</span>
           <h1 class="text-white mb-8 leading-[1.1]">Instalación de RENOLIT ALKORPLAN</h1>
           <p class="text-lg text-silver-400 leading-relaxed max-w-xl">
             Como instaladores oficiales de RENOLIT ALKORPLAN, ofrecemos servicios especializados 
@@ -69,7 +69,7 @@
     <section class="section-padding bg-midnight-800">
       <div class="container-custom">
         <div class="text-center max-w-2xl mx-auto mb-20">
-          <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">Colecciones</span>
+          <span class="text-white/70 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">Colecciones</span>
           <h2 class="text-white mb-6">Gama RENOLIT ALKORPLAN</h2>
           <p class="text-silver-400 text-lg leading-relaxed">
             Ofrecemos toda la gama de membranas RENOLIT ALKORPLAN para que elijas 

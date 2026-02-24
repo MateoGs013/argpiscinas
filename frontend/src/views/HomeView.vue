@@ -29,7 +29,7 @@
 
         <!-- Bottom — text content -->
         <div>
-          <div class="border-l border-white/[0.12] pl-8 lg:pl-10 max-w-xl mb-10 lg:mb-12">
+          <div class="max-w-xl mb-10 lg:mb-12">
             <!-- Title -->
             <h1 class="hero-title text-white font-semibold leading-[1.08] mb-4 text-3xl md:text-4xl lg:text-[2.75rem]">
               {{ t('home.hero.title', 'La mejor lámina, bien instalada.') }}
@@ -55,12 +55,20 @@
           </div>
 
           <!-- Trust line -->
-          <div class="hero-subtitle flex items-center gap-8 text-white/25 text-[10px] tracking-[0.18em] uppercase">
-            <span>{{ t('home.hero.trust_1', 'Instaladores oficiales') }}</span>
-            <span class="w-[3px] h-[3px] rounded-full bg-white/15"></span>
-            <span>{{ t('home.hero.trust_2', 'Garantía 15 años') }}</span>
-            <span class="w-[3px] h-[3px] rounded-full bg-white/15"></span>
-            <span>{{ t('home.hero.trust_3', 'Material europeo') }}</span>
+          <div class="hero-subtitle flex items-center gap-6 text-white/60 text-xs tracking-[0.15em] uppercase font-semibold">
+            <span class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+              </svg>
+              {{ t('home.hero.trust_1', 'Instaladores oficiales') }}
+            </span>
+            <span class="w-[4px] h-[4px] rounded-full bg-white/30"></span>
+            <span class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {{ t('home.hero.trust_2', 'Garantía 15 años') }}
+            </span>
           </div>
         </div>
       </div>
@@ -72,7 +80,7 @@
       <div class="container-custom">
         <div class="grid lg:grid-cols-2 gap-20 items-center">
           <div>
-            <span class="text-silver-500 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('home.renolit.label', '¿Por qué RENOLIT ALKORPLAN?') }}</span>
+            <span class="text-midnight-800 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('home.renolit.label', '¿Por qué RENOLIT ALKORPLAN?') }}</span>
             <h2 class="text-neutral-900 mb-8">{{ t('home.renolit.title', 'La Mejor Lámina Armada del Mercado') }}</h2>
             <p class="text-neutral-600 text-lg mb-10 leading-relaxed">
               {{ t('home.renolit.description', 'RENOLIT ALKORPLAN es la membrana armada más utilizada en el mundo para el revestimiento de piscinas. Como instaladores oficiales certificados, garantizamos una instalación profesional con materiales de primera calidad.') }}
@@ -143,7 +151,7 @@
     <section ref="servicesRef" class="section-padding bg-midnight-800">
       <div class="container-custom">
         <div class="section-header max-w-2xl mb-20">
-          <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('home.services.label', 'Nuestros Servicios') }}</span>
+          <span class="text-white/70 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('home.services.label', 'Nuestros Servicios') }}</span>
           <h2 class="text-white mb-6">{{ t('home.services.title', 'Soluciones con RENOLIT ALKORPLAN') }}</h2>
           <p class="text-silver-400 text-lg leading-relaxed">
             {{ t('home.services.description', 'Como instaladores oficiales, ofrecemos servicios especializados de instalación de lámina armada RENOLIT ALKORPLAN para todo tipo de piscinas.') }}
@@ -202,7 +210,7 @@
           </div>
 
           <div class="order-1 lg:order-2">
-            <span class="text-silver-500 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('home.benefits.label', '¿Por qué elegirnos?') }}</span>
+            <span class="text-midnight-800 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('home.benefits.label', '¿Por qué elegirnos?') }}</span>
             <h2 class="text-neutral-900 mb-8">{{ t('home.benefits.title', 'Instaladores Oficiales Certificados') }}</h2>
             <p class="text-neutral-600 text-lg mb-10 leading-relaxed">
               {{ t('home.benefits.description', 'Como instaladores oficiales de RENOLIT ALKORPLAN, contamos con la formación, herramientas y materiales necesarios para garantizar resultados excepcionales.') }}
@@ -235,7 +243,7 @@
       </div>
       <div class="container-custom relative z-10">
         <div class="section-header text-center max-w-2xl mx-auto mb-20">
-          <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('home.process.label', 'Nuestro Proceso') }}</span>
+          <span class="text-white/70 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('home.process.label', 'Nuestro Proceso') }}</span>
           <h2 class="text-white mb-6">{{ t('home.process.title', 'Cómo Trabajamos') }}</h2>
           <p class="text-silver-400 text-lg leading-relaxed">
             {{ t('home.process.description', 'Un proceso transparente y eficiente para garantizar los mejores resultados en tu proyecto.') }}
@@ -261,7 +269,7 @@
       <div class="container-custom">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
           <div class="max-w-xl">
-            <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('home.projects.label', 'Nuestro Trabajo') }}</span>
+            <span class="text-white/70 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('home.projects.label', 'Nuestro Trabajo') }}</span>
             <h2 class="text-white mb-4">{{ t('home.projects.title', 'Proyectos Destacados') }}</h2>
             <p class="text-silver-400 text-lg leading-relaxed">
               {{ t('home.projects.description', 'Descubre algunos de nuestros trabajos más recientes y déjate inspirar.') }}
@@ -298,7 +306,7 @@
     <section class="section-padding bg-neutral-50">
       <div class="container-custom">
         <div class="text-center max-w-2xl mx-auto mb-20">
-          <span class="text-silver-500 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('home.testimonials.label', 'Testimonios') }}</span>
+          <span class="text-midnight-800 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('home.testimonials.label', 'Testimonios') }}</span>
           <h2 class="text-neutral-900 mb-6">{{ t('home.testimonials.title', 'Lo Que Dicen Nuestros Clientes') }}</h2>
         </div>
 
@@ -330,7 +338,7 @@
       <div class="container-custom">
         <!-- Header — centered -->
         <div class="text-center max-w-2xl mx-auto mb-16">
-          <span class="text-silver-500 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('home.faq.label', 'Preguntas Frecuentes') }}</span>
+          <span class="text-white/70 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('home.faq.label', 'Preguntas Frecuentes') }}</span>
           <h2 class="text-white mb-6">{{ t('home.faq.title', 'Todo Sobre RENOLIT ALKORPLAN') }}</h2>
           <p class="text-silver-400 text-lg leading-relaxed">
             {{ t('home.faq.description', 'Resolvemos las dudas más comunes sobre la instalación de lámina armada en piscinas.') }}

@@ -5,7 +5,7 @@
       <div class="absolute inset-0 bg-gradient-to-b from-charcoal-600/30 to-midnight-800"></div>
       <div class="container-custom relative z-10">
         <div class="max-w-3xl">
-          <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('services.waterproofing.hero_label', 'Servicio Especializado') }}</span>
+          <span class="text-white/70 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('services.waterproofing.hero_label', 'Servicio Especializado') }}</span>
           <h1 class="text-white mb-6">{{ t('services.waterproofing.hero_title', 'Impermeabilización de Piscinas') }}</h1>
           <p class="text-xl text-silver-400 leading-relaxed">
             {{ t('services.waterproofing.hero_desc', 'Sistemas profesionales de impermeabilización para garantizar la estanqueidad total de tu piscina y eliminar filtraciones definitivamente.') }}

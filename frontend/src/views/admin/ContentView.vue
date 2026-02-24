@@ -229,7 +229,6 @@ const defaultContent = [
   { key: 'home.hero.cta_secondary', value: 'Ver Proyectos', section: 'home.hero', label: 'Botón secundario', type: 'text' },
   { key: 'home.hero.trust_1', value: 'Instaladores oficiales', section: 'home.hero', label: 'Confianza — Texto 1', type: 'text' },
   { key: 'home.hero.trust_2', value: 'Garantía 15 años', section: 'home.hero', label: 'Confianza — Texto 2', type: 'text' },
-  { key: 'home.hero.trust_3', value: 'Material europeo', section: 'home.hero', label: 'Confianza — Texto 3', type: 'text' },
   // HOME — RENOLIT
   { key: 'home.renolit.label', value: '¿Por qué RENOLIT ALKORPLAN?', section: 'home.renolit', label: 'Etiqueta de sección', type: 'text' },
   { key: 'home.renolit.title', value: 'La Mejor Lámina Armada del Mercado', section: 'home.renolit', label: 'Título', type: 'text' },

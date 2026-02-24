@@ -12,7 +12,7 @@
       </div>
       <div class="container-custom relative z-10">
         <div class="max-w-3xl">
-          <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('contact.hero.label', 'Contacto') }}</span>
+          <span class="text-white/70 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('contact.hero.label', 'Contacto') }}</span>
           <h1 class="text-white mb-8 leading-[1.1]">{{ t('contact.hero.title', '¿Cómo Podemos Ayudarte?') }}</h1>
           <p class="text-lg text-silver-400 leading-relaxed max-w-xl">
             {{ t('contact.hero.description', 'Estamos aquí para responder tus preguntas y ayudarte con tu proyecto de piscina. Contáctanos y te responderemos lo antes posible.') }}

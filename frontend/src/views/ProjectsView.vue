@@ -12,7 +12,7 @@
       </div>
       <div class="container-custom relative z-10">
         <div class="max-w-3xl">
-          <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">Nuestro Trabajo</span>
+          <span class="text-white/70 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">Nuestro Trabajo</span>
           <h1 class="text-white mb-6">Proyectos Realizados</h1>
           <p class="text-xl text-silver-400 leading-relaxed">
             Descubre algunos de nuestros trabajos más destacados. Cada proyecto refleja 
@@ -99,7 +99,7 @@
     <section class="relative py-32 bg-midnight-800 overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-charcoal-600/20 to-transparent"></div>
       <div class="container-custom relative z-10 text-center">
-        <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">Tu Proyecto</span>
+        <span class="text-white/70 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">Tu Proyecto</span>
         <h2 class="text-white mb-6">¿Te gustaría ver tu piscina aquí?</h2>
         <p class="text-silver-400 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
           Contáctanos y empieza a hacer realidad el proyecto de tu piscina.

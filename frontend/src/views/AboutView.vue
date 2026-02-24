@@ -5,7 +5,7 @@
       <div class="absolute inset-0 bg-gradient-to-b from-charcoal-600/30 to-midnight-800"></div>
       <div class="container-custom relative z-10">
         <div class="max-w-3xl">
-          <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('about.hero.label', 'Conócenos') }}</span>
+          <span class="text-white/70 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('about.hero.label', 'Conócenos') }}</span>
           <h1 class="text-white mb-8 leading-[1.1]">{{ t('about.hero.title', 'Instaladores Oficiales RENOLIT ALKORPLAN') }}</h1>
           <p class="text-lg text-silver-400 leading-relaxed max-w-xl">
             {{ t('about.hero.description', 'Somos especialistas certificados en instalación de lámina armada RENOLIT ALKORPLAN, la membrana más utilizada en el mundo para el revestimiento de piscinas.') }}
@@ -53,7 +53,7 @@
     <section class="section-padding bg-charcoal-600">
       <div class="container-custom">
         <div class="text-center max-w-2xl mx-auto mb-20">
-          <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">Tecnología</span>
+          <span class="text-white/70 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">Tecnología</span>
           <h2 class="text-white mb-6">¿Por qué RENOLIT ALKORPLAN?</h2>
           <p class="text-silver-400 text-lg leading-relaxed">
             Trabajamos exclusivamente con RENOLIT ALKORPLAN porque es la mejor solución 
@@ -108,7 +108,7 @@
     <section class="section-padding bg-neutral-50">
       <div class="container-custom">
         <div class="text-center max-w-2xl mx-auto mb-20">
-          <span class="text-silver-500 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">Compromiso</span>
+          <span class="text-midnight-800 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">Compromiso</span>
           <h2 class="text-neutral-900 mb-6">Nuestra Garantía</h2>
           <p class="text-neutral-600 text-lg leading-relaxed">
             Como instaladores oficiales, ofrecemos todas las garantías de RENOLIT ALKORPLAN.

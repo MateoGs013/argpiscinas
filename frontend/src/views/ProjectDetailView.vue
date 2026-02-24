@@ -132,7 +132,7 @@
       <!-- Related Projects -->
       <section v-if="relatedProjects.length > 0" class="section-padding bg-charcoal-600">
         <div class="container-custom">
-          <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">Más Trabajos</span>
+          <span class="text-white/70 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">Más Trabajos</span>
           <h2 class="text-white mb-10">Proyectos Relacionados</h2>
           <div class="grid md:grid-cols-3 gap-8">
             <RouterLink 
