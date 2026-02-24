@@ -44,6 +44,22 @@ export const useProjectsStore = defineStore('projects', () => {
     }
   }
 
+  async function fetchProjectById(id) {
+    loading.value = true
+    error.value = null
+
+    try {
+      const response = await api.get(`/projects/${id}`)
+      currentProject.value = response.data
+      return response.data
+    } catch (err) {
+      error.value = err.response?.data?.error || 'Error al cargar el proyecto'
+      return null
+    } finally {
+      loading.value = false
+    }
+  }
+
   async function createProject(data) {
     loading.value = true
     error.value = null
@@ -66,7 +82,8 @@ export const useProjectsStore = defineStore('projects', () => {
 
     try {
       const response = await api.put(`/projects/${id}`, data)
-      const index = projects.value.findIndex(p => p.id === id)
+      const numId = Number(id)
+      const index = projects.value.findIndex(p => p.id === numId)
       if (index !== -1) {
         projects.value[index] = response.data
       }
@@ -108,6 +125,7 @@ export const useProjectsStore = defineStore('projects', () => {
     featuredProjects,
     fetchProjects,
     fetchProjectBySlug,
+    fetchProjectById,
     createProject,
     updateProject,
     deleteProject,

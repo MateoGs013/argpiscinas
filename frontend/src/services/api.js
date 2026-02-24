@@ -1,12 +1,26 @@
 import axios from 'axios'
 
+const API_BASE = import.meta.env.VITE_API_URL || 'https://api.argpiscinas.pegasuz.com.ar'
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : '/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json'
   }
 })
+
+/**
+ * Resuelve una URL de imagen del backend para que funcione en producción.
+ * Convierte rutas relativas como /uploads/img.jpg en URLs absolutas.
+ */
+export function resolveImageUrl(url) {
+  if (!url) return ''
+  // Ya es una URL absoluta
+  if (url.startsWith('http://') || url.startsWith('https://')) return url
+  // Ruta relativa del backend → anteponer base URL
+  return `${API_BASE}${url}`
+}
 
 // Request interceptor
 api.interceptors.request.use(
