@@ -3,7 +3,7 @@
     <!-- Skip to main content (accessibility) -->
     <a 
       href="#main-content" 
-      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary-600 focus:text-white focus:rounded-lg"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-midnight-800 focus:text-white focus:rounded-boutique"
     >
       Saltar al contenido principal
     </a>

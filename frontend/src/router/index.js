@@ -39,12 +39,6 @@ const routes = [
     meta: { title: 'Impermeabilización' }
   },
   {
-    path: '/servicios/construccion',
-    name: 'service-construction',
-    component: () => import('@/views/services/ConstructionView.vue'),
-    meta: { title: 'Construcción de Piscinas' }
-  },
-  {
     path: '/proyectos',
     name: 'projects',
     component: () => import('@/views/ProjectsView.vue'),
@@ -153,6 +147,12 @@ const routes = [
     name: 'admin-project-edit',
     component: () => import('@/views/admin/ProjectFormView.vue'),
     meta: { title: 'Editar Proyecto', requiresAuth: true }
+  },
+  {
+    path: '/admin/contenido',
+    name: 'admin-content',
+    component: () => import('@/views/admin/ContentView.vue'),
+    meta: { title: 'Contenido', requiresAuth: true }
   },
   {
     path: '/admin/contactos',
