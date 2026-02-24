@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-neutral-50">
     <!-- Admin Header -->
-    <header class="bg-white border-b border-neutral-200 sticky top-0 z-40">
+    <header class="bg-neutral-50 border-b border-neutral-200 sticky top-0 z-40">
       <div class="flex items-center justify-between px-6 py-4">
         <!-- Logo -->
         <div class="flex items-center space-x-4">
@@ -14,7 +14,7 @@
             </svg>
           </button>
           <RouterLink to="/admin" class="flex items-center space-x-3">
-            <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
+            <div class="w-8 h-8 bg-primary-800 rounded-lg flex items-center justify-center">
               <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none">
                 <path d="M2 12C2 12 5 6 12 6C19 6 22 12 22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>
@@ -28,7 +28,7 @@
           <RouterLink 
             to="/" 
             target="_blank"
-            class="hidden sm:flex items-center space-x-2 text-sm text-neutral-600 hover:text-primary-600 transition-colors"
+            class="hidden sm:flex items-center space-x-2 text-sm text-neutral-600 hover:text-primary-800 transition-colors"
           >
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -41,7 +41,7 @@
               @click="isDropdownOpen = !isDropdownOpen"
               class="flex items-center space-x-3 p-2 rounded-lg hover:bg-neutral-100 transition-colors"
             >
-              <div class="w-8 h-8 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center font-medium text-sm">
+              <div class="w-8 h-8 bg-primary-200 text-primary-800 rounded-full flex items-center justify-center font-medium text-sm">
                 {{ userInitials }}
               </div>
               <span class="hidden sm:block text-sm font-medium text-neutral-700">{{ user?.name }}</span>
@@ -60,7 +60,7 @@
             >
               <div 
                 v-if="isDropdownOpen"
-                class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-neutral-200 py-1"
+                class="absolute right-0 mt-2 w-48 bg-neutral-50 rounded-lg shadow-lg border border-neutral-200 py-1"
               >
                 <div class="px-4 py-2 border-b border-neutral-100">
                   <p class="text-sm font-medium text-neutral-900">{{ user?.name }}</p>
@@ -82,7 +82,7 @@
     <div class="flex">
       <!-- Sidebar -->
       <aside 
-        class="fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-neutral-200 transform transition-transform duration-200 lg:translate-x-0 lg:static lg:inset-auto"
+        class="fixed inset-y-0 left-0 z-30 w-64 bg-neutral-50 border-r border-neutral-200 transform transition-transform duration-200 lg:translate-x-0 lg:static lg:inset-auto"
         :class="isSidebarOpen ? 'translate-x-0' : '-translate-x-full'"
       >
         <nav class="p-4 pt-20 lg:pt-4 space-y-1">
@@ -91,7 +91,7 @@
             :key="item.to"
             :to="item.to"
             class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors"
-            :class="isActive(item.to) ? 'bg-primary-50 text-primary-700' : 'text-neutral-600 hover:bg-neutral-100'"
+            :class="isActive(item.to) ? 'bg-primary-200 text-primary-800' : 'text-neutral-600 hover:bg-neutral-100'"
             @click="isSidebarOpen = false"
           >
             <component :is="item.icon" class="w-5 h-5" />

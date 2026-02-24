@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-neutral-100">
     <!-- Admin Header -->
-    <header class="bg-white border-b border-neutral-200 sticky top-0 z-40">
+    <header class="bg-neutral-50 border-b border-neutral-200 sticky top-0 z-40">
       <div class="flex items-center justify-between px-4 lg:px-6 h-16">
         <!-- Logo & Mobile Toggle -->
         <div class="flex items-center space-x-4">
@@ -14,7 +14,7 @@
             </svg>
           </button>
           <RouterLink to="/admin" class="flex items-center space-x-3">
-            <div class="w-9 h-9 bg-gradient-to-br from-primary-600 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/25">
+            <div class="w-9 h-9 bg-gradient-to-br from-primary-800 to-primary-900 rounded-xl flex items-center justify-center shadow-lg shadow-primary-800/25">
               <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
               </svg>
@@ -28,7 +28,7 @@
           <RouterLink 
             to="/" 
             target="_blank"
-            class="hidden sm:flex items-center space-x-2 px-3 py-2 text-sm text-neutral-600 hover:text-primary-600 hover:bg-neutral-50 rounded-lg transition-colors"
+            class="hidden sm:flex items-center space-x-2 px-3 py-2 text-sm text-neutral-600 hover:text-primary-800 hover:bg-neutral-50 rounded-lg transition-colors"
           >
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -42,7 +42,7 @@
               @click="isDropdownOpen = !isDropdownOpen"
               class="flex items-center space-x-3 p-2 rounded-xl hover:bg-neutral-100 transition-colors"
             >
-              <div class="w-9 h-9 bg-gradient-to-br from-primary-500 to-primary-600 text-white rounded-xl flex items-center justify-center font-semibold text-sm shadow-md">
+              <div class="w-9 h-9 bg-gradient-to-br from-primary-700 to-primary-800 text-white rounded-xl flex items-center justify-center font-semibold text-sm shadow-md">
                 {{ userInitials }}
               </div>
               <div class="hidden sm:block text-left">
@@ -64,7 +64,7 @@
             >
               <div 
                 v-if="isDropdownOpen"
-                class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-neutral-200 py-2 z-50"
+                class="absolute right-0 mt-2 w-56 bg-neutral-50 rounded-xl shadow-xl border border-neutral-200 py-2 z-50"
               >
                 <div class="px-4 py-3 border-b border-neutral-100">
                   <p class="text-sm font-semibold text-neutral-900">{{ user?.name }}</p>
@@ -91,7 +91,7 @@
     <div class="flex">
       <!-- Sidebar -->
       <aside 
-        class="fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-neutral-200 pt-16 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:pt-0"
+        class="fixed inset-y-0 left-0 z-30 w-64 bg-neutral-50 border-r border-neutral-200 pt-16 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:pt-0"
         :class="isSidebarOpen ? 'translate-x-0' : '-translate-x-full'"
       >
         <nav class="p-4 space-y-1">
@@ -103,13 +103,13 @@
             :to="item.to"
             class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200"
             :class="isActive(item.to) 
-              ? 'bg-primary-50 text-primary-700 font-medium shadow-sm' 
+              ? 'bg-primary-200 text-primary-800 font-medium shadow-sm' 
               : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'"
             @click="isSidebarOpen = false"
           >
             <div :class="[
               'w-9 h-9 rounded-lg flex items-center justify-center transition-colors',
-              isActive(item.to) ? 'bg-primary-100' : 'bg-neutral-100'
+              isActive(item.to) ? 'bg-primary-200' : 'bg-neutral-100'
             ]">
               <component :is="item.icon" class="w-5 h-5" />
             </div>
@@ -243,12 +243,21 @@ const ContactsIcon = {
   }
 }
 
+const ContentIcon = {
+  render() {
+    return h('svg', { fill: 'none', viewBox: '0 0 24 24', stroke: 'currentColor', 'stroke-width': '2' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' })
+    ])
+  }
+}
+
 const menuItems = [
   { to: '/admin', label: 'Dashboard', icon: DashboardIcon },
   { to: '/admin/posts', label: 'Artículos', icon: PostsIcon },
   { to: '/admin/categorias', label: 'Categorías', icon: CategoriesIcon },
   { to: '/admin/tags', label: 'Tags', icon: TagsIcon },
   { to: '/admin/proyectos', label: 'Proyectos', icon: ProjectsIcon },
+  { to: '/admin/contenido', label: 'Contenido', icon: ContentIcon },
   { to: '/admin/contactos', label: 'Mensajes', icon: ContactsIcon }
 ]
 </script>

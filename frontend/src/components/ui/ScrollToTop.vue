@@ -10,11 +10,11 @@
     <button
       v-show="isVisible"
       @click="scrollToTop"
-      class="fixed bottom-8 right-8 z-40 w-12 h-12 bg-primary-600 hover:bg-primary-700 text-white rounded-full shadow-lg shadow-primary-500/30 flex items-center justify-center transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+      class="fixed bottom-8 right-8 z-40 w-11 h-11 bg-midnight-800 hover:bg-charcoal-600 text-white rounded-boutique shadow-lg shadow-midnight-800/30 flex items-center justify-center transition-all duration-400 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-charcoal-400 focus:ring-offset-2"
       aria-label="Scroll to top"
     >
-      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 10l7-7m0 0l7 7m-7-7v18" />
       </svg>
     </button>
   </Transition>

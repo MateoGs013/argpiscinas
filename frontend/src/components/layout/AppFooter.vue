@@ -1,47 +1,51 @@
 <template>
-  <footer class="bg-neutral-900 text-white">
+  <footer class="bg-midnight-800 text-silver-400">
     <!-- Main Footer -->
-    <div class="container-custom py-16 lg:py-20">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+    <div class="container-custom py-20 lg:py-28">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-14">
         <!-- Brand -->
         <div class="lg:col-span-1">
           <RouterLink to="/" class="flex items-center space-x-3 mb-6">
-            <div class="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center">
-              <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 12C2 12 5 6 12 6C19 6 22 12 22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <path d="M2 16C2 16 5 10 12 10C19 10 22 16 22 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-              </svg>
-            </div>
-            <span class="font-display font-bold text-xl">ARG Piscinas</span>
+            <img 
+              src="/ArgPiscinas/LOGO NAV.png" 
+              alt="ARG Piscinas - Instalador Oficial RENOLIT ALKORPLAN" 
+              class="h-14 no-filter"
+            />
+            <span class="text-xl font-bold tracking-tight text-white">ARG Piscinas</span>
           </RouterLink>
-          <p class="text-neutral-400 mb-6 leading-relaxed">
-            Especialistas en instalación y rehabilitación de piscinas con lámina armada. 
-            Más de 15 años de experiencia nos avalan.
+          <p class="text-silver-400/70 mb-6 leading-relaxed text-sm">
+            Instaladores oficiales de RENOLIT ALKORPLAN. Especialistas en lámina armada 
+            para piscinas con garantía de 15 años.
           </p>
+          <!-- Certification Badge -->
+          <div class="flex items-center space-x-2.5 mb-8 bg-charcoal-600/40 rounded-boutique px-4 py-3 border border-charcoal-400/10">
+            <img src="/Renolit/logo-RENOLIT-ALKORPLAN_blanc.png" alt="RENOLIT ALKORPLAN" class="w-32 h-auto no-filter" />
+            <span class="text-xs text-silver-400/60 tracking-wide">Instalador Certificado</span>
+          </div>
           <!-- Social Links -->
-          <div class="flex space-x-4">
+          <div class="flex space-x-3">
             <a 
               v-for="social in socials" 
               :key="social.name"
               :href="social.url" 
               target="_blank"
               rel="noopener noreferrer"
-              class="w-10 h-10 bg-neutral-800 hover:bg-primary-600 rounded-lg flex items-center justify-center transition-colors"
+              class="w-10 h-10 bg-charcoal-600/40 hover:bg-charcoal-600 rounded-boutique flex items-center justify-center transition-all duration-400 border border-charcoal-400/10 hover:border-charcoal-400/30"
               :aria-label="social.name"
             >
-              <component :is="social.icon" class="w-5 h-5" />
+              <component :is="social.icon" class="w-4 h-4" />
             </a>
           </div>
         </div>
 
         <!-- Quick Links -->
         <div>
-          <h4 class="font-display font-semibold text-lg mb-6">Servicios</h4>
-          <ul class="space-y-3">
+          <h4 class="font-display font-semibold text-sm text-white tracking-wide uppercase mb-8">Servicios ALKORPLAN</h4>
+          <ul class="space-y-4">
             <li v-for="link in serviceLinks" :key="link.to">
               <RouterLink 
                 :to="link.to" 
-                class="text-neutral-400 hover:text-white transition-colors"
+                class="text-silver-400/70 hover:text-white transition-colors duration-300 text-sm"
               >
                 {{ link.label }}
               </RouterLink>
@@ -51,12 +55,12 @@
 
         <!-- Company -->
         <div>
-          <h4 class="font-display font-semibold text-lg mb-6">Empresa</h4>
-          <ul class="space-y-3">
+          <h4 class="font-display font-semibold text-sm text-white tracking-wide uppercase mb-8">Empresa</h4>
+          <ul class="space-y-4">
             <li v-for="link in companyLinks" :key="link.to">
               <RouterLink 
                 :to="link.to" 
-                class="text-neutral-400 hover:text-white transition-colors"
+                class="text-silver-400/70 hover:text-white transition-colors duration-300 text-sm"
               >
                 {{ link.label }}
               </RouterLink>
@@ -66,28 +70,28 @@
 
         <!-- Contact -->
         <div>
-          <h4 class="font-display font-semibold text-lg mb-6">Contacto</h4>
-          <ul class="space-y-4">
+          <h4 class="font-display font-semibold text-sm text-white tracking-wide uppercase mb-8">Contacto</h4>
+          <ul class="space-y-5">
             <li class="flex items-start space-x-3">
-              <svg class="w-5 h-5 text-primary-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              <svg class="w-4 h-4 text-silver-400/50 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <span class="text-neutral-400">Madrid, España</span>
+              <span class="text-silver-400/70 text-sm">Madrid, España</span>
             </li>
             <li class="flex items-center space-x-3">
-              <svg class="w-5 h-5 text-primary-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              <svg class="w-4 h-4 text-silver-400/50 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
-              <a href="tel:+34900000000" class="text-neutral-400 hover:text-white transition-colors">
+              <a href="tel:+34900000000" class="text-silver-400/70 hover:text-white transition-colors duration-300 text-sm">
                 +34 900 000 000
               </a>
             </li>
             <li class="flex items-center space-x-3">
-              <svg class="w-5 h-5 text-primary-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              <svg class="w-4 h-4 text-silver-400/50 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              <a href="mailto:info@argpiscinas.com" class="text-neutral-400 hover:text-white transition-colors">
+              <a href="mailto:info@argpiscinas.com" class="text-silver-400/70 hover:text-white transition-colors duration-300 text-sm">
                 info@argpiscinas.com
               </a>
             </li>
@@ -97,20 +101,20 @@
     </div>
 
     <!-- Bottom Bar -->
-    <div class="border-t border-neutral-800">
-      <div class="container-custom py-6">
+    <div class="border-t border-charcoal-400/10">
+      <div class="container-custom py-7">
         <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-          <p class="text-neutral-500 text-sm">
-            © {{ currentYear }} ARG Piscinas. Todos los derechos reservados.
+          <p class="text-silver-400/40 text-xs tracking-wide">
+            © {{ currentYear }} ARG Piscinas — Instalador Oficial RENOLIT ALKORPLAN
           </p>
-          <div class="flex space-x-6">
-            <RouterLink to="/privacidad" class="text-neutral-500 hover:text-white text-sm transition-colors">
+          <div class="flex space-x-8">
+            <RouterLink to="/privacidad" class="text-silver-400/40 hover:text-silver-300 text-xs tracking-wide transition-colors duration-300">
               Política de Privacidad
             </RouterLink>
-            <RouterLink to="/cookies" class="text-neutral-500 hover:text-white text-sm transition-colors">
+            <RouterLink to="/cookies" class="text-silver-400/40 hover:text-silver-300 text-xs tracking-wide transition-colors duration-300">
               Cookies
             </RouterLink>
-            <RouterLink to="/legal" class="text-neutral-500 hover:text-white text-sm transition-colors">
+            <RouterLink to="/legal" class="text-silver-400/40 hover:text-silver-300 text-xs tracking-wide transition-colors duration-300">
               Aviso Legal
             </RouterLink>
           </div>
@@ -126,13 +130,13 @@ import { computed, h } from 'vue'
 const currentYear = computed(() => new Date().getFullYear())
 
 const serviceLinks = [
-  { to: '/servicios/instalacion-lamina-armada', label: 'Instalación Lámina Armada' },
+  { to: '/servicios/instalacion-lamina-armada', label: 'Piscinas Nuevas' },
   { to: '/servicios/rehabilitacion-piscinas', label: 'Rehabilitación de Piscinas' },
-  { to: '/servicios/impermeabilizacion', label: 'Impermeabilización' },
-  { to: '/servicios/construccion', label: 'Construcción de Piscinas' }
+  { to: '/servicios/impermeabilizacion', label: 'Impermeabilización' }
 ]
 
 const companyLinks = [
+  { to: '/nosotros', label: 'Sobre Nosotros' },
   { to: '/proyectos', label: 'Proyectos' },
   { to: '/blog', label: 'Blog' },
   { to: '/contacto', label: 'Contacto' }

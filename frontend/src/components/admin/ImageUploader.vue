@@ -12,9 +12,9 @@
         class="w-full h-full object-cover"
         @error="handleImageError"
       />
-      <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+      <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
         <label 
-          class="px-4 py-2 bg-white text-neutral-700 rounded-lg hover:bg-neutral-100 transition-colors cursor-pointer"
+          class="px-4 py-2 bg-neutral-50 text-neutral-700 rounded-lg hover:bg-neutral-100 transition-colors cursor-pointer"
         >
           <svg class="w-5 h-5 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -55,8 +55,8 @@
         :class="[
           aspectClass,
           isDragging 
-            ? 'border-primary-500 bg-primary-50' 
-            : 'border-neutral-300 bg-neutral-50 hover:border-primary-400 hover:bg-primary-50/50'
+            ? 'border-primary-700 bg-neutral-50' 
+            : 'border-neutral-300 bg-neutral-50 hover:border-primary-700 hover:bg-neutral-50/50'
         ]"
         @dragover.prevent="isDragging = true"
         @dragleave.prevent="isDragging = false"
@@ -70,21 +70,21 @@
         />
         
         <div v-if="uploading" class="w-full h-full flex flex-col items-center justify-center">
-          <svg class="animate-spin h-10 w-10 text-primary-500 mb-2" fill="none" viewBox="0 0 24 24">
+          <svg class="animate-spin h-10 w-10 text-primary-700 mb-2" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <span class="text-primary-600 font-medium">Subiendo imagen...</span>
+          <span class="text-primary-800 font-medium">Subiendo imagen...</span>
         </div>
         
         <div v-else class="w-full h-full flex flex-col items-center justify-center p-6">
-          <div class="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mb-3">
-            <svg class="w-8 h-8 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="w-16 h-16 bg-primary-200 rounded-2xl flex items-center justify-center mb-3">
+            <svg class="w-8 h-8 text-primary-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
           <p class="text-neutral-700 font-medium text-center">
-            <span class="text-primary-600">Haz clic para subir</span> o arrastra una imagen
+            <span class="text-primary-800">Haz clic para subir</span> o arrastra una imagen
           </p>
           <p class="text-neutral-400 text-sm mt-1">PNG, JPG, GIF o WebP (máx. 5MB)</p>
         </div>
@@ -96,7 +96,7 @@
         <button 
           type="button"
           @click="showUrlInput = !showUrlInput"
-          class="text-sm text-neutral-500 hover:text-primary-600 transition-colors"
+          class="text-sm text-neutral-500 hover:text-primary-800 transition-colors"
         >
           {{ showUrlInput ? 'Ocultar' : '¿Usar URL externa?' }}
         </button>
@@ -140,6 +140,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import api from '@/services/api'
+import { resolveImageUrl } from '@/services/api'
 
 const props = defineProps({
   modelValue: {
@@ -181,18 +182,9 @@ const aspectClass = computed(() => {
   }
 })
 
-const apiBaseUrl = computed(() => {
-  return import.meta.env.VITE_API_URL || 'http://localhost:3001'
-})
-
 const fullImageUrl = computed(() => {
   if (!props.modelValue) return ''
-  // Si ya es una URL completa, devolverla tal cual
-  if (props.modelValue.startsWith('http://') || props.modelValue.startsWith('https://')) {
-    return props.modelValue
-  }
-  // Si es una ruta relativa (/uploads/...), añadir el base URL
-  return `${apiBaseUrl.value}${props.modelValue}`
+  return resolveImageUrl(props.modelValue)
 })
 
 const handleFileSelect = async (event) => {
