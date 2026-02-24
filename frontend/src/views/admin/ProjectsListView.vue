@@ -15,7 +15,7 @@
 
     <!-- Projects Grid -->
     <div v-if="loading" class="text-center py-20">
-      <div class="inline-block w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
+      <div class="inline-block w-8 h-8 border-4 border-primary-800 border-t-transparent rounded-full animate-spin"></div>
     </div>
 
     <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -26,14 +26,14 @@
       >
         <div class="relative aspect-video overflow-hidden">
           <img 
-            :src="project.featuredImage || 'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'" 
+            :src="resolveImageUrl(project.featuredImage) || 'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'" 
             :alt="project.title"
             class="w-full h-full object-cover"
           />
-          <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center space-x-4">
+          <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-4">
             <RouterLink 
               :to="`/admin/proyectos/${project.id}`"
-              class="p-3 bg-white rounded-full text-neutral-700 hover:text-primary-600"
+              class="p-3 bg-neutral-50 rounded-full text-neutral-700 hover:text-primary-900"
             >
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -41,7 +41,7 @@
             </RouterLink>
             <button 
               @click="confirmDelete(project)"
-              class="p-3 bg-white rounded-full text-neutral-700 hover:text-red-600"
+              class="p-3 bg-neutral-50 rounded-full text-neutral-700 hover:text-red-600"
             >
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -51,7 +51,7 @@
         </div>
         <div class="p-4">
           <div class="flex items-center justify-between mb-2">
-            <span class="px-2 py-1 bg-primary-100 text-primary-700 text-xs font-medium rounded-full">
+            <span class="px-2 py-1 bg-primary-200 text-primary-800 text-xs font-medium rounded-full">
               {{ project.category }}
             </span>
             <span :class="[
@@ -94,6 +94,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useProjectsStore } from '@/stores/projects'
+import { resolveImageUrl } from '@/services/api'
 
 const projectsStore = useProjectsStore()
 

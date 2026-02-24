@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between mb-8">
       <div>
-        <RouterLink to="/admin/posts" class="inline-flex items-center text-neutral-500 hover:text-primary-600 mb-2 transition-colors">
+        <RouterLink to="/admin/posts" class="inline-flex items-center text-neutral-500 hover:text-primary-900 mb-2 transition-colors">
           <svg class="w-5 h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
@@ -24,7 +24,7 @@
           @click="currentStep = index"
           class="flex items-center space-x-3 px-4 py-2 rounded-xl transition-all"
           :class="currentStep === index 
-            ? 'bg-primary-100 text-primary-700' 
+            ? 'bg-primary-200 text-primary-800' 
             : stepCompleted(index) 
               ? 'text-green-600 hover:bg-green-50' 
               : 'text-neutral-400 hover:bg-neutral-50'"
@@ -32,7 +32,7 @@
           <span 
             class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors"
             :class="currentStep === index 
-              ? 'bg-primary-600 text-white' 
+              ? 'bg-primary-800 text-white' 
               : stepCompleted(index) 
                 ? 'bg-green-500 text-white' 
                 : 'bg-neutral-200 text-neutral-500'"
@@ -51,8 +51,8 @@
     <div v-show="currentStep === 0" class="space-y-6">
       <div class="card p-6">
         <div class="flex items-center space-x-2 mb-6">
-          <div class="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
-            <svg class="w-5 h-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="w-10 h-10 bg-primary-200 rounded-xl flex items-center justify-center">
+            <svg class="w-5 h-5 text-primary-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
           </div>
@@ -71,12 +71,12 @@
             <input 
               v-model="form.title"
               type="text"
-              class="w-full px-4 py-4 text-xl font-medium border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+              class="w-full px-4 py-4 text-xl font-medium border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-700 focus:border-transparent transition-all"
               placeholder="Ej: 5 consejos para mantener tu piscina en verano"
               @input="autoGenerateSEO"
             />
             <p class="mt-2 text-sm text-neutral-500 flex items-center">
-              <svg class="w-4 h-4 mr-1 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg class="w-4 h-4 mr-1 text-accent-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               Un buen título describe claramente de qué trata el artículo
@@ -94,7 +94,7 @@
               <button 
                 type="button"
                 @click="insertFormat('h2')"
-                class="p-2 rounded-lg hover:bg-white hover:shadow-sm transition-all"
+                class="p-2 rounded-lg hover:bg-neutral-50 hover:shadow-sm transition-all"
                 title="Título de sección"
               >
                 <span class="font-bold text-sm">H2</span>
@@ -102,7 +102,7 @@
               <button 
                 type="button"
                 @click="insertFormat('h3')"
-                class="p-2 rounded-lg hover:bg-white hover:shadow-sm transition-all"
+                class="p-2 rounded-lg hover:bg-neutral-50 hover:shadow-sm transition-all"
                 title="Subtítulo"
               >
                 <span class="font-bold text-sm">H3</span>
@@ -111,7 +111,7 @@
               <button 
                 type="button"
                 @click="insertFormat('bold')"
-                class="p-2 rounded-lg hover:bg-white hover:shadow-sm transition-all"
+                class="p-2 rounded-lg hover:bg-neutral-50 hover:shadow-sm transition-all"
                 title="Negrita"
               >
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -122,7 +122,7 @@
               <button 
                 type="button"
                 @click="insertFormat('italic')"
-                class="p-2 rounded-lg hover:bg-white hover:shadow-sm transition-all"
+                class="p-2 rounded-lg hover:bg-neutral-50 hover:shadow-sm transition-all"
                 title="Cursiva"
               >
                 <span class="italic font-serif text-lg">I</span>
@@ -131,7 +131,7 @@
               <button 
                 type="button"
                 @click="insertFormat('ul')"
-                class="p-2 rounded-lg hover:bg-white hover:shadow-sm transition-all"
+                class="p-2 rounded-lg hover:bg-neutral-50 hover:shadow-sm transition-all"
                 title="Lista con viñetas"
               >
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -141,7 +141,7 @@
               <button 
                 type="button"
                 @click="insertFormat('link')"
-                class="p-2 rounded-lg hover:bg-white hover:shadow-sm transition-all"
+                class="p-2 rounded-lg hover:bg-neutral-50 hover:shadow-sm transition-all"
                 title="Insertar enlace"
               >
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -154,7 +154,7 @@
               ref="contentTextarea"
               v-model="form.content"
               rows="15"
-              class="w-full px-4 py-4 border border-neutral-200 rounded-b-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all resize-none"
+              class="w-full px-4 py-4 border border-neutral-200 rounded-b-xl focus:outline-none focus:ring-2 focus:ring-primary-700 focus:border-transparent transition-all resize-none"
               placeholder="Escribe aquí el contenido de tu artículo...
 
 Puedes usar los botones de arriba para dar formato al texto.
@@ -245,7 +245,7 @@ Ejemplo de estructura:
                   @click="form.categoryId = cat.id"
                   class="p-3 rounded-xl border-2 text-left transition-all"
                   :class="form.categoryId === cat.id 
-                    ? 'border-primary-500 bg-primary-50 text-primary-700' 
+                    ? 'border-primary-700 bg-neutral-50 text-primary-700' 
                     : 'border-neutral-200 hover:border-neutral-300'"
                 >
                   <span class="font-medium">{{ cat.name }}</span>
@@ -265,7 +265,7 @@ Ejemplo de estructura:
                   @click="toggleTag(tag.id)"
                   class="px-3 py-1.5 rounded-full text-sm font-medium transition-all"
                   :class="form.tagIds.includes(tag.id)
-                    ? 'bg-primary-600 text-white'
+                    ? 'bg-primary-800 text-white'
                     : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'"
                 >
                   {{ tag.name }}
@@ -313,7 +313,7 @@ Ejemplo de estructura:
         </div>
 
         <!-- Google Preview -->
-        <div class="bg-white border border-neutral-200 rounded-xl p-4 mb-6">
+        <div class="bg-neutral-50 border border-neutral-200 rounded-xl p-4 mb-6">
           <p class="text-xs text-neutral-500 mb-2">Vista previa en buscadores:</p>
           <div class="space-y-1">
             <p class="text-blue-700 text-lg hover:underline cursor-pointer">
@@ -340,7 +340,7 @@ Ejemplo de estructura:
             <button 
               type="button"
               @click="showSeoOptions = !showSeoOptions"
-              class="text-sm text-primary-600 hover:text-primary-700"
+              class="text-sm text-accent-600 hover:text-accent-700"
             >
               {{ showSeoOptions ? 'Ocultar opciones' : 'Personalizar' }}
             </button>
@@ -497,7 +497,7 @@ Ejemplo de estructura:
       enter-to-class="opacity-100 scale-100"
     >
       <div v-if="showSuccess" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-        <div class="bg-white rounded-2xl p-8 max-w-md mx-4 text-center">
+        <div class="bg-neutral-50 rounded-2xl p-8 max-w-md mx-4 text-center">
           <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg class="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />

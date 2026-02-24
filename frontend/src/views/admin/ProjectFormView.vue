@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between mb-8">
       <div>
-        <RouterLink to="/admin/proyectos" class="inline-flex items-center text-neutral-500 hover:text-primary-600 mb-2 transition-colors">
+        <RouterLink to="/admin/proyectos" class="inline-flex items-center text-neutral-500 hover:text-primary-900 mb-2 transition-colors">
           <svg class="w-5 h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
@@ -24,7 +24,7 @@
           @click="currentStep = index"
           class="flex items-center space-x-3 px-4 py-2 rounded-xl transition-all"
           :class="currentStep === index 
-            ? 'bg-primary-100 text-primary-700' 
+            ? 'bg-primary-200 text-primary-800' 
             : stepCompleted(index) 
               ? 'text-green-600 hover:bg-green-50' 
               : 'text-neutral-400 hover:bg-neutral-50'"
@@ -32,7 +32,7 @@
           <span 
             class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors"
             :class="currentStep === index 
-              ? 'bg-primary-600 text-white' 
+              ? 'bg-primary-800 text-white' 
               : stepCompleted(index) 
                 ? 'bg-green-500 text-white' 
                 : 'bg-neutral-200 text-neutral-500'"
@@ -51,8 +51,8 @@
     <div v-show="currentStep === 0" class="space-y-6">
       <div class="card p-6">
         <div class="flex items-center space-x-2 mb-6">
-          <div class="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
-            <svg class="w-5 h-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="w-10 h-10 bg-primary-200 rounded-xl flex items-center justify-center">
+            <svg class="w-5 h-5 text-primary-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
           </div>
@@ -71,12 +71,12 @@
             <input 
               v-model="form.title"
               type="text"
-              class="w-full px-4 py-4 text-xl font-medium border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+              class="w-full px-4 py-4 text-xl font-medium border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-700 focus:border-transparent transition-all"
               placeholder="Ej: Piscina Familiar en Chalet de Lujo"
               @input="autoGenerateSlug"
             />
             <p class="mt-2 text-sm text-neutral-500 flex items-center">
-              <svg class="w-4 h-4 mr-1 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg class="w-4 h-4 mr-1 text-accent-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               Usa un nombre descriptivo que identifique el proyecto
@@ -96,12 +96,12 @@
                 @click="form.category = cat.value"
                 class="p-4 rounded-xl border-2 text-center transition-all group"
                 :class="form.category === cat.value 
-                  ? 'border-primary-500 bg-primary-50' 
+                  ? 'border-primary-700 bg-neutral-50' 
                   : 'border-neutral-200 hover:border-neutral-300'"
               >
                 <div 
                   class="w-12 h-12 mx-auto mb-2 rounded-xl flex items-center justify-center transition-colors"
-                  :class="form.category === cat.value ? 'bg-primary-500 text-white' : 'bg-neutral-100 text-neutral-400 group-hover:text-neutral-600'"
+                  :class="form.category === cat.value ? 'bg-neutral-500 text-white' : 'bg-neutral-100 text-neutral-400 group-hover:text-neutral-600'"
                 >
                   <component :is="cat.icon" class="w-6 h-6" />
                 </div>
@@ -200,7 +200,7 @@
         <!-- Galería adicional -->
         <div>
           <h3 class="font-semibold text-neutral-800 mb-3 flex items-center">
-            <svg class="w-5 h-5 mr-2 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg class="w-5 h-5 mr-2 text-accent-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
             </svg>
             Más fotos del proyecto (opcional)
@@ -218,7 +218,7 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
-              <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+              <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
                 <button 
                   @click="removeImage(index)"
                   class="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
@@ -232,7 +232,7 @@
             
             <!-- Add button with file upload -->
             <label 
-              class="aspect-square rounded-xl border-2 border-dashed border-neutral-300 flex flex-col items-center justify-center hover:border-primary-400 hover:bg-primary-50 transition-all group cursor-pointer"
+              class="aspect-square rounded-xl border-2 border-dashed border-neutral-300 flex flex-col items-center justify-center hover:border-primary-700 hover:bg-neutral-50 transition-all group cursor-pointer"
               :class="{ 'opacity-50 pointer-events-none': uploadingGallery }"
             >
               <input 
@@ -242,14 +242,14 @@
                 @change="handleGalleryUpload"
                 :disabled="uploadingGallery"
               />
-              <svg v-if="!uploadingGallery" class="w-8 h-8 text-neutral-400 group-hover:text-primary-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg v-if="!uploadingGallery" class="w-8 h-8 text-neutral-400 group-hover:text-accent-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               </svg>
-              <svg v-else class="animate-spin w-8 h-8 text-primary-500" fill="none" viewBox="0 0 24 24">
+              <svg v-else class="animate-spin w-8 h-8 text-accent-500" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              <span class="text-sm text-neutral-500 group-hover:text-primary-600 mt-1">
+              <span class="text-sm text-neutral-500 group-hover:text-primary-900 mt-1">
                 {{ uploadingGallery ? 'Subiendo...' : 'Añadir foto' }}
               </span>
             </label>
@@ -297,7 +297,7 @@
         <!-- Preview -->
         <div class="bg-neutral-50 rounded-xl p-6">
           <div class="max-w-lg mx-auto">
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="bg-neutral-50 rounded-xl shadow-lg overflow-hidden">
               <div class="aspect-video bg-neutral-200">
                 <img 
                   v-if="form.featuredImage" 
@@ -313,7 +313,7 @@
               </div>
               <div class="p-4">
                 <div class="flex items-center gap-2 mb-2">
-                  <span v-if="form.category" class="px-2 py-1 bg-primary-100 text-primary-700 text-xs font-medium rounded-full">
+                  <span v-if="form.category" class="px-2 py-1 bg-primary-200 text-primary-800 text-xs font-medium rounded-full">
                     {{ form.category }}
                   </span>
                   <span v-if="form.featured" class="px-2 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded-full">
@@ -441,7 +441,7 @@
       enter-to-class="opacity-100 scale-100"
     >
       <div v-if="showSuccess" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-        <div class="bg-white rounded-2xl p-8 max-w-md mx-4 text-center">
+        <div class="bg-neutral-50 rounded-2xl p-8 max-w-md mx-4 text-center">
           <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg class="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -464,6 +464,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useProjectsStore } from '@/stores/projects'
 import ImageUploader from '@/components/admin/ImageUploader.vue'
 import api from '@/services/api'
+import { resolveImageUrl } from '@/services/api'
 
 const route = useRoute()
 const router = useRouter()
@@ -516,7 +517,6 @@ const IconWater = {
 const categories = [
   { value: 'Instalación', label: 'Instalación', icon: IconInstall },
   { value: 'Rehabilitación', label: 'Rehabilitación', icon: IconRehab },
-  { value: 'Construcción', label: 'Construcción', icon: IconBuild },
   { value: 'Impermeabilización', label: 'Impermeab.', icon: IconWater }
 ]
 
@@ -533,7 +533,10 @@ const form = ref({
   images: []
 })
 
-const canPublish = computed(() => form.value.title && form.value.category)
+const canPublish = computed(() => {
+  if (isEditing.value) return !!form.value.title
+  return !!(form.value.title && form.value.category)
+})
 
 const stepCompleted = (index) => {
   switch(index) {
@@ -555,16 +558,8 @@ const autoGenerateSlug = () => {
   }
 }
 
-const apiBaseUrl = computed(() => {
-  return import.meta.env.VITE_API_URL || 'http://localhost:3001'
-})
-
 const getFullImageUrl = (url) => {
-  if (!url) return ''
-  if (url.startsWith('http://') || url.startsWith('https://')) {
-    return url
-  }
-  return `${apiBaseUrl.value}${url}`
+  return resolveImageUrl(url)
 }
 
 const handleGalleryUpload = async (event) => {
@@ -615,15 +610,25 @@ const saveProject = async () => {
   saving.value = true
   
   try {
+    const images = Array.isArray(form.value.images)
+      ? form.value.images.filter(img => img && img.trim() !== '')
+      : []
+
     const data = {
       ...form.value,
-      images: form.value.images.filter(img => img && img.trim() !== '')
+      images
     }
 
+    let result
     if (isEditing.value) {
-      await projectsStore.updateProject(route.params.id, data)
+      result = await projectsStore.updateProject(Number(route.params.id), data)
     } else {
-      await projectsStore.createProject(data)
+      result = await projectsStore.createProject(data)
+    }
+
+    if (!result) {
+      alert(projectsStore.error || 'Error al guardar el proyecto.')
+      return
     }
 
     showSuccess.value = true
@@ -641,6 +646,17 @@ onMounted(async () => {
     await projectsStore.fetchProjectById(route.params.id)
     const project = projectsStore.currentProject
     if (project) {
+      // Parse images: handle both array and double-encoded JSON string
+      let parsedImages = project.images || []
+      if (typeof parsedImages === 'string') {
+        try {
+          parsedImages = JSON.parse(parsedImages)
+        } catch {
+          parsedImages = []
+        }
+      }
+      if (!Array.isArray(parsedImages)) parsedImages = []
+
       form.value = {
         title: project.title,
         slug: project.slug,
@@ -649,7 +665,7 @@ onMounted(async () => {
         description: project.description || '',
         featuredImage: project.featuredImage || '',
         featured: project.featured || false,
-        images: project.images || []
+        images: parsedImages
       }
     }
   }

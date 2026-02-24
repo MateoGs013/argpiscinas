@@ -29,7 +29,7 @@
         <div class="p-6 border-b border-neutral-100">
           <div class="flex items-center justify-between">
             <h2 class="text-lg font-bold text-neutral-900">Últimos Artículos</h2>
-            <RouterLink to="/admin/posts" class="text-sm text-primary-600 hover:text-primary-700">
+            <RouterLink to="/admin/posts" class="text-sm text-accent-600 hover:text-accent-700">
               Ver todos
             </RouterLink>
           </div>
@@ -37,7 +37,7 @@
         <div class="divide-y divide-neutral-100">
           <div v-for="post in recentPosts" :key="post.id" class="p-4 flex items-center space-x-4 hover:bg-neutral-50">
             <div v-if="post.featuredImage" class="w-16 h-12 rounded-lg overflow-hidden flex-shrink-0">
-              <img :src="post.featuredImage" :alt="post.title" class="w-full h-full object-cover" />
+              <img :src="resolveImageUrl(post.featuredImage)" :alt="post.title" class="w-full h-full object-cover" />
             </div>
             <div class="flex-1 min-w-0">
               <p class="font-medium text-neutral-900 truncate">{{ post.title }}</p>
@@ -61,7 +61,7 @@
         <div class="p-6 border-b border-neutral-100">
           <div class="flex items-center justify-between">
             <h2 class="text-lg font-bold text-neutral-900">Últimos Contactos</h2>
-            <RouterLink to="/admin/contactos" class="text-sm text-primary-600 hover:text-primary-700">
+            <RouterLink to="/admin/contactos" class="text-sm text-accent-600 hover:text-accent-700">
               Ver todos
             </RouterLink>
           </div>
@@ -72,7 +72,7 @@
               <p class="font-medium text-neutral-900">{{ contact.name }}</p>
               <span :class="[
                 'px-2 py-1 text-xs font-medium rounded-full',
-                contact.read ? 'bg-neutral-100 text-neutral-600' : 'bg-primary-100 text-primary-700'
+                contact.read ? 'bg-neutral-100 text-neutral-600' : 'bg-primary-200 text-primary-800'
               ]">
                 {{ contact.read ? 'Leído' : 'Nuevo' }}
               </span>
@@ -95,8 +95,8 @@
           to="/admin/posts/nuevo"
           class="card p-6 text-center hover:bg-neutral-50 transition-colors group"
         >
-          <div class="w-12 h-12 mx-auto mb-4 bg-primary-100 rounded-xl flex items-center justify-center group-hover:bg-primary-200 transition-colors">
-            <svg class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="w-12 h-12 mx-auto mb-4 bg-primary-200 rounded-xl flex items-center justify-center group-hover:bg-primary-300 transition-colors">
+            <svg class="w-6 h-6 text-primary-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
           </div>
@@ -146,14 +146,15 @@
 <script setup>
 import { ref, onMounted, h } from 'vue'
 import api from '@/services/api'
+import { resolveImageUrl } from '@/services/api'
 
 const stats = ref([
   { 
     title: 'Artículos', 
     value: 0, 
     change: 0, 
-    bgColor: 'bg-primary-100', 
-    iconColor: 'text-primary-600',
+    bgColor: 'bg-primary-200', 
+    iconColor: 'text-primary-800',
     icon: {
       render() {
         return h('svg', { fill: 'none', viewBox: '0 0 24 24', stroke: 'currentColor' }, [
@@ -217,19 +218,31 @@ const formatDate = (date) => {
 
 onMounted(async () => {
   try {
-    // Fetch stats
+    // Fetch stats using admin endpoints for accurate counts
     const [postsRes, projectsRes, contactsRes] = await Promise.all([
-      api.get('/posts?limit=5'),
-      api.get('/projects?limit=5'),
-      api.get('/contacts?limit=5')
+      api.get('/posts/admin?limit=5'),
+      api.get('/projects'),
+      api.get('/contact?limit=5')
     ])
 
-    stats.value[0].value = postsRes.data.total || postsRes.data.posts?.length || 0
-    stats.value[1].value = projectsRes.data.total || projectsRes.data.projects?.length || 0
-    stats.value[2].value = contactsRes.data.total || contactsRes.data.contacts?.length || 0
+    // Posts: admin endpoint returns { posts, pagination: { total } }
+    stats.value[0].value = postsRes.data.pagination?.total ?? postsRes.data.posts?.length ?? 0
+    
+    // Projects: returns plain array
+    const projects = Array.isArray(projectsRes.data) ? projectsRes.data : (projectsRes.data.projects || [])
+    stats.value[1].value = projects.length
+    
+    // Contacts: returns { contacts, pagination: { total } }
+    stats.value[2].value = contactsRes.data.pagination?.total ?? contactsRes.data.contacts?.length ?? 0
 
-    recentPosts.value = postsRes.data.posts || postsRes.data || []
-    recentContacts.value = contactsRes.data.contacts || contactsRes.data || []
+    // Recent posts from admin endpoint
+    const posts = postsRes.data.posts || []
+    recentPosts.value = posts.map(p => ({
+      ...p,
+      published: p.status === 'PUBLISHED'
+    }))
+    
+    recentContacts.value = contactsRes.data.contacts || []
   } catch (error) {
     console.error('Error loading dashboard data:', error)
   }

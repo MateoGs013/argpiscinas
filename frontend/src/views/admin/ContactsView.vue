@@ -15,7 +15,7 @@
       </div>
       <div class="card p-6">
         <p class="text-sm text-neutral-500 mb-1">Sin leer</p>
-        <p class="text-3xl font-bold text-primary-600">{{ unreadCount }}</p>
+        <p class="text-3xl font-bold text-primary-800">{{ unreadCount }}</p>
       </div>
       <div class="card p-6">
         <p class="text-sm text-neutral-500 mb-1">Este mes</p>
@@ -26,7 +26,7 @@
     <!-- Contacts List -->
     <div class="card overflow-hidden">
       <div v-if="loading" class="p-8 text-center">
-        <div class="inline-block w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
+        <div class="inline-block w-8 h-8 border-4 border-primary-800 border-t-transparent rounded-full animate-spin"></div>
       </div>
 
       <div v-else class="divide-y divide-neutral-100">
@@ -35,20 +35,20 @@
           :key="contact.id"
           @click="openContact(contact)"
           class="p-6 hover:bg-neutral-50 cursor-pointer transition-colors"
-          :class="{ 'bg-primary-50/50': !contact.read }"
+          :class="{ 'bg-neutral-50/50': !contact.read }"
         >
           <div class="flex items-start justify-between">
             <div class="flex items-start space-x-4">
               <div :class="[
                 'w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg',
-                !contact.read ? 'bg-primary-100 text-primary-600' : 'bg-neutral-100 text-neutral-500'
+                !contact.read ? 'bg-primary-200 text-primary-800' : 'bg-neutral-100 text-neutral-500'
               ]">
                 {{ contact.name.charAt(0).toUpperCase() }}
               </div>
               <div>
                 <div class="flex items-center space-x-2">
                   <h3 class="font-semibold text-neutral-900">{{ contact.name }}</h3>
-                  <span v-if="!contact.read" class="w-2 h-2 bg-primary-600 rounded-full"></span>
+                  <span v-if="!contact.read" class="w-2 h-2 bg-primary-800 rounded-full"></span>
                 </div>
                 <p class="text-sm text-neutral-500">{{ contact.email }}</p>
                 <p class="font-medium text-neutral-700 mt-1">{{ contact.subject }}</p>
@@ -92,12 +92,12 @@
 
         <div class="space-y-4 mb-6">
           <div class="flex items-center space-x-4">
-            <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 font-bold">
+            <div class="w-12 h-12 bg-primary-200 rounded-full flex items-center justify-center text-primary-800 font-bold">
               {{ selectedContact.name.charAt(0).toUpperCase() }}
             </div>
             <div>
               <p class="font-semibold text-neutral-900">{{ selectedContact.name }}</p>
-              <a :href="`mailto:${selectedContact.email}`" class="text-primary-600 hover:text-primary-700">
+              <a :href="`mailto:${selectedContact.email}`" class="text-accent-600 hover:text-accent-700">
                 {{ selectedContact.email }}
               </a>
             </div>
@@ -107,13 +107,13 @@
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
-            <a :href="`tel:${selectedContact.phone}`" class="hover:text-primary-600">
+            <a :href="`tel:${selectedContact.phone}`" class="hover:text-primary-900">
               {{ selectedContact.phone }}
             </a>
           </div>
 
           <div v-if="selectedContact.service" class="flex items-center space-x-2">
-            <span class="px-3 py-1 bg-primary-100 text-primary-700 text-sm font-medium rounded-full">
+            <span class="px-3 py-1 bg-primary-200 text-primary-800 text-sm font-medium rounded-full">
               {{ selectedContact.service }}
             </span>
           </div>

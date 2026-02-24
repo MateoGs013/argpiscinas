@@ -2,7 +2,7 @@
   <div class="min-h-screen flex items-center justify-center bg-neutral-100 px-4">
     <div class="w-full max-w-md">
       <div class="text-center mb-8">
-        <RouterLink to="/" class="inline-flex items-center space-x-2 text-2xl font-bold text-primary-600">
+        <RouterLink to="/" class="inline-flex items-center space-x-2 text-2xl font-bold text-primary-800">
           <svg class="w-10 h-10" viewBox="0 0 40 40" fill="none">
             <rect width="40" height="40" rx="8" fill="currentColor"/>
             <path d="M12 28C12 22.477 16.477 18 22 18H28V22C28 27.523 23.523 32 18 32H12V28Z" fill="white"/>
@@ -65,7 +65,7 @@
         </form>
 
         <p class="mt-6 text-center text-sm text-neutral-500">
-          <RouterLink to="/" class="text-primary-600 hover:text-primary-700">
+          <RouterLink to="/" class="text-accent-600 hover:text-accent-700">
             ← Volver a la web
           </RouterLink>
         </p>
@@ -98,13 +98,14 @@ const handleLogin = async () => {
   loading.value = true
   error.value = ''
 
-  try {
-    await authStore.login(form.email, form.password)
+  const success = await authStore.login(form.email, form.password)
+  
+  if (success) {
     router.push('/admin')
-  } catch (err) {
-    error.value = err.response?.data?.message || 'Error al iniciar sesión. Verifica tus credenciales.'
-  } finally {
-    loading.value = false
+  } else {
+    error.value = authStore.error || 'Error al iniciar sesión. Verifica tus credenciales.'
   }
+  
+  loading.value = false
 }
 </script>

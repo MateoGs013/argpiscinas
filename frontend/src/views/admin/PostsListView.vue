@@ -39,7 +39,7 @@
     <!-- Posts Table -->
     <div class="card overflow-hidden">
       <div v-if="loading" class="p-8 text-center">
-        <div class="inline-block w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
+        <div class="inline-block w-8 h-8 border-4 border-primary-800 border-t-transparent rounded-full animate-spin"></div>
       </div>
 
       <table v-else class="w-full">
@@ -57,7 +57,7 @@
             <td class="px-6 py-4">
               <div class="flex items-center space-x-4">
                 <div v-if="post.featuredImage" class="w-16 h-12 rounded-lg overflow-hidden flex-shrink-0">
-                  <img :src="post.featuredImage" :alt="post.title" class="w-full h-full object-cover" />
+                  <img :src="resolveImageUrl(post.featuredImage)" :alt="post.title" class="w-full h-full object-cover" />
                 </div>
                 <div v-else class="w-16 h-12 rounded-lg bg-neutral-100 flex items-center justify-center flex-shrink-0">
                   <svg class="w-6 h-6 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -94,7 +94,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                 </a>
-                <RouterLink :to="`/admin/posts/${post.id}`" class="p-2 text-neutral-400 hover:text-primary-600">
+                <RouterLink :to="`/admin/posts/${post.id}`" class="p-2 text-neutral-400 hover:text-primary-900">
                   <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                   </svg>
@@ -139,6 +139,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { usePostsStore } from '@/stores/posts'
+import { resolveImageUrl } from '@/services/api'
 import { useCategoriesStore } from '@/stores/categories'
 
 const postsStore = usePostsStore()
