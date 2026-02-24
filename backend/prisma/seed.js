@@ -392,11 +392,11 @@ Una piscina completamente renovada con un aspecto moderno y elegante, garantía 
 **Inversión:** €12.500`,
         location: 'Madrid Norte',
         year: 2024,
-        images: JSON.stringify([
+        images: [
           '/images/projects/madrid-norte-1.jpg',
           '/images/projects/madrid-norte-2.jpg',
           '/images/projects/madrid-norte-3.jpg',
-        ]),
+        ],
         featured: true,
       },
     }),
@@ -428,10 +428,10 @@ La comunidad de propietarios de este complejo residencial en Valencia necesitaba
 **Inversión:** €35.000`,
         location: 'Valencia',
         year: 2024,
-        images: JSON.stringify([
+        images: [
           '/images/projects/valencia-comunidad-1.jpg',
           '/images/projects/valencia-comunidad-2.jpg',
-        ]),
+        ],
         featured: true,
       },
     }),
@@ -464,11 +464,11 @@ Esta espectacular villa en Marbella requería una piscina a la altura de sus vis
 **Inversión:** €85.000`,
         location: 'Marbella',
         year: 2023,
-        images: JSON.stringify([
+        images: [
           '/images/projects/marbella-infinity-1.jpg',
           '/images/projects/marbella-infinity-2.jpg',
           '/images/projects/marbella-infinity-3.jpg',
-        ]),
+        ],
         featured: true,
       },
     }),
@@ -534,6 +534,10 @@ Esta espectacular villa en Marbella requería una piscina a la altura de sus vis
   console.log('📧 Credenciales de acceso:');
   console.log('   Admin: admin@argpiscinas.com / admin123');
   console.log('   Editor: editor@argpiscinas.com / editor123');
+
+  // Seed de contenido del sitio
+  const { seedContent } = require('./seed-content');
+  await seedContent();
 }
 
 main()

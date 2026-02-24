@@ -14,6 +14,7 @@ const contactRoutes = require('./routes/contact.routes');
 const testimonialRoutes = require('./routes/testimonial.routes');
 const uploadRoutes = require('./routes/upload.routes');
 const sitemapRoutes = require('./routes/sitemap.routes');
+const contentRoutes = require('./routes/content.routes');
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/content', contentRoutes);
 app.use('/api', sitemapRoutes);
 
 // Ruta de health check
