@@ -1,12 +1,20 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="relative py-32 bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700">
+    <section class="relative py-40 bg-midnight-800 overflow-hidden">
+      <div class="absolute inset-0">
+        <img 
+          src="@/assets/img/RENOLIT_VOGUE_urban_DSC_8772.jpg" 
+          alt="Proyectos de piscinas realizados"
+          class="w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-midnight-800 via-midnight-800/70 to-midnight-800/40"></div>
+      </div>
       <div class="container-custom relative z-10">
         <div class="max-w-3xl">
-          <span class="text-primary-300 font-semibold text-sm uppercase tracking-wider mb-4 block">Nuestro Trabajo</span>
+          <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">Nuestro Trabajo</span>
           <h1 class="text-white mb-6">Proyectos Realizados</h1>
-          <p class="text-xl text-white/80">
+          <p class="text-xl text-silver-400 leading-relaxed">
             Descubre algunos de nuestros trabajos más destacados. Cada proyecto refleja 
             nuestro compromiso con la calidad y la satisfacción del cliente.
           </p>
@@ -15,18 +23,18 @@
     </section>
 
     <!-- Filters -->
-    <section class="py-8 bg-white border-b">
+    <section class="py-6 bg-neutral-50 border-b border-neutral-100 sticky top-[72px] z-30 backdrop-blur-sm bg-neutral-50/95">
       <div class="container-custom">
-        <div class="flex flex-wrap gap-3">
+        <div class="flex flex-wrap gap-2">
           <button 
             v-for="filter in filters" 
             :key="filter.value"
             @click="activeFilter = filter.value"
             :class="[
-              'px-5 py-2 rounded-full text-sm font-medium transition-all',
+              'px-5 py-2 rounded-full text-xs font-medium uppercase tracking-wider transition-all duration-300',
               activeFilter === filter.value 
-                ? 'bg-primary-600 text-white' 
-                : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                ? 'bg-midnight-800 text-white' 
+                : 'bg-neutral-100 text-neutral-500 hover:bg-neutral-200'
             ]"
           >
             {{ filter.label }}
@@ -39,15 +47,15 @@
     <section class="section-padding bg-neutral-50">
       <div class="container-custom">
         <div v-if="loading" class="text-center py-20">
-          <div class="inline-block w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
-          <p class="mt-4 text-neutral-600">Cargando proyectos...</p>
+          <div class="inline-block w-6 h-6 border-2 border-midnight-800 border-t-transparent rounded-full animate-spin"></div>
+          <p class="mt-4 text-neutral-400 text-sm">Cargando proyectos...</p>
         </div>
 
         <div v-else-if="filteredProjects.length === 0" class="text-center py-20">
-          <svg class="w-16 h-16 mx-auto text-neutral-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          <svg class="w-12 h-12 mx-auto text-neutral-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
           </svg>
-          <p class="text-neutral-600">No hay proyectos en esta categoría</p>
+          <p class="text-neutral-500 text-sm">No hay proyectos en esta categoría</p>
         </div>
 
         <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -55,32 +63,32 @@
             v-for="project in filteredProjects" 
             :key="project.id"
             :to="`/proyectos/${project.slug}`"
-            class="group card overflow-hidden"
+            class="group bg-white rounded-boutique-lg border border-neutral-100 overflow-hidden hover:shadow-lg transition-all duration-500"
           >
             <div class="relative aspect-[4/3] overflow-hidden">
               <img 
-                :src="project.featuredImage || 'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'" 
+                :src="resolveImageUrl(project.featuredImage) || 'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'" 
                 :alt="project.title"
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div class="absolute top-4 left-4">
-                <span class="px-3 py-1 bg-white/90 text-primary-600 text-sm font-medium rounded-full">
+                <span class="px-3 py-1.5 bg-midnight-800/80 backdrop-blur-sm text-white text-xs font-medium tracking-wide rounded-full">
                   {{ project.category }}
                 </span>
               </div>
             </div>
             <div class="p-6">
-              <h2 class="text-xl font-bold text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors">
+              <h2 class="text-lg font-bold text-neutral-900 mb-2 group-hover:text-charcoal-500 transition-colors duration-300">
                 {{ project.title }}
               </h2>
-              <div class="flex items-center text-neutral-500 text-sm mb-3">
-                <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              <div class="flex items-center text-neutral-400 text-xs mb-3 tracking-wide">
+                <svg class="w-3.5 h-3.5 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 {{ project.location }}
               </div>
-              <p class="text-neutral-600 line-clamp-2">{{ project.description }}</p>
+              <p class="text-neutral-500 text-sm leading-relaxed line-clamp-2">{{ project.description }}</p>
             </div>
           </RouterLink>
         </div>
@@ -88,10 +96,12 @@
     </section>
 
     <!-- CTA -->
-    <section class="py-20 bg-primary-600">
-      <div class="container-custom text-center">
+    <section class="relative py-32 bg-midnight-800 overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-charcoal-600/20 to-transparent"></div>
+      <div class="container-custom relative z-10 text-center">
+        <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">Tu Proyecto</span>
         <h2 class="text-white mb-6">¿Te gustaría ver tu piscina aquí?</h2>
-        <p class="text-primary-100 text-xl mb-10 max-w-2xl mx-auto">
+        <p class="text-silver-400 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
           Contáctanos y empieza a hacer realidad el proyecto de tu piscina.
         </p>
         <RouterLink to="/contacto" class="btn btn-white btn-lg">
@@ -106,6 +116,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useProjectsStore } from '@/stores/projects'
 import { useSeo } from '@/composables/useSeo'
+import { resolveImageUrl } from '@/services/api'
 
 useSeo({
   title: 'Proyectos de Piscinas Realizados',

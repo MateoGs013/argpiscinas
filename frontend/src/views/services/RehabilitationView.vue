@@ -1,25 +1,82 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="relative py-32 bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700">
+    <section class="relative py-40 bg-midnight-800 overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-charcoal-600/30 to-midnight-800"></div>
       <div class="container-custom relative z-10">
         <div class="max-w-3xl">
-          <span class="text-primary-300 font-semibold text-sm uppercase tracking-wider mb-4 block">Servicio Especializado</span>
-          <h1 class="text-white mb-6">Rehabilitación de Piscinas</h1>
-          <p class="text-xl text-white/80">
-            Devolvemos la vida a tu piscina. Solucionamos filtraciones, deterioro del gresite 
-            y cualquier problema estructural con resultados garantizados.
+          <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('services.rehabilitation.hero_label', 'Servicio Especializado') }}</span>
+          <h1 class="text-white mb-6">{{ t('services.rehabilitation.hero_title', 'Rehabilitación de Piscinas') }}</h1>
+          <p class="text-xl text-silver-400 leading-relaxed">
+            {{ t('services.rehabilitation.hero_desc', 'Devolvemos la vida a tu piscina. Solucionamos filtraciones, deterioro del gresite y cualquier problema estructural con resultados garantizados.') }}
           </p>
         </div>
       </div>
     </section>
 
     <!-- Content -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-neutral-50">
       <div class="container-custom">
-        <div class="grid lg:grid-cols-3 gap-12">
-          <div class="lg:col-span-2 prose max-w-none">
-            <h2>¿Cuándo Rehabilitar tu Piscina?</h2>
+        <div class="grid lg:grid-cols-3 gap-14">
+          <div class="lg:col-span-2 prose max-w-none" v-html="t('services.rehabilitation.content', defaultBody)"></div>
+
+          <!-- Sidebar -->
+          <div class="lg:col-span-1">
+            <div class="sticky top-24 space-y-6">
+              <div class="bg-midnight-800 rounded-boutique-lg p-7">
+                <h3 class="text-lg font-bold text-white mb-4">{{ t('services.rehabilitation.sidebar_cta_title', '¿Tu piscina necesita rehabilitación?') }}</h3>
+                <p class="text-silver-400 text-sm mb-6 leading-relaxed">
+                  {{ t('services.rehabilitation.sidebar_cta_desc', 'Solicita una inspección gratuita y te daremos un diagnóstico completo.') }}
+                </p>
+                <RouterLink to="/contacto" class="btn btn-white w-full text-sm">
+                  {{ t('services.rehabilitation.sidebar_cta_button', 'Solicitar Inspección') }}
+                </RouterLink>
+              </div>
+
+              <div class="bg-white rounded-boutique-lg p-7 border border-neutral-100">
+                <h4 class="font-bold text-neutral-900 text-sm mb-5 uppercase tracking-wide">{{ t('services.rehabilitation.sidebar_alerts_title', 'Señales de alerta:') }}</h4>
+                <ul class="space-y-3">
+                  <li class="flex items-start text-neutral-500 text-sm">
+                    <svg class="w-4 h-4 text-red-500 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    {{ t('services.rehabilitation.sidebar_alert1', 'Nivel de agua baja constantemente') }}
+                  </li>
+                  <li class="flex items-start text-neutral-500 text-sm">
+                    <svg class="w-4 h-4 text-red-500 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    {{ t('services.rehabilitation.sidebar_alert2', 'Gresite que se despega') }}
+                  </li>
+                  <li class="flex items-start text-neutral-500 text-sm">
+                    <svg class="w-4 h-4 text-red-500 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    {{ t('services.rehabilitation.sidebar_alert3', 'Manchas que no desaparecen') }}
+                  </li>
+                  <li class="flex items-start text-neutral-500 text-sm">
+                    <svg class="w-4 h-4 text-red-500 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    {{ t('services.rehabilitation.sidebar_alert4', 'Grietas visibles') }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script setup>
+import { useSeo, useStructuredData } from '@/composables/useSeo'
+import { useContent } from '@/composables/useContent'
+
+const { t } = useContent()
+
+const defaultBody = `<h2>¿Cuándo Rehabilitar tu Piscina?</h2>
             <p>
               Las piscinas, como cualquier estructura, sufren desgaste con el tiempo. 
               Si observas alguna de estas señales, es momento de considerar una rehabilitación:
@@ -36,7 +93,7 @@
             <img 
               src="https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" 
               alt="Rehabilitación de piscina"
-              class="rounded-2xl"
+              class="rounded-boutique-lg"
             />
 
             <h2>Nuestra Solución: Lámina Armada</h2>
@@ -114,61 +171,7 @@
                   <td>Regular</td>
                 </tr>
               </tbody>
-            </table>
-          </div>
-
-          <!-- Sidebar -->
-          <div class="lg:col-span-1">
-            <div class="sticky top-24 space-y-6">
-              <div class="card p-6 bg-primary-50 border-2 border-primary-100">
-                <h3 class="text-xl font-bold text-neutral-900 mb-4">¿Tu piscina necesita rehabilitación?</h3>
-                <p class="text-neutral-600 mb-6">
-                  Solicita una inspección gratuita y te daremos un diagnóstico completo.
-                </p>
-                <RouterLink to="/contacto" class="btn btn-primary w-full">
-                  Solicitar Inspección
-                </RouterLink>
-              </div>
-
-              <div class="card p-6">
-                <h4 class="font-bold text-neutral-900 mb-4">Señales de alerta:</h4>
-                <ul class="space-y-3">
-                  <li class="flex items-start text-neutral-600">
-                    <svg class="w-5 h-5 text-red-500 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                    Nivel de agua baja constantemente
-                  </li>
-                  <li class="flex items-start text-neutral-600">
-                    <svg class="w-5 h-5 text-red-500 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                    Gresite que se despega
-                  </li>
-                  <li class="flex items-start text-neutral-600">
-                    <svg class="w-5 h-5 text-red-500 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                    Manchas que no desaparecen
-                  </li>
-                  <li class="flex items-start text-neutral-600">
-                    <svg class="w-5 h-5 text-red-500 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                    Grietas visibles
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-</template>
-
-<script setup>
-import { useSeo, useStructuredData } from '@/composables/useSeo'
+            </table>`
 
 useSeo({
   title: 'Rehabilitación de Piscinas con Lámina Armada',
