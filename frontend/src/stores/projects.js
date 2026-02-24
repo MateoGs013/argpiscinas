@@ -18,8 +18,10 @@ export const useProjectsStore = defineStore('projects', () => {
 
     try {
       const response = await api.get('/projects', { params })
-      projects.value = response.data
-      return response.data
+      // API returns { projects, pagination } — extract the array
+      const data = response.data
+      projects.value = data.projects || data
+      return data
     } catch (err) {
       error.value = err.response?.data?.error || 'Error al cargar los proyectos'
       return null

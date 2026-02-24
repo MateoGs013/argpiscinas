@@ -64,7 +64,7 @@
           <div class="grid lg:grid-cols-4 gap-14">
             <!-- Main Content -->
             <div class="lg:col-span-3">
-              <div class="prose prose-lg max-w-none" v-html="post.content"></div>
+              <div class="prose prose-lg max-w-none" v-html="sanitizeHtml(post.content)"></div>
 
               <!-- Tags -->
               <div v-if="post.tags && post.tags.length > 0" class="mt-14 pt-8 border-t border-neutral-200">
@@ -182,6 +182,7 @@ import { useRoute } from 'vue-router'
 import { usePostsStore } from '@/stores/posts'
 import { useSeo, useStructuredData } from '@/composables/useSeo'
 import { resolveImageUrl } from '@/services/api'
+import { sanitizeHtml } from '@/composables/useSanitize'
 
 const route = useRoute()
 const postsStore = usePostsStore()

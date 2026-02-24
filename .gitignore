@@ -33,5 +33,9 @@ npm-debug.log*
 uploads/*
 !uploads/.gitkeep
 
+# SQL dumps (keep Prisma migration files tracked)
+backend/argpiscinas.sql
+*.dump.sql
+
 # Vite cache
 .vite/

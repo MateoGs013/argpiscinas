@@ -1,23 +1,39 @@
-const { PrismaClient } = require('@prisma/client');
+const prisma = require('../lib/prisma');
+const { parseId } = require('../lib/parseId');
 
-const prisma = new PrismaClient();
-
-// Obtener testimonios (público)
+// Obtener testimonios (público) — with pagination (M10)
 const getTestimonials = async (req, res) => {
   try {
-    const { featured } = req.query;
+    const { featured, page = 1, limit = 20 } = req.query;
+
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const limitNum = Math.min(50, Math.max(1, parseInt(limit) || 20));
+    const skip = (pageNum - 1) * limitNum;
 
     const where = {};
     if (featured === 'true') {
       where.featured = true;
     }
 
-    const testimonials = await prisma.testimonial.findMany({
-      where,
-      orderBy: { createdAt: 'desc' },
-    });
+    const [testimonials, total] = await Promise.all([
+      prisma.testimonial.findMany({
+        where,
+        skip,
+        take: limitNum,
+        orderBy: { createdAt: 'desc' },
+      }),
+      prisma.testimonial.count({ where }),
+    ]);
 
-    res.json(testimonials);
+    res.json({
+      testimonials,
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total,
+        pages: Math.ceil(total / limitNum),
+      },
+    });
   } catch (error) {
     console.error('Error al obtener testimonios:', error);
     res.status(500).json({ error: 'Error al obtener los testimonios' });
@@ -50,11 +66,13 @@ const createTestimonial = async (req, res) => {
 // Actualizar testimonio
 const updateTestimonial = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'ID inválido' });
+
     const { name, location, content, rating, avatar, featured } = req.body;
 
     const testimonial = await prisma.testimonial.update({
-      where: { id: parseInt(id) },
+      where: { id },
       data: {
         name,
         location,
@@ -75,11 +93,10 @@ const updateTestimonial = async (req, res) => {
 // Eliminar testimonio
 const deleteTestimonial = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'ID inválido' });
 
-    await prisma.testimonial.delete({
-      where: { id: parseInt(id) },
-    });
+    await prisma.testimonial.delete({ where: { id } });
 
     res.json({ message: 'Testimonio eliminado correctamente' });
   } catch (error) {

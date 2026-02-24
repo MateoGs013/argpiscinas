@@ -9,13 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@headlessui/vue": "^1.7.16",
-    "@heroicons/vue": "^2.1.1",
     "@vueuse/core": "^10.7.0",
     "@vueuse/head": "^2.0.0",
     "axios": "^1.6.2",
+    "dompurify": "^3.3.1",
     "gsap": "^3.12.4",
-    "marked": "^11.1.0",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
     "vue": "^3.4.3",

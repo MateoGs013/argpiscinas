@@ -144,12 +144,19 @@ const navLinks = [
 const isScrolled = ref(false)
 const isMobileMenuOpen = ref(false)
 
+let scrollTicking = false
 function handleScroll() {
-  isScrolled.value = window.scrollY > 50
+  if (!scrollTicking) {
+    scrollTicking = true
+    requestAnimationFrame(() => {
+      isScrolled.value = window.scrollY > 50
+      scrollTicking = false
+    })
+  }
 }
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
+  window.addEventListener('scroll', handleScroll, { passive: true })
   handleScroll()
 })
 

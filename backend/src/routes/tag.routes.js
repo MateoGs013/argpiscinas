@@ -1,7 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const { validate } = require('../middlewares/validate.middleware');
-const { authenticate } = require('../middlewares/auth.middleware');
+const { authenticate, authorize } = require('../middlewares/auth.middleware');
 const {
   getTags,
   getTagBySlug,
@@ -16,10 +16,11 @@ const router = express.Router();
 router.get('/', getTags);
 router.get('/:slug', getTagBySlug);
 
-// Rutas admin
+// Rutas admin (H4: authorize ADMIN)
 router.post(
   '/',
   authenticate,
+  authorize('ADMIN'),
   [
     body('name').trim().notEmpty().withMessage('El nombre es requerido'),
   ],
@@ -30,6 +31,7 @@ router.post(
 router.put(
   '/:id',
   authenticate,
+  authorize('ADMIN'),
   [
     body('name').trim().notEmpty().withMessage('El nombre es requerido'),
   ],
@@ -37,6 +39,6 @@ router.put(
   updateTag
 );
 
-router.delete('/:id', authenticate, deleteTag);
+router.delete('/:id', authenticate, authorize('ADMIN'), deleteTag);
 
 module.exports = router;

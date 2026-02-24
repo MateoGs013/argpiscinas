@@ -1,5 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../lib/prisma');
+const { sanitize } = require('../lib/sanitize');
 
 // GET /api/content — Obtener todo el contenido (público)
 const getAllContent = async (req, res) => {
@@ -8,7 +8,6 @@ const getAllContent = async (req, res) => {
       orderBy: [{ section: 'asc' }, { key: 'asc' }]
     });
 
-    // Devolver como objeto key-value para fácil consumo en frontend
     const contentMap = {};
     contents.forEach(item => {
       contentMap[item.key] = item.value;
@@ -28,7 +27,6 @@ const getContentBySections = async (req, res) => {
       orderBy: [{ section: 'asc' }, { id: 'asc' }]
     });
 
-    // Agrupar por sección
     const sections = {};
     contents.forEach(item => {
       if (!sections[item.section]) {
@@ -56,7 +54,7 @@ const updateContent = async (req, res) => {
 
     const content = await prisma.siteContent.update({
       where: { key },
-      data: { value: String(value) }
+      data: { value: sanitize(String(value)) }
     });
 
     res.json({ data: content });
@@ -82,7 +80,7 @@ const bulkUpdateContent = async (req, res) => {
       items.map(item =>
         prisma.siteContent.update({
           where: { key: item.key },
-          data: { value: String(item.value) }
+          data: { value: sanitize(String(item.value)) }
         }).catch(err => {
           console.error(`Error updating key "${item.key}":`, err.message);
           return null;

@@ -39,14 +39,15 @@ api.interceptors.request.use(
 // Response interceptor
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     // Handle 401 Unauthorized
     if (error.response?.status === 401) {
       localStorage.removeItem('token')
       
-      // Only redirect if not on login page
+      // Only redirect if not on login page — use Vue Router (lazy import to avoid circular deps)
       if (!window.location.pathname.includes('/admin/login')) {
-        window.location.href = '/admin/login'
+        const { default: router } = await import('@/router')
+        router.push({ name: 'admin-login' })
       }
     }
     

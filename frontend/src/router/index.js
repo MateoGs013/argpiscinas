@@ -1,9 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
-// Public views
-import HomeView from '@/views/HomeView.vue'
-
 const routes = [
   // =====================
   // PUBLIC ROUTES
@@ -11,7 +8,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView,
+    component: () => import('@/views/HomeView.vue'),
     meta: { title: 'Inicio' }
   },
   {
@@ -122,43 +119,43 @@ const routes = [
     path: '/admin/categorias',
     name: 'admin-categories',
     component: () => import('@/views/admin/CategoriesView.vue'),
-    meta: { title: 'Categorías', requiresAuth: true }
+    meta: { title: 'Categorías', requiresAuth: true, requiresAdmin: true }
   },
   {
     path: '/admin/tags',
     name: 'admin-tags',
     component: () => import('@/views/admin/TagsView.vue'),
-    meta: { title: 'Tags', requiresAuth: true }
+    meta: { title: 'Tags', requiresAuth: true, requiresAdmin: true }
   },
   {
     path: '/admin/proyectos',
     name: 'admin-projects',
     component: () => import('@/views/admin/ProjectsListView.vue'),
-    meta: { title: 'Proyectos', requiresAuth: true }
+    meta: { title: 'Proyectos', requiresAuth: true, requiresAdmin: true }
   },
   {
     path: '/admin/proyectos/nuevo',
     name: 'admin-project-new',
     component: () => import('@/views/admin/ProjectFormView.vue'),
-    meta: { title: 'Nuevo Proyecto', requiresAuth: true }
+    meta: { title: 'Nuevo Proyecto', requiresAuth: true, requiresAdmin: true }
   },
   {
     path: '/admin/proyectos/:id',
     name: 'admin-project-edit',
     component: () => import('@/views/admin/ProjectFormView.vue'),
-    meta: { title: 'Editar Proyecto', requiresAuth: true }
+    meta: { title: 'Editar Proyecto', requiresAuth: true, requiresAdmin: true }
   },
   {
     path: '/admin/contenido',
     name: 'admin-content',
     component: () => import('@/views/admin/ContentView.vue'),
-    meta: { title: 'Contenido', requiresAuth: true }
+    meta: { title: 'Contenido', requiresAuth: true, requiresAdmin: true }
   },
   {
     path: '/admin/contactos',
     name: 'admin-contacts',
     component: () => import('@/views/admin/ContactsView.vue'),
-    meta: { title: 'Contactos', requiresAuth: true }
+    meta: { title: 'Contactos', requiresAuth: true, requiresAdmin: true }
   },
 
   // =====================
@@ -197,6 +194,12 @@ router.beforeEach((to, from, next) => {
   // Check authentication for protected routes
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next({ name: 'admin-login', query: { redirect: to.fullPath } })
+    return
+  }
+
+  // Check admin role for admin-only routes
+  if (to.meta.requiresAdmin && !authStore.isAdmin) {
+    next({ name: 'admin' })
     return
   }
 

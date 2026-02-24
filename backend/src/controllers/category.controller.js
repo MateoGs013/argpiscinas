@@ -1,7 +1,6 @@
-const { PrismaClient } = require('@prisma/client');
-const slugify = require('slugify');
-
-const prisma = new PrismaClient();
+const prisma = require('../lib/prisma');
+const { generateSlug } = require('../lib/slugify');
+const { parseId } = require('../lib/parseId');
 
 // Obtener todas las categorías
 const getCategories = async (req, res) => {
@@ -60,22 +59,16 @@ const createCategory = async (req, res) => {
   try {
     const { name, description } = req.body;
 
-    const slug = slugify(name, { lower: true, strict: true });
+    const slug = generateSlug(name);
 
-    const existingCategory = await prisma.category.findUnique({
-      where: { slug },
-    });
+    const existingCategory = await prisma.category.findUnique({ where: { slug } });
 
     if (existingCategory) {
       return res.status(400).json({ error: 'Ya existe una categoría con ese nombre' });
     }
 
     const category = await prisma.category.create({
-      data: {
-        name,
-        slug,
-        description,
-      },
+      data: { name, slug, description },
     });
 
     res.status(201).json(category);
@@ -88,12 +81,12 @@ const createCategory = async (req, res) => {
 // Actualizar categoría
 const updateCategory = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'ID inválido' });
+
     const { name, description } = req.body;
 
-    const existingCategory = await prisma.category.findUnique({
-      where: { id: parseInt(id) },
-    });
+    const existingCategory = await prisma.category.findUnique({ where: { id } });
 
     if (!existingCategory) {
       return res.status(404).json({ error: 'Categoría no encontrada' });
@@ -102,12 +95,9 @@ const updateCategory = async (req, res) => {
     const updateData = { description };
 
     if (name && name !== existingCategory.name) {
-      const newSlug = slugify(name, { lower: true, strict: true });
+      const newSlug = generateSlug(name);
       const slugExists = await prisma.category.findFirst({
-        where: {
-          slug: newSlug,
-          id: { not: parseInt(id) },
-        },
+        where: { slug: newSlug, id: { not: id } },
       });
 
       if (slugExists) {
@@ -119,7 +109,7 @@ const updateCategory = async (req, res) => {
     }
 
     const category = await prisma.category.update({
-      where: { id: parseInt(id) },
+      where: { id },
       data: updateData,
     });
 
@@ -133,10 +123,11 @@ const updateCategory = async (req, res) => {
 // Eliminar categoría
 const deleteCategory = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'ID inválido' });
 
     const category = await prisma.category.findUnique({
-      where: { id: parseInt(id) },
+      where: { id },
       include: {
         _count: {
           select: { posts: true },
@@ -154,9 +145,7 @@ const deleteCategory = async (req, res) => {
       });
     }
 
-    await prisma.category.delete({
-      where: { id: parseInt(id) },
-    });
+    await prisma.category.delete({ where: { id } });
 
     res.json({ message: 'Categoría eliminada correctamente' });
   } catch (error) {

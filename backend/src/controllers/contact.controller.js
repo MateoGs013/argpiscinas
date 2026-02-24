@@ -1,6 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
-
-const prisma = new PrismaClient();
+const prisma = require('../lib/prisma');
+const { parseId } = require('../lib/parseId');
 
 // Enviar mensaje de contacto
 const createContact = async (req, res) => {
@@ -32,8 +31,9 @@ const getContacts = async (req, res) => {
   try {
     const { page = 1, limit = 20, status } = req.query;
 
-    const skip = (parseInt(page) - 1) * parseInt(limit);
-    const take = parseInt(limit);
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const limitNum = Math.min(100, Math.max(1, parseInt(limit) || 20));
+    const skip = (pageNum - 1) * limitNum;
 
     const where = {};
     if (status) {
@@ -44,7 +44,7 @@ const getContacts = async (req, res) => {
       prisma.contact.findMany({
         where,
         skip,
-        take,
+        take: limitNum,
         orderBy: { createdAt: 'desc' },
       }),
       prisma.contact.count({ where }),
@@ -53,10 +53,10 @@ const getContacts = async (req, res) => {
     res.json({
       contacts,
       pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
+        page: pageNum,
+        limit: limitNum,
         total,
-        pages: Math.ceil(total / take),
+        pages: Math.ceil(total / limitNum),
       },
     });
   } catch (error) {
@@ -68,11 +68,10 @@ const getContacts = async (req, res) => {
 // Obtener un contacto
 const getContactById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'ID inválido' });
 
-    const contact = await prisma.contact.findUnique({
-      where: { id: parseInt(id) },
-    });
+    const contact = await prisma.contact.findUnique({ where: { id } });
 
     if (!contact) {
       return res.status(404).json({ error: 'Contacto no encontrado' });
@@ -88,11 +87,13 @@ const getContactById = async (req, res) => {
 // Actualizar estado del contacto
 const updateContactStatus = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'ID inválido' });
+
     const { status } = req.body;
 
     const contact = await prisma.contact.update({
-      where: { id: parseInt(id) },
+      where: { id },
       data: { status },
     });
 
@@ -106,11 +107,10 @@ const updateContactStatus = async (req, res) => {
 // Eliminar contacto
 const deleteContact = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'ID inválido' });
 
-    await prisma.contact.delete({
-      where: { id: parseInt(id) },
-    });
+    await prisma.contact.delete({ where: { id } });
 
     res.json({ message: 'Contacto eliminado correctamente' });
   } catch (error) {

@@ -1,7 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const { validate } = require('../middlewares/validate.middleware');
-const { authenticate } = require('../middlewares/auth.middleware');
+const { authenticate, authorize } = require('../middlewares/auth.middleware');
 const {
   getTestimonials,
   createTestimonial,
@@ -14,10 +14,11 @@ const router = express.Router();
 // Ruta pública
 router.get('/', getTestimonials);
 
-// Rutas admin
+// Rutas admin (H4: authorize ADMIN)
 router.post(
   '/',
   authenticate,
+  authorize('ADMIN'),
   [
     body('name').trim().notEmpty().withMessage('El nombre es requerido'),
     body('content').trim().notEmpty().withMessage('El contenido es requerido'),
@@ -30,6 +31,7 @@ router.post(
 router.put(
   '/:id',
   authenticate,
+  authorize('ADMIN'),
   [
     body('name').optional().trim().notEmpty().withMessage('El nombre no puede estar vacío'),
     body('content').optional().trim().notEmpty().withMessage('El contenido no puede estar vacío'),
@@ -39,6 +41,6 @@ router.put(
   updateTestimonial
 );
 
-router.delete('/:id', authenticate, deleteTestimonial);
+router.delete('/:id', authenticate, authorize('ADMIN'), deleteTestimonial);
 
 module.exports = router;

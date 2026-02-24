@@ -9,8 +9,8 @@ async function main() {
   // =====================
   // USUARIOS
   // =====================
-  const adminPassword = await bcrypt.hash('admin123', 10);
-  const editorPassword = await bcrypt.hash('editor123', 10);
+  const adminPassword = await bcrypt.hash(process.env.SEED_ADMIN_PASSWORD || 'Admin1234!', 10);
+  const editorPassword = await bcrypt.hash(process.env.SEED_EDITOR_PASSWORD || 'Editor1234!', 10);
 
   const admin = await prisma.user.upsert({
     where: { email: 'admin@argpiscinas.com' },
@@ -532,8 +532,8 @@ Esta espectacular villa en Marbella requería una piscina a la altura de sus vis
   console.log('🎉 Seed completado exitosamente!');
   console.log('');
   console.log('📧 Credenciales de acceso:');
-  console.log('   Admin: admin@argpiscinas.com / admin123');
-  console.log('   Editor: editor@argpiscinas.com / editor123');
+  console.log('   Admin: admin@argpiscinas.com / (SEED_ADMIN_PASSWORD env var)');
+  console.log('   Editor: editor@argpiscinas.com / (SEED_EDITOR_PASSWORD env var)');
 
   // Seed de contenido del sitio
   const { seedContent } = require('./seed-content');

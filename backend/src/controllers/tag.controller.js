@@ -1,7 +1,6 @@
-const { PrismaClient } = require('@prisma/client');
-const slugify = require('slugify');
-
-const prisma = new PrismaClient();
+const prisma = require('../lib/prisma');
+const { generateSlug } = require('../lib/slugify');
+const { parseId } = require('../lib/parseId');
 
 // Obtener todos los tags
 const getTags = async (req, res) => {
@@ -60,21 +59,16 @@ const createTag = async (req, res) => {
   try {
     const { name } = req.body;
 
-    const slug = slugify(name, { lower: true, strict: true });
+    const slug = generateSlug(name);
 
-    const existingTag = await prisma.tag.findUnique({
-      where: { slug },
-    });
+    const existingTag = await prisma.tag.findUnique({ where: { slug } });
 
     if (existingTag) {
       return res.status(400).json({ error: 'Ya existe un tag con ese nombre' });
     }
 
     const tag = await prisma.tag.create({
-      data: {
-        name,
-        slug,
-      },
+      data: { name, slug },
     });
 
     res.status(201).json(tag);
@@ -87,24 +81,21 @@ const createTag = async (req, res) => {
 // Actualizar tag
 const updateTag = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'ID inválido' });
+
     const { name } = req.body;
 
-    const existingTag = await prisma.tag.findUnique({
-      where: { id: parseInt(id) },
-    });
+    const existingTag = await prisma.tag.findUnique({ where: { id } });
 
     if (!existingTag) {
       return res.status(404).json({ error: 'Tag no encontrado' });
     }
 
-    const newSlug = slugify(name, { lower: true, strict: true });
+    const newSlug = generateSlug(name);
     
     const slugExists = await prisma.tag.findFirst({
-      where: {
-        slug: newSlug,
-        id: { not: parseInt(id) },
-      },
+      where: { slug: newSlug, id: { not: id } },
     });
 
     if (slugExists) {
@@ -112,11 +103,8 @@ const updateTag = async (req, res) => {
     }
 
     const tag = await prisma.tag.update({
-      where: { id: parseInt(id) },
-      data: {
-        name,
-        slug: newSlug,
-      },
+      where: { id },
+      data: { name, slug: newSlug },
     });
 
     res.json(tag);
@@ -129,19 +117,16 @@ const updateTag = async (req, res) => {
 // Eliminar tag
 const deleteTag = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'ID inválido' });
 
-    const tag = await prisma.tag.findUnique({
-      where: { id: parseInt(id) },
-    });
+    const tag = await prisma.tag.findUnique({ where: { id } });
 
     if (!tag) {
       return res.status(404).json({ error: 'Tag no encontrado' });
     }
 
-    await prisma.tag.delete({
-      where: { id: parseInt(id) },
-    });
+    await prisma.tag.delete({ where: { id } });
 
     res.json({ message: 'Tag eliminado correctamente' });
   } catch (error) {

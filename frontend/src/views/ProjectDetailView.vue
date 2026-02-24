@@ -58,7 +58,7 @@
             <!-- Main Content -->
             <div class="lg:col-span-2">
               <h2 class="text-2xl font-bold text-neutral-900 mb-6">Descripción del Proyecto</h2>
-              <div class="prose max-w-none" v-html="project.description"></div>
+              <div class="prose max-w-none" v-html="sanitizeHtml(project.description)"></div>
 
               <!-- Gallery -->
               <div v-if="project.images && project.images.length > 0" class="mt-14">
@@ -168,6 +168,7 @@ import { useRoute } from 'vue-router'
 import { useProjectsStore } from '@/stores/projects'
 import { useSeo } from '@/composables/useSeo'
 import { resolveImageUrl } from '@/services/api'
+import { sanitizeHtml } from '@/composables/useSanitize'
 
 const route = useRoute()
 const projectsStore = useProjectsStore()

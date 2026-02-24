@@ -1,12 +1,16 @@
-const { PrismaClient } = require('@prisma/client');
-const slugify = require('slugify');
+const prisma = require('../lib/prisma');
+const { sanitize } = require('../lib/sanitize');
+const { generateSlug, ensureUniqueSlug } = require('../lib/slugify');
+const { parseId } = require('../lib/parseId');
 
-const prisma = new PrismaClient();
-
-// Obtener proyectos (público)
+// Obtener proyectos (público) — with pagination (M10)
 const getProjects = async (req, res) => {
   try {
-    const { featured, category } = req.query;
+    const { featured, category, page = 1, limit = 20 } = req.query;
+
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const limitNum = Math.min(50, Math.max(1, parseInt(limit) || 20));
+    const skip = (pageNum - 1) * limitNum;
 
     const where = {};
     if (featured === 'true') {
@@ -16,12 +20,25 @@ const getProjects = async (req, res) => {
       where.category = category;
     }
 
-    const projects = await prisma.project.findMany({
-      where,
-      orderBy: { createdAt: 'desc' },
-    });
+    const [projects, total] = await Promise.all([
+      prisma.project.findMany({
+        where,
+        skip,
+        take: limitNum,
+        orderBy: { createdAt: 'desc' },
+      }),
+      prisma.project.count({ where }),
+    ]);
 
-    res.json(projects);
+    res.json({
+      projects,
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total,
+        pages: Math.ceil(total / limitNum),
+      },
+    });
   } catch (error) {
     console.error('Error al obtener proyectos:', error);
     res.status(500).json({ error: 'Error al obtener los proyectos' });
@@ -35,16 +52,12 @@ const getProjectBySlug = async (req, res) => {
 
     // Try by ID first (for admin), then by slug (for public)
     let project = null;
-    const idNum = parseInt(slug);
-    if (!isNaN(idNum)) {
-      project = await prisma.project.findUnique({
-        where: { id: idNum },
-      });
+    const idNum = parseId(slug);
+    if (idNum) {
+      project = await prisma.project.findUnique({ where: { id: idNum } });
     }
     if (!project) {
-      project = await prisma.project.findUnique({
-        where: { slug },
-      });
+      project = await prisma.project.findUnique({ where: { slug } });
     }
 
     if (!project) {
@@ -63,19 +76,15 @@ const createProject = async (req, res) => {
   try {
     const { title, description, content, category, location, year, featuredImage, images, featured } = req.body;
 
-    let slug = slugify(title, { lower: true, strict: true });
-
-    const existingProject = await prisma.project.findUnique({ where: { slug } });
-    if (existingProject) {
-      slug = `${slug}-${Date.now()}`;
-    }
+    const baseSlug = generateSlug(title);
+    const slug = await ensureUniqueSlug(prisma, 'project', baseSlug);
 
     const project = await prisma.project.create({
       data: {
         title,
         slug,
         description,
-        content,
+        content: sanitize(content),
         category: category || null,
         location,
         year: year ? parseInt(year) : null,
@@ -95,12 +104,12 @@ const createProject = async (req, res) => {
 // Actualizar proyecto
 const updateProject = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'ID inválido' });
+
     const { title, description, content, category, location, year, featuredImage, images, featured } = req.body;
 
-    const existingProject = await prisma.project.findUnique({
-      where: { id: parseInt(id) },
-    });
+    const existingProject = await prisma.project.findUnique({ where: { id } });
 
     if (!existingProject) {
       return res.status(404).json({ error: 'Proyecto no encontrado' });
@@ -108,20 +117,13 @@ const updateProject = async (req, res) => {
 
     const updateData = {};
 
-    // Only include fields that were actually sent (avoid undefined in Prisma data)
     if (title && title !== existingProject.title) {
-      let newSlug = slugify(title, { lower: true, strict: true });
-      const slugExists = await prisma.project.findFirst({
-        where: { slug: newSlug, id: { not: parseInt(id) } },
-      });
-      if (slugExists) {
-        newSlug = `${newSlug}-${Date.now()}`;
-      }
+      const newSlug = generateSlug(title);
+      updateData.slug = await ensureUniqueSlug(prisma, 'project', newSlug, id);
       updateData.title = title;
-      updateData.slug = newSlug;
     }
     if (description !== undefined) updateData.description = description;
-    if (content !== undefined) updateData.content = content;
+    if (content !== undefined) updateData.content = sanitize(content);
     if (category !== undefined) updateData.category = category || null;
     if (location !== undefined) updateData.location = location;
     if (year !== undefined) updateData.year = year ? parseInt(year) : null;
@@ -130,7 +132,7 @@ const updateProject = async (req, res) => {
     if (featured !== undefined) updateData.featured = featured === true;
 
     const project = await prisma.project.update({
-      where: { id: parseInt(id) },
+      where: { id },
       data: updateData,
     });
 
@@ -144,19 +146,16 @@ const updateProject = async (req, res) => {
 // Eliminar proyecto
 const deleteProject = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'ID inválido' });
 
-    const project = await prisma.project.findUnique({
-      where: { id: parseInt(id) },
-    });
+    const project = await prisma.project.findUnique({ where: { id } });
 
     if (!project) {
       return res.status(404).json({ error: 'Proyecto no encontrado' });
     }
 
-    await prisma.project.delete({
-      where: { id: parseInt(id) },
-    });
+    await prisma.project.delete({ where: { id } });
 
     res.json({ message: 'Proyecto eliminado correctamente' });
   } catch (error) {

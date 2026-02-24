@@ -1,7 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const { validate } = require('../middlewares/validate.middleware');
-const { authenticate, optionalAuth } = require('../middlewares/auth.middleware');
+const { authenticate, authorize, optionalAuth } = require('../middlewares/auth.middleware');
 const {
   getPosts,
   getAdminPosts,
@@ -19,13 +19,14 @@ const router = express.Router();
 router.get('/', getPosts);
 router.get('/slug/:slug', optionalAuth, getPostBySlug);
 
-// Rutas admin
-router.get('/admin', authenticate, getAdminPosts);
-router.get('/admin/:id', authenticate, getPostById);
+// Rutas admin (H4: authorize ADMIN)
+router.get('/admin', authenticate, authorize('ADMIN', 'EDITOR'), getAdminPosts);
+router.get('/admin/:id', authenticate, authorize('ADMIN', 'EDITOR'), getPostById);
 
 router.post(
   '/',
   authenticate,
+  authorize('ADMIN', 'EDITOR'),
   [
     body('title').trim().notEmpty().withMessage('El título es requerido'),
     body('content').trim().notEmpty().withMessage('El contenido es requerido'),
@@ -38,6 +39,7 @@ router.post(
 router.put(
   '/:id',
   authenticate,
+  authorize('ADMIN', 'EDITOR'),
   [
     body('title').optional().trim().notEmpty().withMessage('El título no puede estar vacío'),
     body('status').optional().isIn(['DRAFT', 'PUBLISHED', 'ARCHIVED']).withMessage('Estado inválido'),
@@ -49,6 +51,7 @@ router.put(
 router.patch(
   '/:id/status',
   authenticate,
+  authorize('ADMIN', 'EDITOR'),
   [
     body('status').isIn(['DRAFT', 'PUBLISHED', 'ARCHIVED']).withMessage('Estado inválido'),
   ],
@@ -56,6 +59,6 @@ router.patch(
   updatePostStatus
 );
 
-router.delete('/:id', authenticate, deletePost);
+router.delete('/:id', authenticate, authorize('ADMIN'), deletePost);
 
 module.exports = router;

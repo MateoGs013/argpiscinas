@@ -1,15 +1,15 @@
-const { PrismaClient } = require('@prisma/client');
+const prisma = require('../lib/prisma');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const prisma = new PrismaClient();
+const MIN_PASSWORD_LENGTH = 8;
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
 // Login
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Buscar usuario
     const user = await prisma.user.findUnique({
       where: { email },
     });
@@ -18,14 +18,12 @@ const login = async (req, res) => {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
-    // Verificar contraseña
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
-    // Generar token
     const token = jwt.sign(
       { userId: user.id, role: user.role },
       process.env.JWT_SECRET,
@@ -82,6 +80,17 @@ const updateProfile = async (req, res) => {
 
     // Si quiere cambiar contraseña
     if (currentPassword && newPassword) {
+      if (newPassword.length < MIN_PASSWORD_LENGTH) {
+        return res.status(400).json({
+          error: `La contraseña debe tener al menos ${MIN_PASSWORD_LENGTH} caracteres`,
+        });
+      }
+      if (!PASSWORD_REGEX.test(newPassword)) {
+        return res.status(400).json({
+          error: 'La contraseña debe contener al menos una mayúscula, una minúscula y un número',
+        });
+      }
+
       const user = await prisma.user.findUnique({
         where: { id: req.user.id },
       });
@@ -119,7 +128,6 @@ const register = async (req, res) => {
   try {
     const { email, password, name, role } = req.body;
 
-    // Verificar si el email ya existe
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -128,7 +136,6 @@ const register = async (req, res) => {
       return res.status(400).json({ error: 'El email ya está registrado' });
     }
 
-    // Hash de la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({

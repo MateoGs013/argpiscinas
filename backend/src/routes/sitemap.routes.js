@@ -1,7 +1,6 @@
 const express = require('express');
-const { PrismaClient } = require('@prisma/client');
+const prisma = require('../lib/prisma');
 
-const prisma = new PrismaClient();
 const router = express.Router();
 
 // Generar sitemap XML dinámico
@@ -9,30 +8,26 @@ router.get('/sitemap.xml', async (req, res) => {
   try {
     const baseUrl = process.env.FRONTEND_URL || 'https://argpiscinas.com';
 
-    // Obtener posts publicados
-    const posts = await prisma.post.findMany({
-      where: { status: 'PUBLISHED' },
-      select: { slug: true, updatedAt: true },
-    });
+    const [posts, projects, categories] = await Promise.all([
+      prisma.post.findMany({
+        where: { status: 'PUBLISHED' },
+        select: { slug: true, updatedAt: true },
+      }),
+      prisma.project.findMany({
+        select: { slug: true, updatedAt: true },
+      }),
+      prisma.category.findMany({
+        select: { slug: true, updatedAt: true },
+      }),
+    ]);
 
-    // Obtener proyectos
-    const projects = await prisma.project.findMany({
-      select: { slug: true, updatedAt: true },
-    });
-
-    // Obtener categorías
-    const categories = await prisma.category.findMany({
-      select: { slug: true, updatedAt: true },
-    });
-
-    // Páginas estáticas
+    // Páginas estáticas (removed /servicios/construccion)
     const staticPages = [
       { url: '/', priority: '1.0', changefreq: 'weekly' },
       { url: '/servicios', priority: '0.9', changefreq: 'monthly' },
       { url: '/servicios/instalacion-lamina-armada', priority: '0.8', changefreq: 'monthly' },
       { url: '/servicios/rehabilitacion-piscinas', priority: '0.8', changefreq: 'monthly' },
       { url: '/servicios/impermeabilizacion', priority: '0.8', changefreq: 'monthly' },
-      { url: '/servicios/construccion', priority: '0.8', changefreq: 'monthly' },
       { url: '/proyectos', priority: '0.8', changefreq: 'weekly' },
       { url: '/blog', priority: '0.8', changefreq: 'daily' },
       { url: '/contacto', priority: '0.7', changefreq: 'monthly' },
@@ -41,7 +36,6 @@ router.get('/sitemap.xml', async (req, res) => {
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
 
-    // Páginas estáticas
     for (const page of staticPages) {
       xml += `
   <url>
@@ -51,7 +45,6 @@ router.get('/sitemap.xml', async (req, res) => {
   </url>`;
     }
 
-    // Posts del blog
     for (const post of posts) {
       xml += `
   <url>
@@ -62,7 +55,6 @@ router.get('/sitemap.xml', async (req, res) => {
   </url>`;
     }
 
-    // Proyectos
     for (const project of projects) {
       xml += `
   <url>
@@ -73,7 +65,6 @@ router.get('/sitemap.xml', async (req, res) => {
   </url>`;
     }
 
-    // Categorías
     for (const category of categories) {
       xml += `
   <url>

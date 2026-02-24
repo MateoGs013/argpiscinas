@@ -3,7 +3,8 @@ import { ref, computed } from 'vue'
 import api from '@/services/api'
 
 export const useAuthStore = defineStore('auth', () => {
-  // State
+  // State — initial token read from localStorage for immediate hydration;
+  // subsequent persistence is handled by pinia-plugin-persistedstate
   const user = ref(null)
   const token = ref(localStorage.getItem('token') || null)
   const loading = ref(false)
@@ -23,7 +24,7 @@ export const useAuthStore = defineStore('auth', () => {
       const response = await api.post('/auth/login', { email, password })
       token.value = response.data.token
       user.value = response.data.user
-      localStorage.setItem('token', response.data.token)
+      // Token persistence handled by pinia-plugin-persistedstate (no manual localStorage)
       api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
       return true
     } catch (err) {
@@ -66,7 +67,7 @@ export const useAuthStore = defineStore('auth', () => {
   function logout() {
     user.value = null
     token.value = null
-    localStorage.removeItem('token')
+    // Token cleanup handled by pinia-plugin-persistedstate (no manual localStorage)
     delete api.defaults.headers.common['Authorization']
   }
 

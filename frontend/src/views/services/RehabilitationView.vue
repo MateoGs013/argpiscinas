@@ -18,7 +18,7 @@
     <section class="section-padding bg-neutral-50">
       <div class="container-custom">
         <div class="grid lg:grid-cols-3 gap-14">
-          <div class="lg:col-span-2 prose max-w-none" v-html="t('services.rehabilitation.content', defaultBody)"></div>
+          <div class="lg:col-span-2 prose max-w-none" v-html="sanitizeHtml(t('services.rehabilitation.content', defaultBody))"></div>
 
           <!-- Sidebar -->
           <div class="lg:col-span-1">
@@ -73,6 +73,7 @@
 <script setup>
 import { useSeo, useStructuredData } from '@/composables/useSeo'
 import { useContent } from '@/composables/useContent'
+import { sanitizeHtml } from '@/composables/useSanitize'
 
 const { t } = useContent()
 

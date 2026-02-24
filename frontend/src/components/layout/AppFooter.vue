@@ -108,15 +108,15 @@
             © {{ currentYear }} ARG Piscinas — Instalador Oficial RENOLIT ALKORPLAN
           </p>
           <div class="flex space-x-8">
-            <RouterLink to="/privacidad" class="text-silver-400/40 hover:text-silver-300 text-xs tracking-wide transition-colors duration-300">
+            <span class="text-silver-400/40 text-xs tracking-wide cursor-default">
               Política de Privacidad
-            </RouterLink>
-            <RouterLink to="/cookies" class="text-silver-400/40 hover:text-silver-300 text-xs tracking-wide transition-colors duration-300">
+            </span>
+            <span class="text-silver-400/40 text-xs tracking-wide cursor-default">
               Cookies
-            </RouterLink>
-            <RouterLink to="/legal" class="text-silver-400/40 hover:text-silver-300 text-xs tracking-wide transition-colors duration-300">
+            </span>
+            <span class="text-silver-400/40 text-xs tracking-wide cursor-default">
               Aviso Legal
-            </RouterLink>
+            </span>
           </div>
         </div>
       </div>
