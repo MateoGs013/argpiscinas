@@ -127,20 +127,23 @@ model PostTag {
 // PROYECTOS
 // =====================
 model Project {
-  id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(255)
-  slug        String   @unique @db.VarChar(255)
-  description String?  @db.Text
-  content     String?  @db.LongText
-  location    String?  @db.VarChar(255)
-  year        Int?
-  images      Json?    
-  featured    Boolean  @default(false)
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id            Int      @id @default(autoincrement())
+  title         String   @db.VarChar(255)
+  slug          String   @unique @db.VarChar(255)
+  description   String?  @db.Text
+  content       String?  @db.LongText
+  category      String?  @db.VarChar(255)
+  location      String?  @db.VarChar(255)
+  year          Int?
+  featuredImage String?  @map("featured_image") @db.VarChar(500)
+  images        Json?    
+  featured      Boolean  @default(false)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   @@index([slug])
   @@index([featured])
+  @@index([category])
   @@map("projects")
 }
 
@@ -167,6 +170,23 @@ enum ContactStatus {
   READ
   REPLIED
   ARCHIVED
+}
+
+// =====================
+// CONTENIDO DEL SITIO (CMS)
+// =====================
+model SiteContent {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique @db.VarChar(255)
+  value     String   @db.LongText
+  section   String   @db.VarChar(100)
+  label     String   @db.VarChar(255)
+  type      String   @default("text") @db.VarChar(50) // text, textarea, html
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([section])
+  @@index([key])
+  @@map("site_contents")
 }
 
 // =====================
