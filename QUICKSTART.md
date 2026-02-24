@@ -15,7 +15,7 @@ Si tienes MySQL instalado, ejecuta:
 ```sql
 CREATE DATABASE argpiscinas;
 ```
-
+ 
 O desde terminal:
 ```bash
 mysql -u root -p -e "CREATE DATABASE argpiscinas;"

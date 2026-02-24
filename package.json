@@ -1,0 +1,12 @@
+{
+  "name": "argpiscinas",
+  "version": "1.0.0",
+  "description": "Web corporativa moderna para empresa especializada en instalación y rehabilitación de piscinas con lámina armada.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
