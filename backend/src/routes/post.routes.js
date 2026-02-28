@@ -31,6 +31,26 @@ router.post(
     body('title').trim().notEmpty().withMessage('El título es requerido'),
     body('content').trim().notEmpty().withMessage('El contenido es requerido'),
     body('status').optional().isIn(['DRAFT', 'PUBLISHED', 'ARCHIVED']).withMessage('Estado inválido'),
+    body('publishedAt')
+      .optional({ values: 'falsy' })
+      .isISO8601()
+      .withMessage('Fecha de publicación inválida'),
+    body('categoryIds')
+      .optional()
+      .isArray()
+      .withMessage('categoryIds debe ser un array'),
+    body('categoryIds.*')
+      .optional()
+      .isInt({ min: 1 })
+      .withMessage('Cada categoryId debe ser un entero positivo'),
+    body('tagIds')
+      .optional()
+      .isArray()
+      .withMessage('tagIds debe ser un array'),
+    body('tagIds.*')
+      .optional()
+      .isInt({ min: 1 })
+      .withMessage('Cada tagId debe ser un entero positivo'),
   ],
   validate,
   createPost
@@ -43,6 +63,26 @@ router.put(
   [
     body('title').optional().trim().notEmpty().withMessage('El título no puede estar vacío'),
     body('status').optional().isIn(['DRAFT', 'PUBLISHED', 'ARCHIVED']).withMessage('Estado inválido'),
+    body('publishedAt')
+      .optional({ values: 'falsy' })
+      .isISO8601()
+      .withMessage('Fecha de publicación inválida'),
+    body('categoryIds')
+      .optional()
+      .isArray()
+      .withMessage('categoryIds debe ser un array'),
+    body('categoryIds.*')
+      .optional()
+      .isInt({ min: 1 })
+      .withMessage('Cada categoryId debe ser un entero positivo'),
+    body('tagIds')
+      .optional()
+      .isArray()
+      .withMessage('tagIds debe ser un array'),
+    body('tagIds.*')
+      .optional()
+      .isInt({ min: 1 })
+      .withMessage('Cada tagId debe ser un entero positivo'),
   ],
   validate,
   updatePost

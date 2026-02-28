@@ -2,6 +2,11 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
+const uploadMaxFileSizeMb = Number.parseInt(process.env.UPLOAD_MAX_FILE_SIZE_MB, 10);
+const uploadMaxFileSizeBytes = Number.isInteger(uploadMaxFileSizeMb) && uploadMaxFileSizeMb > 0
+  ? uploadMaxFileSizeMb * 1024 * 1024
+  : 5 * 1024 * 1024;
+
 // Magic bytes for allowed image types
 const MAGIC_BYTES = {
   'image/jpeg': [Buffer.from([0xFF, 0xD8, 0xFF])],
@@ -40,7 +45,7 @@ const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB
+    fileSize: uploadMaxFileSizeBytes,
   },
 });
 
@@ -78,7 +83,9 @@ const uploadImage = (req, res) => {
     // Validate magic bytes — reject spoofed MIME types
     if (!validateMagicBytes(req.file.path)) {
       // Remove the uploaded file
-      fs.unlinkSync(req.file.path);
+      if (fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+      }
       return res.status(400).json({ error: 'El archivo no es una imagen válida' });
     }
 

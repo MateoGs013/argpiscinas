@@ -13,10 +13,13 @@ const {
 
 const router = express.Router();
 
+const contactWindowMs = Number.parseInt(process.env.CONTACT_RATE_WINDOW_MS, 10) || 60 * 60 * 1000;
+const contactMaxRequests = Number.parseInt(process.env.CONTACT_RATE_MAX, 10) || 5;
+
 // Rate limit for public contact form (C2: spam protection)
 const contactLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 5,                    // 5 messages per hour per IP
+  windowMs: contactWindowMs,
+  max: contactMaxRequests,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'Demasiados mensajes enviados, intente de nuevo más tarde' },

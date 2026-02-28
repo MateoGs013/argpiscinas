@@ -148,6 +148,26 @@ model Project {
 }
 
 // =====================
+// SERVICIOS
+// =====================
+model Service {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  slug        String   @unique @db.VarChar(255)
+  description String?  @db.Text
+  content     String?  @db.LongText
+  image       String?  @db.VarChar(500)
+  features    Json?
+  showOnHome  Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([slug])
+  @@map("services")
+}
+
+// =====================
 // CONTACTOS
 // =====================
 model Contact {
@@ -181,7 +201,7 @@ model SiteContent {
   value     String   @db.LongText
   section   String   @db.VarChar(100)
   label     String   @db.VarChar(255)
-  type      String   @default("text") @db.VarChar(50) // text, textarea, html
+  type      String   @default("text") @db.VarChar(50) // text, textarea, html, json
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@index([section])

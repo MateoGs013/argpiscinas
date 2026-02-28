@@ -1,6 +1,46 @@
 const prisma = require('../lib/prisma');
 const { sanitize } = require('../lib/sanitize');
 
+function inferSectionFromKey(key) {
+  if (!key || typeof key !== 'string') return 'general';
+  const segments = key.split('.').filter(Boolean);
+  if (segments.length === 0) return 'general';
+  if (segments[0] === 'services' && segments.length > 1) {
+    return `services.${segments[1]}`;
+  }
+  return segments[0];
+}
+
+function inferTypeFromValue(value) {
+  const normalized = String(value ?? '').trim();
+  if (!normalized) return 'text';
+
+  if (normalized.startsWith('{') || normalized.startsWith('[')) {
+    try {
+      const parsed = JSON.parse(normalized);
+      if (parsed && typeof parsed === 'object') {
+        return 'json';
+      }
+    } catch (_error) {
+      // Keep evaluating with other heuristics
+    }
+  }
+
+  if (/<[a-z][\s\S]*>/i.test(normalized)) return 'html';
+  if (normalized.length > 160) return 'textarea';
+  return 'text';
+}
+
+function buildCreatePayload(item) {
+  return {
+    key: item.key,
+    value: sanitize(String(item.value ?? '')),
+    section: item.section || inferSectionFromKey(item.key),
+    label: item.label || item.key,
+    type: item.type || inferTypeFromValue(item.value)
+  };
+}
+
 // GET /api/content — Obtener todo el contenido (público)
 const getAllContent = async (req, res) => {
   try {
@@ -46,22 +86,20 @@ const getContentBySections = async (req, res) => {
 const updateContent = async (req, res) => {
   try {
     const { key } = req.params;
-    const { value } = req.body;
+    const { value, section, label, type } = req.body;
 
     if (value === undefined || value === null) {
       return res.status(400).json({ error: 'El campo "value" es requerido' });
     }
 
-    const content = await prisma.siteContent.update({
+    const content = await prisma.siteContent.upsert({
       where: { key },
-      data: { value: sanitize(String(value)) }
+      update: { value: sanitize(String(value)) },
+      create: buildCreatePayload({ key, value, section, label, type })
     });
 
     res.json({ data: content });
   } catch (error) {
-    if (error.code === 'P2025') {
-      return res.status(404).json({ error: 'Contenido no encontrado' });
-    }
     console.error('Error updating content:', error);
     res.status(500).json({ error: 'Error al actualizar el contenido' });
   }
@@ -76,17 +114,16 @@ const bulkUpdateContent = async (req, res) => {
       return res.status(400).json({ error: 'Se requiere un array de items' });
     }
 
-    const updates = await Promise.all(
-      items.map(item =>
-        prisma.siteContent.update({
-          where: { key: item.key },
-          data: { value: sanitize(String(item.value)) }
-        }).catch(err => {
-          console.error(`Error updating key "${item.key}":`, err.message);
-          return null;
-        })
-      )
-    );
+    const updates = await Promise.all(items.map(item =>
+      prisma.siteContent.upsert({
+        where: { key: item.key },
+        update: { value: sanitize(String(item.value ?? '')) },
+        create: buildCreatePayload(item)
+      }).catch(err => {
+        console.error(`Error updating key "${item.key}":`, err.message);
+        return null;
+      })
+    ));
 
     const successful = updates.filter(u => u !== null);
 

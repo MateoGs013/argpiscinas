@@ -1,6 +1,20 @@
 const prisma = require('../lib/prisma');
 const { parseId } = require('../lib/parseId');
 
+function parseFeatured(value, fallback = false) {
+  if (value === undefined) return fallback;
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') return value.toLowerCase() === 'true';
+  return Boolean(value);
+}
+
+function parseRating(value, fallback = 5) {
+  if (value === undefined || value === null || value === '') return fallback;
+  const parsed = Number.parseInt(value, 10);
+  if (!Number.isInteger(parsed) || parsed < 1 || parsed > 5) return null;
+  return parsed;
+}
+
 // Obtener testimonios (público) — with pagination (M10)
 const getTestimonials = async (req, res) => {
   try {
@@ -44,15 +58,20 @@ const getTestimonials = async (req, res) => {
 const createTestimonial = async (req, res) => {
   try {
     const { name, location, content, rating, avatar, featured } = req.body;
+    const normalizedRating = parseRating(rating, 5);
+
+    if (normalizedRating === null) {
+      return res.status(400).json({ error: 'Rating debe ser un entero entre 1 y 5' });
+    }
 
     const testimonial = await prisma.testimonial.create({
       data: {
         name,
         location,
         content,
-        rating: rating || 5,
+        rating: normalizedRating,
         avatar,
-        featured: featured || false,
+        featured: parseFeatured(featured, false),
       },
     });
 
@@ -70,6 +89,11 @@ const updateTestimonial = async (req, res) => {
     if (!id) return res.status(400).json({ error: 'ID inválido' });
 
     const { name, location, content, rating, avatar, featured } = req.body;
+    const normalizedRating = parseRating(rating, undefined);
+
+    if (rating !== undefined && normalizedRating === null) {
+      return res.status(400).json({ error: 'Rating debe ser un entero entre 1 y 5' });
+    }
 
     const testimonial = await prisma.testimonial.update({
       where: { id },
@@ -77,14 +101,17 @@ const updateTestimonial = async (req, res) => {
         name,
         location,
         content,
-        rating,
+        rating: normalizedRating,
         avatar,
-        featured,
+        featured: featured === undefined ? undefined : parseFeatured(featured),
       },
     });
 
     res.json(testimonial);
   } catch (error) {
+    if (error.code === 'P2025') {
+      return res.status(404).json({ error: 'Testimonio no encontrado' });
+    }
     console.error('Error al actualizar testimonio:', error);
     res.status(500).json({ error: 'Error al actualizar el testimonio' });
   }
@@ -100,6 +127,9 @@ const deleteTestimonial = async (req, res) => {
 
     res.json({ message: 'Testimonio eliminado correctamente' });
   } catch (error) {
+    if (error.code === 'P2025') {
+      return res.status(404).json({ error: 'Testimonio no encontrado' });
+    }
     console.error('Error al eliminar testimonio:', error);
     res.status(500).json({ error: 'Error al eliminar el testimonio' });
   }

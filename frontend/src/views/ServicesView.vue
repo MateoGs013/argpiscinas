@@ -6,17 +6,19 @@
         <img 
           src="@/assets/img/RENOLIT_TOUCH Elegance (22).jpg" 
           alt="Servicios de instalación de lámina armada"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
           class="w-full h-full object-cover"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-midnight-800 via-midnight-800/70 to-midnight-800/40"></div>
       </div>
       <div class="container-custom relative z-10">
         <div class="max-w-3xl">
-          <span class="text-white/70 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">Nuestros Servicios</span>
-          <h1 class="text-white mb-8 leading-[1.1]">Instalación de RENOLIT ALKORPLAN</h1>
+          <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('services.hero.label', 'Nuestros Servicios') }}</span>
+          <h1 class="text-white mb-8 leading-[1.1]">{{ t('services.hero.title', 'Instalación de RENOLIT ALKORPLAN') }}</h1>
           <p class="text-lg text-silver-400 leading-relaxed max-w-xl">
-            Como instaladores oficiales de RENOLIT ALKORPLAN, ofrecemos servicios especializados 
-            de instalación de lámina armada para todo tipo de piscinas.
+            {{ t('services.hero.description', 'Como instaladores oficiales de RENOLIT ALKORPLAN, ofrecemos servicios especializados de instalación de lámina armada para todo tipo de piscinas.') }}
           </p>
         </div>
       </div>
@@ -36,6 +38,8 @@
               <img 
                 :src="service.image" 
                 :alt="service.title"
+                loading="lazy"
+                decoding="async"
                 class="w-full h-full object-cover transition-transform duration-800 group-hover:scale-105"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-midnight-800/70 to-transparent"></div>
@@ -69,25 +73,26 @@
     <section class="section-padding bg-midnight-800">
       <div class="container-custom">
         <div class="text-center max-w-2xl mx-auto mb-20">
-          <span class="text-white/70 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">Colecciones</span>
-          <h2 class="text-white mb-6">Gama RENOLIT ALKORPLAN</h2>
+          <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('services.collections.label', 'Colecciones') }}</span>
+          <h2 class="text-white mb-6">{{ t('services.collections.title', 'Gama RENOLIT ALKORPLAN') }}</h2>
           <p class="text-silver-400 text-lg leading-relaxed">
-            Ofrecemos toda la gama de membranas RENOLIT ALKORPLAN para que elijas 
-            el acabado perfecto para tu piscina.
+            {{ t('services.collections.description', 'Ofrecemos toda la gama de membranas RENOLIT ALKORPLAN para que elijas el acabado perfecto para tu piscina.') }}
           </p>
         </div>
 
         <div class="grid md:grid-cols-2 gap-5">
           <div 
             v-for="collection in collections" 
-            :key="collection.name" 
+            :key="collection.id" 
             class="group bg-charcoal-600/40 rounded-boutique-lg overflow-hidden border border-white/[0.06] hover:border-white/[0.12] transition-all duration-500"
           >
             <!-- Main texture image -->
             <div class="aspect-[16/10] relative overflow-hidden">
               <img 
-                :src="collection.heroImage" 
-                :alt="collection.name"
+                :src="resolveCollectionImage(collection.activeSwatch.image || collection.heroImage)" 
+                :alt="`${collection.name} - ${collection.activeSwatch.name || ''}`"
+                loading="lazy"
+                decoding="async"
                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-midnight-800/80 via-transparent to-transparent"></div>
@@ -95,6 +100,11 @@
               <div class="absolute top-5 left-5">
                 <span class="bg-white/10 backdrop-blur-md text-white text-[10px] font-semibold uppercase tracking-[0.15em] px-3 py-1.5 rounded-full border border-white/10">
                   {{ collection.type }}
+                </span>
+              </div>
+              <div class="absolute top-5 right-5">
+                <span class="bg-midnight-800/70 backdrop-blur-md text-white text-[10px] font-semibold tracking-[0.12em] px-3 py-1.5 rounded-full border border-white/15">
+                  {{ collection.activeSwatch.name || 'Muestra' }}
                 </span>
               </div>
               <!-- Collection name overlay -->
@@ -109,13 +119,19 @@
               
               <!-- Texture swatches -->
               <div class="flex items-center gap-2">
-                <div 
+                <button
                   v-for="(swatch, i) in collection.swatches" 
                   :key="i"
-                  class="w-9 h-9 rounded-lg overflow-hidden border border-white/10 hover:border-white/30 transition-colors duration-300 cursor-pointer"
+                  type="button"
+                  class="w-9 h-9 rounded-lg overflow-hidden border transition-all duration-300 cursor-pointer"
+                  :class="i === collection.activeSwatchIndex ? 'border-white ring-2 ring-white/50 scale-105' : 'border-white/10 hover:border-white/30'"
+                  :aria-label="`Ver muestra ${swatch.name} en ${collection.name}`"
+                  :aria-pressed="i === collection.activeSwatchIndex"
+                  @click="setActiveSwatch(collection.id, i)"
+                  @mouseenter="setActiveSwatch(collection.id, i)"
                 >
-                  <img :src="swatch.image" :alt="swatch.name" class="w-full h-full object-cover" />
-                </div>
+                  <img :src="resolveCollectionImage(swatch.image)" :alt="swatch.name" loading="lazy" decoding="async" class="w-full h-full object-cover" />
+                </button>
                 <span v-if="collection.moreCount" class="text-silver-500 text-xs ml-1">+{{ collection.moreCount }}</span>
               </div>
             </div>
@@ -130,19 +146,20 @@
         <img 
           src="@/assets/img/RENOLIT_TOUCH_prestige_Haselhofer_02.jpg" 
           alt="Piscina RENOLIT ALKORPLAN"
+          loading="lazy"
+          decoding="async"
           class="w-full h-full object-cover"
         />
         <div class="absolute inset-0 bg-midnight-800/75"></div>
       </div>
-      <div class="container-custom relative z-10 text-center">
-        <img src="/Renolit/logo-RENOLIT-ALKORPLAN_blanc.png" alt="RENOLIT ALKORPLAN" class="w-44 h-auto mx-auto mb-8 no-filter" />
-        <h2 class="text-white mb-6">¿Necesitas Asesoramiento?</h2>
+        <div class="container-custom relative z-10 text-center">
+          <img src="/Renolit/logo-RENOLIT-ALKORPLAN_blanc.png" alt="RENOLIT ALKORPLAN" loading="lazy" decoding="async" class="w-44 h-auto mx-auto mb-8 no-filter" />
+        <h2 class="text-white mb-6">{{ t('services.cta.title', '¿Necesitas Asesoramiento?') }}</h2>
         <p class="text-silver-400 text-lg mb-12 max-w-2xl mx-auto leading-relaxed">
-          Te ayudamos a elegir la mejor solución RENOLIT ALKORPLAN para tu piscina. 
-          Presupuesto sin compromiso.
+          {{ t('services.cta.description', 'Te ayudamos a elegir la mejor solución RENOLIT ALKORPLAN para tu piscina. Presupuesto sin compromiso.') }}
         </p>
         <RouterLink to="/contacto" class="btn btn-white btn-lg">
-          Contactar Ahora
+          {{ t('services.cta.button', 'Contactar Ahora') }}
         </RouterLink>
       </div>
     </section>
@@ -151,6 +168,17 @@
 
 <script setup>
 import { useSeo } from '@/composables/useSeo'
+import { onMounted, computed, ref } from 'vue'
+import { useServicesStore } from '@/stores/services'
+import { resolveImageUrl } from '@/services/api'
+import { useContent } from '@/composables/useContent'
+import {
+  SERVICES_COLLECTIONS_CONTENT_KEY,
+  SERVICES_COLLECTIONS_DEFAULTS,
+  parseServicesCollectionsContent
+} from '@/data/servicesCollectionsDefaults'
+
+const { t } = useContent()
 
 useSeo({
   title: 'Servicios | Instalación RENOLIT ALKORPLAN',
@@ -158,122 +186,55 @@ useSeo({
   keywords: 'instalación RENOLIT ALKORPLAN, lámina armada piscinas, rehabilitación piscinas, impermeabilización ALKORPLAN'
 })
 
-const services = [
-  {
-    slug: 'instalacion-lamina-armada',
-    title: 'Piscinas Nuevas',
-    description: 'Instalación de lámina armada RENOLIT ALKORPLAN en piscinas de nueva construcción. La mejor opción para garantizar la impermeabilización desde el primer día.',
-    image: 'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
-    features: [
-      'Garantía oficial RENOLIT de 15 años',
-      'Amplia gama de colores y diseños',
-      'Instalación en cualquier forma de piscina',
-      'Acabado estético premium'
-    ]
-  },
-  {
-    slug: 'rehabilitacion-piscinas',
-    title: 'Rehabilitación de Piscinas',
-    description: 'Renovación de piscinas existentes con membrana RENOLIT ALKORPLAN. Solución definitiva para piscinas con problemas de filtraciones o gresite deteriorado.',
-    image: 'https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
-    features: [
-      'Se instala sobre cualquier superficie',
-      'Elimina problemas de filtraciones',
-      'Sin obras de demolición',
-      'Instalación rápida y limpia'
-    ]
-  },
-  {
-    slug: 'impermeabilizacion',
-    title: 'Impermeabilización',
-    description: 'Solución 100% estanca para piscinas con problemas de fugas. RENOLIT ALKORPLAN es la única membrana que garantiza la impermeabilización total.',
-    image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1475&q=80',
-    features: [
-      '100% estanqueidad garantizada',
-      'Ideal para piscinas en azoteas',
-      'Prevención de humedades',
-      'Garantía escrita de 15 años'
-    ]
-  }
-]
+const servicesStore = useServicesStore()
+const services = computed(() => servicesStore.services.map((service) => ({
+  ...service,
+  image: service.image ? resolveImageUrl(service.image) : '/ArgPiscinas/ARG PISCINAS LOGO OK sin fondo.png',
+  features: Array.isArray(service.features) ? service.features : []
+})))
 
-const collections = [
-  {
-    name: 'ALKORPLAN TOUCH',
-    type: 'Premium 2mm',
-    description: 'Texturas y relieves inspirados en la naturaleza. La colección más exclusiva de RENOLIT ALKORPLAN.',
-    heroImage: '/Renolit/04. touch/RENOLIT_TOUCH-Vanity-06.jpg',
-    swatches: [
-      { name: 'Vanity', image: '/Renolit/04. touch/RENOLIT_TOUCH-Vanity-06.jpg' },
-      { name: 'Relax', image: '/Renolit/04. touch/RENOLIT_TOUCH-Relax-06.jpg' },
-      { name: 'Elegance', image: '/Renolit/04. touch/RENOLIT_TOUCH_elegance_09A7068.jpg' },
-      { name: 'Sublime', image: '/Renolit/04. touch/RENOLIT_TOUCH-Sublime-06.jpg' },
-    ],
-    moreCount: 3
-  },
-  {
-    name: 'ALKORPLAN VOGUE',
-    type: 'Premium 2mm',
-    description: 'Estampados contemporáneos inspirados en tendencias de diseño interior y moda.',
-    heroImage: '/Renolit/05. vogue/RENOLIT_VOGUE_urban_09A4055.jpg',
-    swatches: [
-      { name: 'Urban', image: '/Renolit/05. vogue/RENOLIT_VOGUE_urban_09A4055.jpg' },
-      { name: 'Vintage', image: '/Renolit/05. vogue/RENOLIT_VOGUE_vintage_09A4191.jpg' },
-      { name: 'Summer', image: '/Renolit/05. vogue/RENOLIT_VOGUE_summer_09A2892.jpg' },
-      { name: 'Tropical', image: '/Renolit/05. vogue/RENOLIT_VOGUE_tropical_JMLR8244B.jpg' },
-    ],
-    moreCount: 0
-  },
-  {
-    name: 'ALKORPLAN CERAMICS',
-    type: 'Premium 2mm',
-    description: 'Efecto mosaico y piedra natural con relieve embosado. Elegancia clásica.',
-    heroImage: '/Renolit/03. ceramics/RENOLIT_texture CERAMICS_Selene.jpg',
-    swatches: [
-      { name: 'Selene', image: '/Renolit/03. ceramics/RENOLIT_texture CERAMICS_Selene.jpg' },
-      { name: 'Atenea', image: '/Renolit/03. ceramics/RENOLIT_texture CERAMICS_Atenea.jpg' },
-      { name: 'Etna', image: '/Renolit/03. ceramics/RENOLIT_texture CERAMICS_Etna.jpg' },
-    ],
-    moreCount: 0
-  },
-  {
-    name: 'ALKORPLAN RELIEF',
-    type: 'Antideslizante',
-    description: 'Superficie antideslizante certificada para zonas de baño y bordes de piscina.',
-    heroImage: '/Renolit/07. relief/RENOLIT_RELIEF_azulclaro_AT2A6464.jpg',
-    swatches: [
-      { name: 'Azul Claro', image: '/Renolit/07. relief/RENOLIT_RELIEF_azulclaro_AT2A6464.jpg' },
-      { name: 'Blanco', image: '/Renolit/07. relief/RENOLIT_RELIEF_blanco_AT2A6484.jpg' },
-      { name: 'Arena', image: '/Renolit/07. relief/RENOLIT_RELIEF_arena_AT2A6420.jpg' },
-      { name: 'Gris Claro', image: '/Renolit/07. relief/RENOLIT_RELIEF_grisclaro_AT2A6555.jpg' },
-    ],
-    moreCount: 4
-  },
-  {
-    name: 'ALKORPLAN 2000',
-    type: 'Estándar 1.5mm',
-    description: 'Colores lisos lacados. La opción más popular y versátil del mercado.',
-    heroImage: '/Renolit/01. 2000/RENOLIT_2000 light blue-6097-00016.jpg',
-    swatches: [
-      { name: 'Light Blue', image: '/Renolit/01. 2000/RENOLIT_2000 light blue-6097-00016.jpg' },
-      { name: 'White', image: '/Renolit/01. 2000/RENOLIT_2000 white - 6097-00140.jpg' },
-      { name: 'Sand', image: '/Renolit/01. 2000/RENOLIT_2000 sand - 6097-00058.jpg' },
-      { name: 'Grey', image: '/Renolit/01. 2000/RENOLIT_2000 grey - 6097-00090.jpg' },
-    ],
-    moreCount: 4
-  },
-  {
-    name: 'ALKORPLAN 3000',
-    type: 'Estándar 1.5mm',
-    description: 'Diseños estampados exclusivos con doble lacado. Efecto piedra y mármol.',
-    heroImage: '/Renolit/02. 3000/RENOLIT_Marble-IMG_5913.jpg',
-    swatches: [
-      { name: 'Marble', image: '/Renolit/02. 3000/RENOLIT_Marble-IMG_5913.jpg' },
-      { name: 'Carrara', image: '/Renolit/02. 3000/RENOLIT_Carrara-IMG_5941.jpg' },
-      { name: 'Bysance Blue', image: '/Renolit/02. 3000/RENOLIT_Bysance Blue-IMG_5975.jpg' },
-      { name: 'Persia Sand', image: '/Renolit/02. 3000/RENOLIT_Persia Sand-IMG_6001.jpg' },
-    ],
-    moreCount: 1
+onMounted(async () => {
+  await servicesStore.fetchServices()
+})
+
+const activeSwatchByCollection = ref({})
+
+function getActiveSwatchIndex(collectionId) {
+  return activeSwatchByCollection.value[collectionId] ?? 0
+}
+
+function setActiveSwatch(collectionId, swatchIndex) {
+  activeSwatchByCollection.value[collectionId] = swatchIndex
+}
+
+function resolveCollectionImage(url) {
+  if (!url) return ''
+  if (url.startsWith('/Renolit/') || url.startsWith('/ArgPiscinas/')) {
+    return url
   }
-]
+  return resolveImageUrl(url)
+}
+
+const rawCollectionsContent = computed(() =>
+  t(SERVICES_COLLECTIONS_CONTENT_KEY, '')
+)
+
+const parsedCollections = computed(() =>
+  parseServicesCollectionsContent(
+    rawCollectionsContent.value,
+    SERVICES_COLLECTIONS_DEFAULTS
+  )
+)
+
+const collections = computed(() =>
+  parsedCollections.value.map((collection) => {
+    const activeSwatchIndex = getActiveSwatchIndex(collection.id)
+    const activeSwatch = collection.swatches[activeSwatchIndex] || collection.swatches[0]
+    return {
+      ...collection,
+      activeSwatchIndex,
+      activeSwatch
+    }
+  })
+)
 </script>

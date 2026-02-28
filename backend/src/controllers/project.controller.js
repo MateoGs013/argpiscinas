@@ -3,6 +3,43 @@ const { sanitize } = require('../lib/sanitize');
 const { generateSlug, ensureUniqueSlug } = require('../lib/slugify');
 const { parseId } = require('../lib/parseId');
 
+function toBoolean(value, fallback = false) {
+  if (value === undefined) return fallback;
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') return value.toLowerCase() === 'true';
+  if (typeof value === 'number') return value === 1;
+  return Boolean(value);
+}
+
+function parseYear(value) {
+  if (value === undefined) return undefined;
+  if (value === null || value === '') return null;
+
+  const parsed = Number.parseInt(value, 10);
+  if (!Number.isInteger(parsed) || parsed < 1900 || parsed > 2100) {
+    return null;
+  }
+  return parsed;
+}
+
+function normalizeImages(value) {
+  if (value === undefined) return undefined;
+  if (value === null || value === '') return null;
+
+  if (Array.isArray(value)) return value;
+
+  if (typeof value === 'string') {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : value;
+    } catch {
+      return value;
+    }
+  }
+
+  return value;
+}
+
 // Obtener proyectos (público) — with pagination (M10)
 const getProjects = async (req, res) => {
   try {
@@ -75,6 +112,11 @@ const getProjectBySlug = async (req, res) => {
 const createProject = async (req, res) => {
   try {
     const { title, description, content, category, location, year, featuredImage, images, featured } = req.body;
+    const parsedYear = parseYear(year);
+
+    if (year !== undefined && parsedYear === null) {
+      return res.status(400).json({ error: 'El año debe ser un entero entre 1900 y 2100' });
+    }
 
     const baseSlug = generateSlug(title);
     const slug = await ensureUniqueSlug(prisma, 'project', baseSlug);
@@ -87,10 +129,10 @@ const createProject = async (req, res) => {
         content: sanitize(content),
         category: category || null,
         location,
-        year: year ? parseInt(year) : null,
+        year: parsedYear ?? null,
         featuredImage: featuredImage || null,
-        images: images || null,
-        featured: featured || false,
+        images: normalizeImages(images),
+        featured: toBoolean(featured, false),
       },
     });
 
@@ -108,6 +150,10 @@ const updateProject = async (req, res) => {
     if (!id) return res.status(400).json({ error: 'ID inválido' });
 
     const { title, description, content, category, location, year, featuredImage, images, featured } = req.body;
+    const parsedYear = parseYear(year);
+    if (year !== undefined && parsedYear === null) {
+      return res.status(400).json({ error: 'El año debe ser un entero entre 1900 y 2100' });
+    }
 
     const existingProject = await prisma.project.findUnique({ where: { id } });
 
@@ -126,10 +172,10 @@ const updateProject = async (req, res) => {
     if (content !== undefined) updateData.content = sanitize(content);
     if (category !== undefined) updateData.category = category || null;
     if (location !== undefined) updateData.location = location;
-    if (year !== undefined) updateData.year = year ? parseInt(year) : null;
+    if (year !== undefined) updateData.year = parsedYear;
     if (featuredImage !== undefined) updateData.featuredImage = featuredImage || null;
-    if (images !== undefined) updateData.images = images;
-    if (featured !== undefined) updateData.featured = featured === true;
+    if (images !== undefined) updateData.images = normalizeImages(images);
+    if (featured !== undefined) updateData.featured = toBoolean(featured);
 
     const project = await prisma.project.update({
       where: { id },

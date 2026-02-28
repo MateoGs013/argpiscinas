@@ -3,6 +3,24 @@ const { sanitize } = require('../lib/sanitize');
 const { generateSlug, ensureUniqueSlug } = require('../lib/slugify');
 const { parseId } = require('../lib/parseId');
 
+function parseDateOrNull(value) {
+  if (!value) return null;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+  return date;
+}
+
+function parseRelationIds(rawIds) {
+  if (rawIds === undefined) return undefined;
+  if (!Array.isArray(rawIds)) return null;
+
+  const parsed = rawIds.map((id) => Number.parseInt(id, 10));
+  if (parsed.some((id) => !Number.isInteger(id) || id <= 0)) {
+    return null;
+  }
+  return parsed;
+}
+
 // Obtener todos los posts (público - solo publicados)
 const getPosts = async (req, res) => {
   try {
@@ -164,6 +182,14 @@ const getPostBySlug = async (req, res) => {
       return res.status(404).json({ error: 'Post no encontrado' });
     }
 
+    if (
+      post.status !== 'PUBLISHED' &&
+      req.user &&
+      !['ADMIN', 'EDITOR'].includes(req.user.role)
+    ) {
+      return res.status(404).json({ error: 'Post no encontrado' });
+    }
+
     res.json({
       ...post,
       categories: post.categories.map(pc => pc.category),
@@ -222,6 +248,22 @@ const createPost = async (req, res) => {
       tagIds,
     } = req.body;
 
+    const publishedAtDate = parseDateOrNull(publishedAt);
+    if (publishedAt && !publishedAtDate) {
+      return res.status(400).json({ error: 'Fecha de publicación inválida' });
+    }
+
+    const parsedCategoryIds = parseRelationIds(categoryIds);
+    const parsedTagIds = parseRelationIds(tagIds);
+
+    if (categoryIds !== undefined && !parsedCategoryIds) {
+      return res.status(400).json({ error: 'categoryIds inválido: debe ser array de enteros positivos' });
+    }
+
+    if (tagIds !== undefined && !parsedTagIds) {
+      return res.status(400).json({ error: 'tagIds inválido: debe ser array de enteros positivos' });
+    }
+
     const baseSlug = customSlug || generateSlug(title);
     const slug = await ensureUniqueSlug(prisma, 'post', baseSlug);
 
@@ -235,13 +277,13 @@ const createPost = async (req, res) => {
         status: status || 'DRAFT',
         seoTitle,
         seoDescription,
-        publishedAt: publishedAt ? new Date(publishedAt) : (status === 'PUBLISHED' ? new Date() : null),
+        publishedAt: publishedAtDate || (status === 'PUBLISHED' ? new Date() : null),
         authorId: req.user.id,
-        categories: categoryIds?.length > 0 ? {
-          create: categoryIds.map(id => ({ categoryId: parseInt(id) })),
+        categories: parsedCategoryIds?.length > 0 ? {
+          create: parsedCategoryIds.map((id) => ({ categoryId: id })),
         } : undefined,
-        tags: tagIds?.length > 0 ? {
-          create: tagIds.map(id => ({ tagId: parseInt(id) })),
+        tags: parsedTagIds?.length > 0 ? {
+          create: parsedTagIds.map((id) => ({ tagId: id })),
         } : undefined,
       },
       include: {
@@ -282,6 +324,22 @@ const updatePost = async (req, res) => {
       tagIds,
     } = req.body;
 
+    const publishedAtDate = parseDateOrNull(publishedAt);
+    if (publishedAt && !publishedAtDate) {
+      return res.status(400).json({ error: 'Fecha de publicación inválida' });
+    }
+
+    const parsedCategoryIds = parseRelationIds(categoryIds);
+    const parsedTagIds = parseRelationIds(tagIds);
+
+    if (categoryIds !== undefined && !parsedCategoryIds) {
+      return res.status(400).json({ error: 'categoryIds inválido: debe ser array de enteros positivos' });
+    }
+
+    if (tagIds !== undefined && !parsedTagIds) {
+      return res.status(400).json({ error: 'tagIds inválido: debe ser array de enteros positivos' });
+    }
+
     const existingPost = await prisma.post.findUnique({ where: { id } });
 
     if (!existingPost) {
@@ -310,8 +368,8 @@ const updatePost = async (req, res) => {
     }
 
     // Manejar fecha de publicación
-    if (publishedAt) {
-      updateData.publishedAt = new Date(publishedAt);
+    if (publishedAtDate) {
+      updateData.publishedAt = publishedAtDate;
     } else if (status === 'PUBLISHED' && !existingPost.publishedAt) {
       updateData.publishedAt = new Date();
     }
@@ -319,26 +377,26 @@ const updatePost = async (req, res) => {
     // Use transaction to keep relations + post update atomic
     const post = await prisma.$transaction(async (tx) => {
       // Update category relations
-      if (categoryIds !== undefined) {
+      if (parsedCategoryIds !== undefined) {
         await tx.postCategory.deleteMany({ where: { postId: id } });
-        if (categoryIds.length > 0) {
+        if (parsedCategoryIds.length > 0) {
           await tx.postCategory.createMany({
-            data: categoryIds.map(categoryId => ({
+            data: parsedCategoryIds.map((categoryId) => ({
               postId: id,
-              categoryId: parseInt(categoryId),
+              categoryId,
             })),
           });
         }
       }
 
       // Update tag relations
-      if (tagIds !== undefined) {
+      if (parsedTagIds !== undefined) {
         await tx.postTag.deleteMany({ where: { postId: id } });
-        if (tagIds.length > 0) {
+        if (parsedTagIds.length > 0) {
           await tx.postTag.createMany({
-            data: tagIds.map(tagId => ({
+            data: parsedTagIds.map((tagId) => ({
               postId: id,
-              tagId: parseInt(tagId),
+              tagId,
             })),
           });
         }

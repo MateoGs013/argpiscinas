@@ -4,22 +4,14 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 
-// ── Environment validation (C4, H6) ─────────────────────────────
-const REQUIRED_ENV = ['JWT_SECRET', 'DATABASE_URL'];
-for (const key of REQUIRED_ENV) {
-  if (!process.env[key]) {
-    console.error(`FATAL: Missing required env var ${key}`);
-    process.exit(1);
-  }
-}
-if (process.env.JWT_SECRET && process.env.JWT_SECRET.length < 32) {
-  console.warn('WARN: JWT_SECRET should be at least 32 characters for production security');
+if (!process.env.JWT_SECRET || !process.env.JWT_SECRET.trim()) {
+  console.error('Falta JWT_SECRET en variables de entorno. El backend no puede iniciar sin esta clave.');
+  process.exit(1);
 }
 
-// ── Import routes ────────────────────────────────────────────────
+// Importar rutas
 const authRoutes = require('./routes/auth.routes');
 const postRoutes = require('./routes/post.routes');
 const categoryRoutes = require('./routes/category.routes');
@@ -30,89 +22,107 @@ const testimonialRoutes = require('./routes/testimonial.routes');
 const uploadRoutes = require('./routes/upload.routes');
 const sitemapRoutes = require('./routes/sitemap.routes');
 const contentRoutes = require('./routes/content.routes');
+const serviceRoutes = require('./routes/service.routes');
 
 const app = express();
 
-// ── Security middleware (C3) ─────────────────────────────────────
-app.use(helmet({
-  crossOriginResourcePolicy: { policy: 'cross-origin' }, // allow frontend to load uploaded images
-  contentSecurityPolicy: false, // API doesn't serve HTML; CSP handled by frontend
-}));
-
-// ── Request logging (L6) ────────────────────────────────────────
-if (process.env.NODE_ENV !== 'test') {
-  app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+function normalizeOrigin(url) {
+  return String(url || '').trim().replace(/\/+$/, '');
 }
 
-// ── Global rate limiter (C2) ────────────────────────────────────
-const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 300,                  // 300 requests per window per IP
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: 'Demasiadas solicitudes, intente de nuevo más tarde' },
-});
-app.use(globalLimiter);
+function getAllowedOrigins() {
+  const explicitOrigins = process.env.FRONTEND_URLS || process.env.FRONTEND_URL || 'http://localhost:5173';
+  return explicitOrigins
+    .split(',')
+    .map(normalizeOrigin)
+    .filter(Boolean);
+}
 
-// ── CORS ─────────────────────────────────────────────────────────
+const allowedOrigins = getAllowedOrigins();
+
+// Middlewares
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin(origin, callback) {
+    // Permitir requests server-to-server/curl sin Origin
+    if (!origin) return callback(null, true);
+
+    const normalizedOrigin = normalizeOrigin(origin);
+    if (allowedOrigins.includes(normalizedOrigin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error('Origen no permitido por CORS'));
+  },
   credentials: true,
 }));
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: 'cross-origin' },
+}));
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// ── Body parsers with size limits ────────────────────────────────
-app.use(express.json({ limit: '1mb' }));
-app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+// Archivos estáticos (uploads)
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-// ── Static uploads with security headers (H2) ───────────────────
-app.use('/uploads', (req, res, next) => {
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('Content-Security-Policy', "default-src 'none'; img-src 'self'");
-  res.setHeader('Cache-Control', 'public, max-age=86400');
-  next();
-}, express.static(path.join(__dirname, '../uploads')));
-
-// ── API routes ───────────────────────────────────────────────────
+// Rutas API
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/tags', tagRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/contacts', contactRoutes);
 app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/content', contentRoutes);
+app.use('/api/services', serviceRoutes);
 app.use('/api', sitemapRoutes);
 
-// ── Health check ─────────────────────────────────────────────────
+// Ruta de health check
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'ok', 
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV,
+    environment: process.env.NODE_ENV 
   });
 });
 
-// ── 404 handler ──────────────────────────────────────────────────
+// Manejo de errores 404
 app.use((req, res) => {
   res.status(404).json({ error: 'Ruta no encontrada' });
 });
 
-// ── Global error handler ─────────────────────────────────────────
+// Manejo de errores global
 app.use((err, req, res, next) => {
   console.error('Error:', err);
+
+  if (err?.name === 'MulterError') {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(413).json({ error: 'El archivo excede el tamaño máximo permitido' });
+    }
+    return res.status(400).json({ error: 'Error al procesar el archivo subido' });
+  }
+
+  if (err?.message === 'Origen no permitido por CORS') {
+    return res.status(403).json({ error: err.message });
+  }
+
+  if (err?.message?.includes('Tipo de archivo no permitido')) {
+    return res.status(400).json({ error: err.message });
+  }
+
   res.status(err.status || 500).json({
     error: err.message || 'Error interno del servidor',
     ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
   });
 });
 
-// ── Start server ─────────────────────────────────────────────────
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`Entorno: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`📝 Entorno: ${process.env.NODE_ENV || 'development'}`);
 });
 
 module.exports = app;

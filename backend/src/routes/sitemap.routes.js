@@ -3,31 +3,44 @@ const prisma = require('../lib/prisma');
 
 const router = express.Router();
 
+function normalizeBaseUrl(url) {
+  return String(url || '').trim().replace(/\/+$/, '');
+}
+
+function getSiteUrl() {
+  return normalizeBaseUrl(process.env.SITE_URL || process.env.FRONTEND_URL || 'https://argpiscinas.com');
+}
+
 // Generar sitemap XML dinámico
 router.get('/sitemap.xml', async (req, res) => {
   try {
-    const baseUrl = process.env.FRONTEND_URL || 'https://argpiscinas.com';
+    const baseUrl = getSiteUrl();
 
-    const [posts, projects, categories] = await Promise.all([
-      prisma.post.findMany({
-        where: { status: 'PUBLISHED' },
-        select: { slug: true, updatedAt: true },
-      }),
-      prisma.project.findMany({
-        select: { slug: true, updatedAt: true },
-      }),
-      prisma.category.findMany({
-        select: { slug: true, updatedAt: true },
-      }),
-    ]);
+    // Obtener posts publicados
+    const posts = await prisma.post.findMany({
+      where: { status: 'PUBLISHED' },
+      select: { slug: true, updatedAt: true },
+    });
 
-    // Páginas estáticas (removed /servicios/construccion)
+    // Obtener proyectos
+    const projects = await prisma.project.findMany({
+      select: { slug: true, updatedAt: true },
+    });
+
+    // Obtener categorías
+    const categories = await prisma.category.findMany({
+      select: { slug: true, updatedAt: true },
+    });
+
+    // Obtener servicios
+    const services = await prisma.service.findMany({
+      select: { slug: true, updatedAt: true },
+    });
+
+    // Páginas estáticas (sin servicios individuales, serán añadidos más abajo)
     const staticPages = [
       { url: '/', priority: '1.0', changefreq: 'weekly' },
       { url: '/servicios', priority: '0.9', changefreq: 'monthly' },
-      { url: '/servicios/instalacion-lamina-armada', priority: '0.8', changefreq: 'monthly' },
-      { url: '/servicios/rehabilitacion-piscinas', priority: '0.8', changefreq: 'monthly' },
-      { url: '/servicios/impermeabilizacion', priority: '0.8', changefreq: 'monthly' },
       { url: '/proyectos', priority: '0.8', changefreq: 'weekly' },
       { url: '/blog', priority: '0.8', changefreq: 'daily' },
       { url: '/contacto', priority: '0.7', changefreq: 'monthly' },
@@ -36,6 +49,7 @@ router.get('/sitemap.xml', async (req, res) => {
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
 
+    // Páginas estáticas
     for (const page of staticPages) {
       xml += `
   <url>
@@ -45,6 +59,7 @@ router.get('/sitemap.xml', async (req, res) => {
   </url>`;
     }
 
+    // Posts del blog
     for (const post of posts) {
       xml += `
   <url>
@@ -55,6 +70,7 @@ router.get('/sitemap.xml', async (req, res) => {
   </url>`;
     }
 
+    // Proyectos
     for (const project of projects) {
       xml += `
   <url>
@@ -65,6 +81,7 @@ router.get('/sitemap.xml', async (req, res) => {
   </url>`;
     }
 
+    // Categorías
     for (const category of categories) {
       xml += `
   <url>
@@ -72,6 +89,17 @@ router.get('/sitemap.xml', async (req, res) => {
     <lastmod>${category.updatedAt.toISOString()}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
+  </url>`;
+    }
+
+    // Servicios
+    for (const svc of services) {
+      xml += `
+  <url>
+    <loc>${baseUrl}/servicios/${svc.slug}</loc>
+    <lastmod>${svc.updatedAt.toISOString()}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>`;
     }
 
@@ -88,12 +116,13 @@ router.get('/sitemap.xml', async (req, res) => {
 
 // Robots.txt
 router.get('/robots.txt', (req, res) => {
-  const baseUrl = process.env.FRONTEND_URL || 'https://argpiscinas.com';
+  const baseUrl = getSiteUrl();
+  const sitemapUrl = process.env.SITEMAP_URL || `${baseUrl}/api/sitemap.xml`;
   
   const robots = `User-agent: *
 Allow: /
 
-Sitemap: ${baseUrl}/api/sitemap.xml
+Sitemap: ${sitemapUrl}
 
 Disallow: /admin
 Disallow: /api/

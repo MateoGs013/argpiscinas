@@ -35,23 +35,23 @@
           :key="contact.id"
           @click="openContact(contact)"
           class="p-6 hover:bg-neutral-50 cursor-pointer transition-colors"
-          :class="{ 'bg-neutral-50/50': !contact.read }"
+          :class="{ 'bg-neutral-50/50': contact.status === 'PENDING' }"
         >
           <div class="flex items-start justify-between">
             <div class="flex items-start space-x-4">
               <div :class="[
                 'w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg',
-                !contact.read ? 'bg-primary-200 text-primary-800' : 'bg-neutral-100 text-neutral-500'
+                contact.status === 'PENDING' ? 'bg-primary-200 text-primary-800' : 'bg-neutral-100 text-neutral-500'
               ]">
                 {{ contact.name.charAt(0).toUpperCase() }}
               </div>
               <div>
                 <div class="flex items-center space-x-2">
                   <h3 class="font-semibold text-neutral-900">{{ contact.name }}</h3>
-                  <span v-if="!contact.read" class="w-2 h-2 bg-primary-800 rounded-full"></span>
+                  <span v-if="contact.status === 'PENDING'" class="w-2 h-2 bg-primary-800 rounded-full"></span>
                 </div>
                 <p class="text-sm text-neutral-500">{{ contact.email }}</p>
-                <p class="font-medium text-neutral-700 mt-1">{{ contact.subject }}</p>
+                <p class="font-medium text-neutral-700 mt-1">{{ contact.service || 'Consulta general' }}</p>
                 <p class="text-sm text-neutral-500 line-clamp-1 mt-1">{{ contact.message }}</p>
               </div>
             </div>
@@ -80,7 +80,7 @@
       <div class="card p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div class="flex items-start justify-between mb-6">
           <div>
-            <h3 class="text-xl font-bold text-neutral-900">{{ selectedContact.subject }}</h3>
+            <h3 class="text-xl font-bold text-neutral-900">Mensaje de contacto</h3>
             <p class="text-neutral-500">{{ formatDate(selectedContact.createdAt) }}</p>
           </div>
           <button @click="selectedContact = null" class="p-2 text-neutral-400 hover:text-neutral-600">
@@ -126,7 +126,7 @@
 
         <div class="flex justify-end space-x-4">
           <a 
-            :href="`mailto:${selectedContact.email}?subject=Re: ${selectedContact.subject}`"
+            :href="`mailto:${selectedContact.email}?subject=Respuesta%20ARG%20Piscinas`"
             class="btn btn-primary"
           >
             <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -168,7 +168,7 @@ const selectedContact = ref(null)
 const showDeleteModal = ref(false)
 const contactToDelete = ref(null)
 
-const unreadCount = computed(() => contacts.value.filter(c => !c.read).length)
+const unreadCount = computed(() => contacts.value.filter(c => c.status === 'PENDING').length)
 const thisMonthCount = computed(() => {
   const now = new Date()
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1)
@@ -188,10 +188,10 @@ const formatDate = (date) => {
 const openContact = async (contact) => {
   selectedContact.value = contact
   
-  if (!contact.read) {
+  if (contact.status === 'PENDING') {
     try {
-      await api.patch(`/contacts/${contact.id}`, { read: true })
-      contact.read = true
+      await api.patch(`/contacts/${contact.id}/status`, { status: 'READ' })
+      contact.status = 'READ'
     } catch (error) {
       console.error('Error marking as read:', error)
     }
@@ -205,12 +205,13 @@ const confirmDelete = (contact) => {
 
 const deleteContact = async () => {
   try {
-    await api.delete(`/contacts/${contactToDelete.value.id}`)
-    contacts.value = contacts.value.filter(c => c.id !== contactToDelete.value.id)
+    const deletingId = contactToDelete.value.id
+    await api.delete(`/contacts/${deletingId}`)
+    contacts.value = contacts.value.filter(c => c.id !== deletingId)
     showDeleteModal.value = false
     contactToDelete.value = null
     
-    if (selectedContact.value?.id === contactToDelete.value?.id) {
+    if (selectedContact.value?.id === deletingId) {
       selectedContact.value = null
     }
   } catch (error) {

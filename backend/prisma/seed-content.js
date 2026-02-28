@@ -1,6 +1,92 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+const servicesCollectionsDefaults = [
+  {
+    id: 'touch',
+    name: 'ALKORPLAN TOUCH',
+    type: 'Premium 2mm',
+    description: 'Texturas y relieves inspirados en la naturaleza. La colección más exclusiva de RENOLIT ALKORPLAN.',
+    heroImage: '/Renolit/04. touch/RENOLIT_TOUCH-Vanity-06.jpg',
+    swatches: [
+      { name: 'Vanity', image: '/Renolit/04. touch/RENOLIT_TOUCH-Vanity-06.jpg' },
+      { name: 'Relax', image: '/Renolit/04. touch/RENOLIT_TOUCH-Relax-06.jpg' },
+      { name: 'Elegance', image: '/Renolit/04. touch/RENOLIT_TOUCH_elegance_09A7068.jpg' },
+      { name: 'Sublime', image: '/Renolit/04. touch/RENOLIT_TOUCH-Sublime-06.jpg' }
+    ],
+    moreCount: 3
+  },
+  {
+    id: 'vogue',
+    name: 'ALKORPLAN VOGUE',
+    type: 'Premium 2mm',
+    description: 'Estampados contemporáneos inspirados en tendencias de diseño interior y moda.',
+    heroImage: '/Renolit/05. vogue/RENOLIT_VOGUE_urban_09A4055.jpg',
+    swatches: [
+      { name: 'Urban', image: '/Renolit/05. vogue/RENOLIT_VOGUE_urban_09A4055.jpg' },
+      { name: 'Vintage', image: '/Renolit/05. vogue/RENOLIT_VOGUE_vintage_09A4191.jpg' },
+      { name: 'Summer', image: '/Renolit/05. vogue/RENOLIT_VOGUE_summer_09A2892.jpg' },
+      { name: 'Tropical', image: '/Renolit/05. vogue/RENOLIT_VOGUE_tropical_JMLR8244B.jpg' }
+    ],
+    moreCount: 0
+  },
+  {
+    id: 'ceramics',
+    name: 'ALKORPLAN CERAMICS',
+    type: 'Premium 2mm',
+    description: 'Efecto mosaico y piedra natural con relieve embosado. Elegancia clásica.',
+    heroImage: '/Renolit/03. ceramics/RENOLIT_texture CERAMICS_Selene.jpg',
+    swatches: [
+      { name: 'Selene', image: '/Renolit/03. ceramics/RENOLIT_texture CERAMICS_Selene.jpg' },
+      { name: 'Atenea', image: '/Renolit/03. ceramics/RENOLIT_texture CERAMICS_Atenea.jpg' },
+      { name: 'Etna', image: '/Renolit/03. ceramics/RENOLIT_texture CERAMICS_Etna.jpg' }
+    ],
+    moreCount: 0
+  },
+  {
+    id: 'relief',
+    name: 'ALKORPLAN RELIEF',
+    type: 'Antideslizante',
+    description: 'Superficie antideslizante certificada para zonas de baño y bordes de piscina.',
+    heroImage: '/Renolit/07. relief/RENOLIT_RELIEF_azulclaro_AT2A6464.jpg',
+    swatches: [
+      { name: 'Azul Claro', image: '/Renolit/07. relief/RENOLIT_RELIEF_azulclaro_AT2A6464.jpg' },
+      { name: 'Blanco', image: '/Renolit/07. relief/RENOLIT_RELIEF_blanco_AT2A6484.jpg' },
+      { name: 'Arena', image: '/Renolit/07. relief/RENOLIT_RELIEF_arena_AT2A6420.jpg' },
+      { name: 'Gris Claro', image: '/Renolit/07. relief/RENOLIT_RELIEF_grisclaro_AT2A6555.jpg' }
+    ],
+    moreCount: 4
+  },
+  {
+    id: '2000',
+    name: 'ALKORPLAN 2000',
+    type: 'Estándar 1.5mm',
+    description: 'Colores lisos lacados. La opción más popular y versátil del mercado.',
+    heroImage: '/Renolit/01. 2000/RENOLIT_2000 light blue-6097-00016.jpg',
+    swatches: [
+      { name: 'Light Blue', image: '/Renolit/01. 2000/RENOLIT_2000 light blue-6097-00016.jpg' },
+      { name: 'White', image: '/Renolit/01. 2000/RENOLIT_2000 white - 6097-00140.jpg' },
+      { name: 'Sand', image: '/Renolit/01. 2000/RENOLIT_2000 sand - 6097-00058.jpg' },
+      { name: 'Grey', image: '/Renolit/01. 2000/RENOLIT_2000 grey - 6097-00090.jpg' }
+    ],
+    moreCount: 4
+  },
+  {
+    id: '3000',
+    name: 'ALKORPLAN 3000',
+    type: 'Estándar 1.5mm',
+    description: 'Diseños estampados exclusivos con doble lacado. Efecto piedra y mármol.',
+    heroImage: '/Renolit/02. 3000/RENOLIT_Marble-IMG_5913.jpg',
+    swatches: [
+      { name: 'Marble', image: '/Renolit/02. 3000/RENOLIT_Marble-IMG_5913.jpg' },
+      { name: 'Carrara', image: '/Renolit/02. 3000/RENOLIT_Carrara-IMG_5941.jpg' },
+      { name: 'Bysance Blue', image: '/Renolit/02. 3000/RENOLIT_Bysance Blue-IMG_5975.jpg' },
+      { name: 'Persia Sand', image: '/Renolit/02. 3000/RENOLIT_Persia Sand-IMG_6001.jpg' }
+    ],
+    moreCount: 1
+  }
+];
+
 const defaultContent = [
   // =====================
   // HOME — HERO
@@ -154,6 +240,23 @@ const defaultContent = [
   { key: 'contact.info.schedule', value: 'Lun - Vie: 9:00 - 19:00', section: 'contact', label: 'Horario', type: 'text' },
   { key: 'contact.form.title', value: 'Envíanos un Mensaje', section: 'contact', label: 'Formulario — Título', type: 'text' },
   { key: 'contact.form.success', value: '¡Mensaje enviado! Nos pondremos en contacto contigo pronto.', section: 'contact', label: 'Formulario — Mensaje de éxito', type: 'text' },
+  { key: 'contact.info.map_embed_url', value: '', section: 'contact', label: 'Mapa — URL embebida (iframe)', type: 'textarea' },
+
+  // =====================
+  // SITE CONFIG
+  // =====================
+  { key: 'site.brand.name', value: 'ARG Piscinas', section: 'site', label: 'Marca — Nombre', type: 'text' },
+  { key: 'site.contact.phone', value: '+34 900 000 000', section: 'site', label: 'Sitio — Teléfono', type: 'text' },
+  { key: 'site.contact.email', value: 'info@argpiscinas.com', section: 'site', label: 'Sitio — Email', type: 'text' },
+  { key: 'site.contact.whatsapp', value: '+34 900 000 000', section: 'site', label: 'Sitio — WhatsApp', type: 'text' },
+  { key: 'site.contact.address_line1', value: 'Calle Ejemplo 123', section: 'site', label: 'Sitio — Dirección línea 1', type: 'text' },
+  { key: 'site.contact.address_line2', value: '28001 Madrid', section: 'site', label: 'Sitio — Dirección línea 2', type: 'text' },
+  { key: 'site.contact.schedule', value: 'Lun - Vie: 9:00 - 19:00', section: 'site', label: 'Sitio — Horario', type: 'text' },
+  { key: 'site.social.facebook', value: 'https://facebook.com/argpiscinas', section: 'site', label: 'Red social — Facebook', type: 'text' },
+  { key: 'site.social.instagram', value: 'https://instagram.com/argpiscinas', section: 'site', label: 'Red social — Instagram', type: 'text' },
+  { key: 'site.social.linkedin', value: 'https://linkedin.com/company/argpiscinas', section: 'site', label: 'Red social — LinkedIn', type: 'text' },
+  { key: 'header.cta_label', value: 'Solicitar Presupuesto', section: 'site', label: 'Header — Texto CTA', type: 'text' },
+  { key: 'footer.description', value: 'Instaladores oficiales de RENOLIT ALKORPLAN. Especialistas en lámina armada para piscinas con garantía de 15 años.', section: 'site', label: 'Footer — Descripción', type: 'textarea' },
 
   // =====================
   // PROJECTS PAGE
@@ -175,6 +278,13 @@ const defaultContent = [
   { key: 'services.hero.label', value: 'Servicios', section: 'services', label: 'Hero — Etiqueta', type: 'text' },
   { key: 'services.hero.title', value: 'Nuestros Servicios', section: 'services', label: 'Hero — Título', type: 'text' },
   { key: 'services.hero.description', value: 'Servicios especializados de instalación de lámina armada RENOLIT ALKORPLAN para piscinas.', section: 'services', label: 'Hero — Descripción', type: 'textarea' },
+  { key: 'services.collections.label', value: 'Colecciones', section: 'services', label: 'Colecciones — Etiqueta', type: 'text' },
+  { key: 'services.collections.title', value: 'Gama RENOLIT ALKORPLAN', section: 'services', label: 'Colecciones — Título', type: 'text' },
+  { key: 'services.collections.description', value: 'Ofrecemos toda la gama de membranas RENOLIT ALKORPLAN para que elijas el acabado perfecto para tu piscina.', section: 'services', label: 'Colecciones — Descripción', type: 'textarea' },
+  { key: 'services.collections.items', value: JSON.stringify(servicesCollectionsDefaults, null, 2), section: 'services', label: 'Colecciones — Items', type: 'json' },
+  { key: 'services.cta.title', value: '¿Necesitas Asesoramiento?', section: 'services', label: 'CTA — Título', type: 'text' },
+  { key: 'services.cta.description', value: 'Te ayudamos a elegir la mejor solución RENOLIT ALKORPLAN para tu piscina. Presupuesto sin compromiso.', section: 'services', label: 'CTA — Descripción', type: 'textarea' },
+  { key: 'services.cta.button', value: 'Contactar Ahora', section: 'services', label: 'CTA — Botón', type: 'text' },
 
   // =====================
   // SERVICIO — INSTALACIÓN
@@ -227,10 +337,20 @@ const defaultContent = [
   { key: 'services.waterproofing.sidebar_feat3', value: 'Materiales certificados', section: 'services.waterproofing', label: 'Sidebar — Garantía 3', type: 'text' },
 ];
 
+const deprecatedContentSections = new Set([
+  'services.installation',
+  'services.rehabilitation',
+  'services.waterproofing',
+]);
+
+const effectiveDefaultContent = defaultContent.filter(
+  (item) => !deprecatedContentSections.has(item.section)
+);
+
 async function seedContent() {
   console.log('🌱 Seeding site content...');
 
-  for (const item of defaultContent) {
+  for (const item of effectiveDefaultContent) {
     await prisma.siteContent.upsert({
       where: { key: item.key },
       update: {}, // No sobreescribir si ya existe (preservar ediciones del admin)
@@ -238,7 +358,7 @@ async function seedContent() {
     });
   }
 
-  console.log(`✅ ${defaultContent.length} contenidos insertados/verificados`);
+  console.log(`✅ ${effectiveDefaultContent.length} contenidos insertados/verificados`);
 }
 
 module.exports = { seedContent, defaultContent };

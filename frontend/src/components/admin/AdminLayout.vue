@@ -235,6 +235,22 @@ const ProjectsIcon = {
   }
 }
 
+const ServicesIcon = {
+  render() {
+    return h('svg', { fill: 'none', viewBox: '0 0 24 24', stroke: 'currentColor', 'stroke-width': '2' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.12 3.447a1 1 0 00.95.69h3.626c.969 0 1.371 1.24.588 1.81l-2.933 2.131a1 1 0 00-.364 1.118l1.12 3.447c.3.921-.755 1.688-1.54 1.118l-2.933-2.131a1 1 0 00-1.176 0l-2.932 2.13c-.785.57-1.84-.196-1.54-1.117l1.12-3.447a1 1 0 00-.364-1.118L4.764 8.874c-.783-.57-.38-1.81.588-1.81h3.626a1 1 0 00.95-.69l1.12-3.447z' })
+    ])
+  }
+}
+
+const CollectionsIcon = {
+  render() {
+    return h('svg', { fill: 'none', viewBox: '0 0 24 24', stroke: 'currentColor', 'stroke-width': '2' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M4 6a2 2 0 012-2h4a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h4a2 2 0 012 2v2a2 2 0 01-2 2h-4a2 2 0 01-2-2v-2z' })
+    ])
+  }
+}
+
 const ContactsIcon = {
   render() {
     return h('svg', { fill: 'none', viewBox: '0 0 24 24', stroke: 'currentColor', 'stroke-width': '2' }, [
@@ -256,6 +272,8 @@ const menuItems = [
   { to: '/admin/posts', label: 'Artículos', icon: PostsIcon },
   { to: '/admin/categorias', label: 'Categorías', icon: CategoriesIcon },
   { to: '/admin/tags', label: 'Tags', icon: TagsIcon },
+  { to: '/admin/servicios', label: 'Servicios', icon: ServicesIcon },
+  { to: '/admin/colecciones', label: 'Colecciones', icon: CollectionsIcon },
   { to: '/admin/proyectos', label: 'Proyectos', icon: ProjectsIcon },
   { to: '/admin/contenido', label: 'Contenido', icon: ContentIcon },
   { to: '/admin/contactos', label: 'Mensajes', icon: ContactsIcon }

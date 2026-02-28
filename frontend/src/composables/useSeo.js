@@ -1,16 +1,35 @@
 import { useHead } from '@vueuse/head'
 import { computed, unref } from 'vue'
 
+function normalizeBaseUrl(url) {
+  return String(url || '').replace(/\/+$/, '')
+}
+
+function getSiteUrl() {
+  const fromEnv = import.meta.env.VITE_SITE_URL
+  if (fromEnv) return normalizeBaseUrl(fromEnv)
+  if (typeof window !== 'undefined' && window.location?.origin) return normalizeBaseUrl(window.location.origin)
+  return 'https://argpiscinas.com'
+}
+
+function toAbsoluteUrl(url, siteUrl = getSiteUrl()) {
+  if (!url) return siteUrl
+  if (url.startsWith('http://') || url.startsWith('https://')) return url
+  return `${siteUrl}${url.startsWith('/') ? url : `/${url}`}`
+}
+
 /**
  * Composable for managing SEO meta tags
  */
 export function useSeo(options = {}) {
+  const siteUrl = getSiteUrl()
+
   const defaultOptions = {
     title: 'ARG Piscinas',
     description: 'Especialistas en instalación y rehabilitación de piscinas con lámina armada. Más de 15 años de experiencia.',
     keywords: 'piscinas, lámina armada, rehabilitación piscinas, impermeabilización, construcción piscinas',
-    image: '/images/og-image.jpg',
-    url: typeof window !== 'undefined' ? window.location.href : '',
+    image: '/ArgPiscinas/ARG PISCINAS LOGO OK sin fondo.png',
+    url: typeof window !== 'undefined' ? window.location.href : siteUrl,
     type: 'website',
     siteName: 'ARG Piscinas'
   }
@@ -48,11 +67,11 @@ export function useSeo(options = {}) {
       },
       {
         property: 'og:image',
-        content: computed(() => seoOptions.value.image)
+        content: computed(() => toAbsoluteUrl(seoOptions.value.image, siteUrl))
       },
       {
         property: 'og:url',
-        content: computed(() => seoOptions.value.url)
+        content: computed(() => toAbsoluteUrl(seoOptions.value.url, siteUrl))
       },
       {
         property: 'og:type',
@@ -78,7 +97,7 @@ export function useSeo(options = {}) {
       },
       {
         name: 'twitter:image',
-        content: computed(() => seoOptions.value.image)
+        content: computed(() => toAbsoluteUrl(seoOptions.value.image, siteUrl))
       },
       
       // Additional
@@ -94,7 +113,7 @@ export function useSeo(options = {}) {
     link: [
       {
         rel: 'canonical',
-        href: computed(() => seoOptions.value.url)
+        href: computed(() => toAbsoluteUrl(seoOptions.value.url, siteUrl))
       }
     ]
   })
@@ -106,6 +125,8 @@ export function useSeo(options = {}) {
  * Generate JSON-LD structured data
  */
 export function useStructuredData(type, data) {
+  const siteUrl = getSiteUrl()
+
   const structuredData = computed(() => {
     switch (type) {
       case 'organization':
@@ -114,8 +135,8 @@ export function useStructuredData(type, data) {
           '@type': 'Organization',
           name: 'ARG Piscinas',
           description: data.description || 'Especialistas en instalación y rehabilitación de piscinas con lámina armada.',
-          url: data.url || 'https://argpiscinas.com',
-          logo: data.logo || 'https://argpiscinas.com/logo.png',
+          url: data.url || siteUrl,
+          logo: data.logo || `${siteUrl}/ArgPiscinas/LOGO NAV.png`,
           contactPoint: {
             '@type': 'ContactPoint',
             telephone: data.phone || '+34 XXX XXX XXX',
@@ -136,8 +157,8 @@ export function useStructuredData(type, data) {
           '@type': 'LocalBusiness',
           name: 'ARG Piscinas',
           description: data.description || 'Especialistas en instalación y rehabilitación de piscinas con lámina armada.',
-          image: data.image || 'https://argpiscinas.com/images/og-image.jpg',
-          url: data.url || 'https://argpiscinas.com',
+          image: data.image || `${siteUrl}/ArgPiscinas/ARG PISCINAS LOGO OK sin fondo.png`,
+          url: data.url || siteUrl,
           telephone: data.phone || '+34 XXX XXX XXX',
           priceRange: '€€€',
           address: {
@@ -166,7 +187,7 @@ export function useStructuredData(type, data) {
             name: 'ARG Piscinas',
             logo: {
               '@type': 'ImageObject',
-              url: 'https://argpiscinas.com/logo.png'
+              url: `${siteUrl}/ArgPiscinas/LOGO NAV.png`
             }
           },
           mainEntityOfPage: {

@@ -116,7 +116,8 @@ export const usePostsStore = defineStore('posts', () => {
 
     try {
       const response = await api.put(`/posts/${id}`, data)
-      const index = posts.value.findIndex(p => p.id === id)
+      const numId = Number(id)
+      const index = posts.value.findIndex(p => p.id === numId)
       if (index !== -1) {
         posts.value[index] = response.data
       }
@@ -136,7 +137,8 @@ export const usePostsStore = defineStore('posts', () => {
 
     try {
       const response = await api.patch(`/posts/${id}/status`, { status })
-      const index = posts.value.findIndex(p => p.id === id)
+      const numId = Number(id)
+      const index = posts.value.findIndex(p => p.id === numId)
       if (index !== -1) {
         posts.value[index] = { ...posts.value[index], status: response.data.status }
       }
@@ -155,7 +157,8 @@ export const usePostsStore = defineStore('posts', () => {
 
     try {
       await api.delete(`/posts/${id}`)
-      posts.value = posts.value.filter(p => p.id !== id)
+      const numId = Number(id)
+      posts.value = posts.value.filter(p => p.id !== numId)
       return true
     } catch (err) {
       error.value = err.response?.data?.error || 'Error al eliminar el post'

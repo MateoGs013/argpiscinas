@@ -1,6 +1,21 @@
 import axios from 'axios'
 
-const API_BASE = import.meta.env.VITE_API_URL || 'https://api.argpiscinas.pegasuz.com.ar'
+const API_BASE = import.meta.env.VITE_API_URL || ''
+
+function getStoredToken() {
+  const directToken = localStorage.getItem('token')
+  if (directToken) return directToken
+
+  const authStoreRaw = localStorage.getItem('auth')
+  if (!authStoreRaw) return null
+
+  try {
+    const parsed = JSON.parse(authStoreRaw)
+    return parsed?.token || null
+  } catch {
+    return null
+  }
+}
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : '/api',
@@ -18,14 +33,16 @@ export function resolveImageUrl(url) {
   if (!url) return ''
   // Ya es una URL absoluta
   if (url.startsWith('http://') || url.startsWith('https://')) return url
+  if (!API_BASE) return url
+
   // Ruta relativa del backend → anteponer base URL
-  return `${API_BASE}${url}`
+  return url.startsWith('/') ? `${API_BASE}${url}` : `${API_BASE}/${url}`
 }
 
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token')
+    const token = getStoredToken()
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
@@ -39,15 +56,14 @@ api.interceptors.request.use(
 // Response interceptor
 api.interceptors.response.use(
   (response) => response,
-  async (error) => {
+  (error) => {
     // Handle 401 Unauthorized
     if (error.response?.status === 401) {
       localStorage.removeItem('token')
       
-      // Only redirect if not on login page — use Vue Router (lazy import to avoid circular deps)
+      // Only redirect if not on login page
       if (!window.location.pathname.includes('/admin/login')) {
-        const { default: router } = await import('@/router')
-        router.push({ name: 'admin-login' })
+        window.location.assign('/admin/login')
       }
     }
     

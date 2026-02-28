@@ -23,6 +23,14 @@ router.post(
   authorize('ADMIN'),
   [
     body('title').trim().notEmpty().withMessage('El título es requerido'),
+    body('year')
+      .optional({ values: 'falsy' })
+      .isInt({ min: 1900, max: 2100 })
+      .withMessage('El año debe ser un entero válido'),
+    body('featured')
+      .optional()
+      .isBoolean()
+      .withMessage('featured debe ser booleano'),
   ],
   validate,
   createProject
@@ -34,6 +42,14 @@ router.put(
   authorize('ADMIN'),
   [
     body('title').optional().trim().notEmpty().withMessage('El título no puede estar vacío'),
+    body('year')
+      .optional({ values: 'falsy' })
+      .isInt({ min: 1900, max: 2100 })
+      .withMessage('El año debe ser un entero válido'),
+    body('featured')
+      .optional()
+      .isBoolean()
+      .withMessage('featured debe ser booleano'),
   ],
   validate,
   updateProject

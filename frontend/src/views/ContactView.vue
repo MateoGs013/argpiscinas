@@ -6,13 +6,16 @@
         <img 
           src="@/assets/img/RENOLIT_CERAMICS Selene (1).jpg" 
           alt="Contacto ARG Piscinas"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
           class="w-full h-full object-cover"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-midnight-800 via-midnight-800/70 to-midnight-800/40"></div>
       </div>
       <div class="container-custom relative z-10">
         <div class="max-w-3xl">
-          <span class="text-white/70 font-semibold text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('contact.hero.label', 'Contacto') }}</span>
+          <span class="text-silver-400/60 font-medium text-xs uppercase tracking-[0.2em] mb-6 block">{{ t('contact.hero.label', 'Contacto') }}</span>
           <h1 class="text-white mb-8 leading-[1.1]">{{ t('contact.hero.title', '¿Cómo Podemos Ayudarte?') }}</h1>
           <p class="text-lg text-silver-400 leading-relaxed max-w-xl">
             {{ t('contact.hero.description', 'Estamos aquí para responder tus preguntas y ayudarte con tu proyecto de piscina. Contáctanos y te responderemos lo antes posible.') }}
@@ -44,8 +47,8 @@
                   </div>
                   <div>
                     <h3 class="font-semibold text-neutral-900 text-sm">Teléfono</h3>
-                    <a href="tel:+34900000000" class="text-midnight-800 hover:text-charcoal-500 text-sm">{{ t('contact.info.phone', '+34 900 000 000') }}</a>
-                    <p class="text-xs text-neutral-400 mt-1 tracking-wide">{{ t('contact.info.schedule', 'Lun - Vie: 9:00 - 19:00') }}</p>
+                    <a :href="phoneHref" class="text-midnight-800 hover:text-charcoal-500 text-sm">{{ phone }}</a>
+                    <p class="text-xs text-neutral-400 mt-1 tracking-wide">{{ schedule }}</p>
                   </div>
                 </div>
 
@@ -57,7 +60,7 @@
                   </div>
                   <div>
                     <h3 class="font-semibold text-neutral-900 text-sm">Email</h3>
-                    <a href="mailto:info@argpiscinas.com" class="text-midnight-800 hover:text-charcoal-500 text-sm">{{ t('contact.info.email', 'info@argpiscinas.com') }}</a>
+                    <a :href="emailHref" class="text-midnight-800 hover:text-charcoal-500 text-sm">{{ email }}</a>
                     <p class="text-xs text-neutral-400 mt-1 tracking-wide">Respondemos en menos de 24h</p>
                   </div>
                 </div>
@@ -71,8 +74,8 @@
                   </div>
                   <div>
                     <h3 class="font-semibold text-neutral-900 text-sm">Dirección</h3>
-                    <p class="text-neutral-500 text-sm">{{ t('contact.info.address_line1', 'Calle Ejemplo 123') }}</p>
-                    <p class="text-neutral-500 text-sm">{{ t('contact.info.address_line2', '28001 Madrid') }}</p>
+                    <p class="text-neutral-500 text-sm">{{ addressLine1 }}</p>
+                    <p class="text-neutral-500 text-sm">{{ addressLine2 }}</p>
                   </div>
                 </div>
 
@@ -84,7 +87,7 @@
                   </div>
                   <div>
                     <h3 class="font-semibold text-neutral-900 text-sm">WhatsApp</h3>
-                    <a href="https://wa.me/34900000000" target="_blank" class="text-green-700 hover:text-green-800 text-sm">{{ t('contact.info.whatsapp', '+34 900 000 000') }}</a>
+                    <a :href="whatsappHref" target="_blank" rel="noopener noreferrer" class="text-green-700 hover:text-green-800 text-sm">{{ whatsappPhone }}</a>
                     <p class="text-xs text-neutral-400 mt-1 tracking-wide">Escríbenos directamente</p>
                   </div>
                 </div>
@@ -94,14 +97,18 @@
               <div class="pt-8 border-t border-neutral-200">
                 <h3 class="font-semibold text-neutral-900 text-sm mb-4">Síguenos</h3>
                 <div class="flex space-x-3">
-                  <a href="#" class="w-10 h-10 bg-neutral-100 rounded-boutique flex items-center justify-center text-neutral-500 hover:bg-midnight-800 hover:text-white transition-all duration-400">
+                  <a
+                    v-for="social in socialLinks"
+                    :key="social.name"
+                    :href="social.url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-10 h-10 bg-neutral-100 rounded-boutique flex items-center justify-center text-neutral-500 hover:bg-midnight-800 hover:text-white transition-all duration-400"
+                  >
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                      <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
-                    </svg>
-                  </a>
-                  <a href="#" class="w-10 h-10 bg-neutral-100 rounded-boutique flex items-center justify-center text-neutral-500 hover:bg-midnight-800 hover:text-white transition-all duration-400">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                      <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" />
+                      <path v-if="social.name === 'Facebook'" fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                      <path v-else-if="social.name === 'Instagram'" fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" />
+                      <path v-else d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                     </svg>
                   </a>
                 </div>
@@ -119,7 +126,7 @@
                   <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
                   </svg>
-                  ¡Mensaje enviado! Nos pondremos en contacto contigo pronto.
+                  {{ t('contact.form.success', '¡Mensaje enviado! Nos pondremos en contacto contigo pronto.') }}
                 </div>
               </div>
 
@@ -176,27 +183,16 @@
                     </label>
                     <select id="service" v-model="form.service" class="input">
                       <option value="">Selecciona una opción</option>
-                      <option value="instalacion">Instalación de Lámina Armada</option>
-                      <option value="rehabilitacion">Rehabilitación de Piscinas</option>
-                      <option value="impermeabilizacion">Impermeabilización</option>
+                      <option 
+                        v-for="svc in servicesStore.services" 
+                        :key="svc.slug" 
+                        :value="svc.slug"
+                      >
+                        {{ svc.title }}
+                      </option>
                       <option value="otro">Otro</option>
                     </select>
                   </div>
-                </div>
-
-                <div>
-                  <label for="subject" class="block text-xs font-medium text-neutral-600 mb-2 tracking-wide uppercase">
-                    Asunto *
-                  </label>
-                  <input 
-                    id="subject"
-                    v-model="form.subject"
-                    type="text"
-                    required
-                    class="input"
-                    placeholder="¿En qué podemos ayudarte?"
-                  />
-                  <p v-if="errors.subject" class="mt-1 text-xs text-red-600">{{ errors.subject }}</p>
                 </div>
 
                 <div>
@@ -250,25 +246,15 @@
       </div>
     </section>
 
-    <!-- Map -->
-    <section class="h-96 bg-charcoal-600">
-      <iframe 
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.0!2d-3.7!3d40.4!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjvCsDA5JzMwLjAiTiAzwrAyMScwMC4wIlc!5e0!3m2!1ses!2ses!4v1234567890"
-        width="100%"
-        height="100%"
-        style="border:0;"
-        allowfullscreen=""
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-      ></iframe>
-    </section>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useSeo } from '@/composables/useSeo'
 import { useContent } from '@/composables/useContent'
+import { useSiteConfig } from '@/composables/useSiteConfig'
+import { useServicesStore } from '@/stores/services'
 import api from '@/services/api'
 
 const { t } = useContent()
@@ -284,9 +270,26 @@ const form = reactive({
   email: '',
   phone: '',
   service: '',
-  subject: '',
   message: '',
   privacy: false
+})
+
+const servicesStore = useServicesStore()
+const {
+  phone,
+  phoneHref,
+  email,
+  emailHref,
+  whatsappPhone,
+  whatsappHref,
+  addressLine1,
+  addressLine2,
+  schedule,
+  socialLinks
+} = useSiteConfig()
+
+onMounted(() => {
+  servicesStore.fetchServices()
 })
 
 const errors = reactive({})
@@ -295,6 +298,7 @@ const submitSuccess = ref(false)
 
 const validateForm = () => {
   const newErrors = {}
+  Object.keys(errors).forEach((key) => { delete errors[key] })
   
   if (!form.name.trim()) {
     newErrors.name = 'El nombre es obligatorio'
@@ -304,10 +308,6 @@ const validateForm = () => {
     newErrors.email = 'El email es obligatorio'
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
     newErrors.email = 'El email no es válido'
-  }
-  
-  if (!form.subject.trim()) {
-    newErrors.subject = 'El asunto es obligatorio'
   }
   
   if (!form.message.trim()) {
@@ -328,7 +328,6 @@ const submitForm = async () => {
       name: form.name,
       email: form.email,
       phone: form.phone,
-      subject: form.subject,
       message: form.message,
       service: form.service
     })
@@ -340,7 +339,6 @@ const submitForm = async () => {
     form.email = ''
     form.phone = ''
     form.service = ''
-    form.subject = ''
     form.message = ''
     form.privacy = false
     

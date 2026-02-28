@@ -6,17 +6,22 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Iniciando seed de la base de datos...');
 
+  const adminEmail = process.env.SEED_ADMIN_EMAIL || 'admin@argpiscinas.com';
+  const adminPlainPassword = process.env.SEED_ADMIN_PASSWORD || 'admin123';
+  const editorEmail = process.env.SEED_EDITOR_EMAIL || 'editor@argpiscinas.com';
+  const editorPlainPassword = process.env.SEED_EDITOR_PASSWORD || 'editor123';
+
   // =====================
   // USUARIOS
   // =====================
-  const adminPassword = await bcrypt.hash(process.env.SEED_ADMIN_PASSWORD || 'Admin1234!', 10);
-  const editorPassword = await bcrypt.hash(process.env.SEED_EDITOR_PASSWORD || 'Editor1234!', 10);
+  const adminPassword = await bcrypt.hash(adminPlainPassword, 10);
+  const editorPassword = await bcrypt.hash(editorPlainPassword, 10);
 
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@argpiscinas.com' },
+    where: { email: adminEmail },
     update: {},
     create: {
-      email: 'admin@argpiscinas.com',
+      email: adminEmail,
       password: adminPassword,
       name: 'Administrador',
       role: 'ADMIN',
@@ -24,10 +29,10 @@ async function main() {
   });
 
   const editor = await prisma.user.upsert({
-    where: { email: 'editor@argpiscinas.com' },
+    where: { email: editorEmail },
     update: {},
     create: {
-      email: 'editor@argpiscinas.com',
+      email: editorEmail,
       password: editorPassword,
       name: 'Editor',
       role: 'EDITOR',
@@ -117,6 +122,71 @@ async function main() {
   ]);
 
   console.log('✅ Tags creados:', tags.length);
+
+  // =====================
+  // SERVICIOS (catalogo básico)
+  // =====================
+  const services = await Promise.all([
+    prisma.service.upsert({
+      where: { slug: 'instalacion-lamina-armada' },
+      update: {},
+      create: {
+        title: 'Piscinas Nuevas',
+        slug: 'instalacion-lamina-armada',
+        description: 'Instalación de lámina armada RENOLIT ALKORPLAN en piscinas de nueva construcción. La mejor opción para garantizar la impermeabilización desde el primer día.',
+        content: '<h2>Instalación en piscina nueva</h2><p>Instalamos lámina armada RENOLIT ALKORPLAN desde el inicio de obra para asegurar estanqueidad, durabilidad y un acabado premium.</p><h3>Qué incluye</h3><ul><li>Revisión técnica del vaso y preparación de superficies</li><li>Colocación y termosoldado profesional</li><li>Terminaciones en piezas especiales y perímetros</li><li>Puesta en marcha y recomendaciones de mantenimiento</li></ul><p>Trabajamos con procedimiento certificado para que la piscina quede lista en tiempos reducidos y con respaldo técnico.</p>',
+        image: null,
+        features: [
+          'Garantía oficial RENOLIT de 15 años',
+          'Amplia gama de colores y diseños',
+          'Instalación en cualquier forma de piscina',
+          'Acabado estético premium',
+        ],
+        showOnHome: true,
+        order: 1,
+      },
+    }),
+    prisma.service.upsert({
+      where: { slug: 'rehabilitacion-piscinas' },
+      update: {},
+      create: {
+        title: 'Rehabilitación de Piscinas',
+        slug: 'rehabilitacion-piscinas',
+        description: 'Renovación de piscinas existentes con membrana RENOLIT ALKORPLAN. Solución definitiva para piscinas con problemas de filtraciones o gresite deteriorado.',
+        content: '<h2>Rehabilitación sin demoliciones complejas</h2><p>Renovamos piscinas existentes con lámina armada para resolver filtraciones, desgaste y problemas de revestimiento.</p><h3>Proceso de trabajo</h3><ol><li>Diagnóstico técnico del estado actual</li><li>Preparación y reparación base</li><li>Instalación de membrana y sellado completo</li><li>Verificación final de estanqueidad</li></ol><p>La intervención reduce tiempos de obra y mejora estética y rendimiento de la piscina.</p>',
+        image: null,
+        features: [
+          'Se instala sobre cualquier superficie',
+          'Elimina problemas de filtraciones',
+          'Sin obras de demolición',
+          'Instalación rápida y limpia',
+        ],
+        showOnHome: true,
+        order: 2,
+      },
+    }),
+    prisma.service.upsert({
+      where: { slug: 'impermeabilizacion' },
+      update: {},
+      create: {
+        title: 'Impermeabilización',
+        slug: 'impermeabilizacion',
+        description: 'Solución 100% estanca para piscinas con problemas de fugas. RENOLIT ALKORPLAN es la única membrana que garantiza la impermeabilización total.',
+        content: '<h2>Impermeabilización profesional</h2><p>Aplicamos sistemas de impermeabilización para eliminar pérdidas de agua y proteger la estructura de la piscina.</p><h3>Beneficios</h3><ul><li>Estanqueidad integral</li><li>Protección frente a fisuras y movimientos</li><li>Mayor vida útil del vaso</li><li>Mantenimiento simplificado</li></ul><p>Definimos la solución adecuada según el tipo de piscina y su estado estructural.</p>',
+        image: null,
+        features: [
+          '100% estanqueidad garantizada',
+          'Ideal para piscinas en azoteas',
+          'Prevención de humedades',
+          'Garantía escrita de 15 años',
+        ],
+        showOnHome: true,
+        order: 3,
+      },
+    }),
+  ]);
+
+  console.log('✅ Servicios creados:', services.length);
 
   // =====================
   // POSTS
@@ -532,8 +602,8 @@ Esta espectacular villa en Marbella requería una piscina a la altura de sus vis
   console.log('🎉 Seed completado exitosamente!');
   console.log('');
   console.log('📧 Credenciales de acceso:');
-  console.log('   Admin: admin@argpiscinas.com / (SEED_ADMIN_PASSWORD env var)');
-  console.log('   Editor: editor@argpiscinas.com / (SEED_EDITOR_PASSWORD env var)');
+  console.log(`   Admin: ${adminEmail} / ${adminPlainPassword}`);
+  console.log(`   Editor: ${editorEmail} / ${editorPlainPassword}`);
 
   // Seed de contenido del sitio
   const { seedContent } = require('./seed-content');

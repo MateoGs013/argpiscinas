@@ -9,17 +9,18 @@
             <img 
               src="/ArgPiscinas/LOGO NAV.png" 
               alt="ARG Piscinas - Instalador Oficial RENOLIT ALKORPLAN" 
+              loading="lazy"
+              decoding="async"
               class="h-14 no-filter"
             />
-            <span class="text-xl font-bold tracking-tight text-white">ARG Piscinas</span>
+            <span class="text-xl font-bold tracking-tight text-white">{{ siteName }}</span>
           </RouterLink>
           <p class="text-silver-400/70 mb-6 leading-relaxed text-sm">
-            Instaladores oficiales de RENOLIT ALKORPLAN. Especialistas en lámina armada 
-            para piscinas con garantía de 15 años.
+            {{ t('footer.description', 'Instaladores oficiales de RENOLIT ALKORPLAN. Especialistas en lámina armada para piscinas con garantía de 15 años.') }}
           </p>
           <!-- Certification Badge -->
           <div class="flex items-center space-x-2.5 mb-8 bg-charcoal-600/40 rounded-boutique px-4 py-3 border border-charcoal-400/10">
-            <img src="/Renolit/logo-RENOLIT-ALKORPLAN_blanc.png" alt="RENOLIT ALKORPLAN" class="w-32 h-auto no-filter" />
+            <img src="/Renolit/logo-RENOLIT-ALKORPLAN_blanc.png" alt="RENOLIT ALKORPLAN" loading="lazy" decoding="async" class="w-32 h-auto no-filter" />
             <span class="text-xs text-silver-400/60 tracking-wide">Instalador Certificado</span>
           </div>
           <!-- Social Links -->
@@ -77,22 +78,22 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <span class="text-silver-400/70 text-sm">Madrid, España</span>
+              <span class="text-silver-400/70 text-sm">{{ `${addressLine1}, ${addressLine2}` }}</span>
             </li>
             <li class="flex items-center space-x-3">
               <svg class="w-4 h-4 text-silver-400/50 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
-              <a href="tel:+34900000000" class="text-silver-400/70 hover:text-white transition-colors duration-300 text-sm">
-                +34 900 000 000
+              <a :href="phoneHref" class="text-silver-400/70 hover:text-white transition-colors duration-300 text-sm">
+                {{ phone }}
               </a>
             </li>
             <li class="flex items-center space-x-3">
               <svg class="w-4 h-4 text-silver-400/50 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              <a href="mailto:info@argpiscinas.com" class="text-silver-400/70 hover:text-white transition-colors duration-300 text-sm">
-                info@argpiscinas.com
+              <a :href="emailHref" class="text-silver-400/70 hover:text-white transition-colors duration-300 text-sm">
+                {{ email }}
               </a>
             </li>
           </ul>
@@ -105,18 +106,18 @@
       <div class="container-custom py-7">
         <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <p class="text-silver-400/40 text-xs tracking-wide">
-            © {{ currentYear }} ARG Piscinas — Instalador Oficial RENOLIT ALKORPLAN
+            © {{ currentYear }} {{ siteName }} — Instalador Oficial RENOLIT ALKORPLAN
           </p>
           <div class="flex space-x-8">
-            <span class="text-silver-400/40 text-xs tracking-wide cursor-default">
+            <RouterLink to="/privacidad" class="text-silver-400/40 hover:text-silver-300 text-xs tracking-wide transition-colors duration-300">
               Política de Privacidad
-            </span>
-            <span class="text-silver-400/40 text-xs tracking-wide cursor-default">
+            </RouterLink>
+            <RouterLink to="/cookies" class="text-silver-400/40 hover:text-silver-300 text-xs tracking-wide transition-colors duration-300">
               Cookies
-            </span>
-            <span class="text-silver-400/40 text-xs tracking-wide cursor-default">
+            </RouterLink>
+            <RouterLink to="/legal" class="text-silver-400/40 hover:text-silver-300 text-xs tracking-wide transition-colors duration-300">
               Aviso Legal
-            </span>
+            </RouterLink>
           </div>
         </div>
       </div>
@@ -125,15 +126,25 @@
 </template>
 
 <script setup>
-import { computed, h } from 'vue'
+import { computed, h, onMounted } from 'vue'
+import { useContent } from '@/composables/useContent'
+import { useSiteConfig } from '@/composables/useSiteConfig'
+import { useServicesStore } from '@/stores/services'
 
 const currentYear = computed(() => new Date().getFullYear())
+const { t } = useContent()
+const { siteName, phone, phoneHref, email, emailHref, addressLine1, addressLine2, socialLinks } = useSiteConfig()
 
-const serviceLinks = [
-  { to: '/servicios/instalacion-lamina-armada', label: 'Piscinas Nuevas' },
-  { to: '/servicios/rehabilitacion-piscinas', label: 'Rehabilitación de Piscinas' },
-  { to: '/servicios/impermeabilizacion', label: 'Impermeabilización' }
-]
+const servicesStore = useServicesStore()
+onMounted(() => {
+  if (!servicesStore.services.length) {
+    servicesStore.fetchServices()
+  }
+})
+
+const serviceLinks = computed(() =>
+  servicesStore.services.map(s => ({ to: `/servicios/${s.slug}`, label: s.title }))
+)
 
 const companyLinks = [
   { to: '/nosotros', label: 'Sobre Nosotros' },
@@ -167,9 +178,16 @@ const LinkedInIcon = {
   }
 }
 
-const socials = [
-  { name: 'Facebook', url: 'https://facebook.com/argpiscinas', icon: FacebookIcon },
-  { name: 'Instagram', url: 'https://instagram.com/argpiscinas', icon: InstagramIcon },
-  { name: 'LinkedIn', url: 'https://linkedin.com/company/argpiscinas', icon: LinkedInIcon }
-]
+const socialIconByName = {
+  Facebook: FacebookIcon,
+  Instagram: InstagramIcon,
+  LinkedIn: LinkedInIcon
+}
+
+const socials = computed(() =>
+  socialLinks.value.map((social) => ({
+    ...social,
+    icon: socialIconByName[social.name] || FacebookIcon
+  }))
+)
 </script>

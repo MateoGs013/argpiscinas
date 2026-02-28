@@ -12,13 +12,16 @@ const {
 
 const router = express.Router();
 
+const loginWindowMs = Number.parseInt(process.env.AUTH_RATE_WINDOW_MS, 10) || 15 * 60 * 1000;
+const loginMaxAttempts = Number.parseInt(process.env.AUTH_RATE_MAX, 10) || 10;
+
 // Rate limit for login (C2: brute-force protection)
 const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10,                   // 10 attempts per window per IP
+  windowMs: loginWindowMs,
+  max: loginMaxAttempts,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { error: 'Demasiados intentos de login, intente de nuevo en 15 minutos' },
+  message: { error: 'Demasiados intentos de login, intente de nuevo más tarde' },
 });
 
 // Login

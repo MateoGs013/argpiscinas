@@ -118,6 +118,9 @@ const updateProfile = async (req, res) => {
 
     res.json(updatedUser);
   } catch (error) {
+    if (error.code === 'P2002' && String(error.meta?.target || '').includes('email')) {
+      return res.status(409).json({ error: 'El email ya está en uso por otro usuario' });
+    }
     console.error('Error al actualizar perfil:', error);
     res.status(500).json({ error: 'Error al actualizar el perfil' });
   }

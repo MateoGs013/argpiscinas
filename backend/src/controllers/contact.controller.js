@@ -99,6 +99,9 @@ const updateContactStatus = async (req, res) => {
 
     res.json(contact);
   } catch (error) {
+    if (error.code === 'P2025') {
+      return res.status(404).json({ error: 'Contacto no encontrado' });
+    }
     console.error('Error al actualizar contacto:', error);
     res.status(500).json({ error: 'Error al actualizar el contacto' });
   }
@@ -114,6 +117,9 @@ const deleteContact = async (req, res) => {
 
     res.json({ message: 'Contacto eliminado correctamente' });
   } catch (error) {
+    if (error.code === 'P2025') {
+      return res.status(404).json({ error: 'Contacto no encontrado' });
+    }
     console.error('Error al eliminar contacto:', error);
     res.status(500).json({ error: 'Error al eliminar el contacto' });
   }

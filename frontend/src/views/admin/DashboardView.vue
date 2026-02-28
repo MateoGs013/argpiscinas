@@ -72,12 +72,12 @@
               <p class="font-medium text-neutral-900">{{ contact.name }}</p>
               <span :class="[
                 'px-2 py-1 text-xs font-medium rounded-full',
-                contact.read ? 'bg-neutral-100 text-neutral-600' : 'bg-primary-200 text-primary-800'
+                contact.status !== 'PENDING' ? 'bg-neutral-100 text-neutral-600' : 'bg-primary-200 text-primary-800'
               ]">
-                {{ contact.read ? 'Leído' : 'Nuevo' }}
+                {{ contact.status !== 'PENDING' ? 'Leído' : 'Nuevo' }}
               </span>
             </div>
-            <p class="text-sm text-neutral-600 truncate">{{ contact.subject }}</p>
+            <p class="text-sm text-neutral-600 truncate">{{ contact.service || contact.message }}</p>
             <p class="text-xs text-neutral-400 mt-1">{{ formatDate(contact.createdAt) }}</p>
           </div>
           <div v-if="recentContacts.length === 0" class="p-8 text-center text-neutral-500">
@@ -222,7 +222,7 @@ onMounted(async () => {
     const [postsRes, projectsRes, contactsRes] = await Promise.all([
       api.get('/posts/admin?limit=5'),
       api.get('/projects'),
-      api.get('/contact?limit=5')
+      api.get('/contacts?limit=5')
     ])
 
     // Posts: admin endpoint returns { posts, pagination: { total } }
