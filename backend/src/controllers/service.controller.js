@@ -1,6 +1,7 @@
 const prisma = require('../lib/prisma');
 const { parseId } = require('../lib/parseId');
 const { generateSlug, ensureUniqueSlug } = require('../lib/slugify');
+const { sanitize } = require('../lib/sanitize');
 
 function toBoolean(value, fallback = false) {
   if (value === undefined) return fallback;
@@ -96,7 +97,7 @@ const createService = async (req, res) => {
         title: String(title).trim(),
         slug,
         description: description || null,
-        content: content || null,
+        content: content ? sanitize(content) : null,
         image: image || null,
         features: normalizeFeatures(features),
         showOnHome: toBoolean(showOnHome, false),
@@ -136,7 +137,7 @@ const updateService = async (req, res) => {
       updateData.slug = await ensureUniqueSlug(prisma, 'service', baseSlug, id);
     }
     if (description !== undefined) updateData.description = description || null;
-    if (content !== undefined) updateData.content = content || null;
+    if (content !== undefined) updateData.content = content ? sanitize(content) : null;
     if (image !== undefined) updateData.image = image || null;
     if (features !== undefined) updateData.features = normalizeFeatures(features);
     if (showOnHome !== undefined) updateData.showOnHome = toBoolean(showOnHome, false);

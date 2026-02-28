@@ -6,6 +6,9 @@
         <img
           src="@/assets/img/RENOLIT_VOGUE_urban_DSC_8772.jpg"
           alt="Proyectos de piscinas realizados"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
           class="w-full h-full object-cover object-[56%_center] sm:object-center"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-midnight-900 via-midnight-800/70 to-midnight-800/40"></div>
@@ -189,6 +192,8 @@
               <img
                 :src="getProjectCover(project)"
                 :alt="project.title"
+                loading="lazy"
+                decoding="async"
                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div class="absolute top-4 left-4 flex flex-wrap items-center gap-2">

@@ -4,8 +4,12 @@
   "description": "Web corporativa moderna para empresa especializada en instalación y rehabilitación de piscinas con lámina armada.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "setup:local": "node scripts/setupLocalDev.js"
+    "setup:local": "node scripts/setupLocalDev.js",
+    "build:frontend": "npm run build --prefix frontend",
+    "test:backend": "npm run test --prefix backend",
+    "test:smoke": "npm run test:smoke --prefix backend && npm run test:smoke --prefix frontend",
+    "test": "npm run test:smoke",
+    "ci": "npm run test:smoke"
   },
   "keywords": [],
   "author": "",

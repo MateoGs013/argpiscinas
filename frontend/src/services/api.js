@@ -2,19 +2,27 @@ import axios from 'axios'
 
 const API_BASE = import.meta.env.VITE_API_URL || ''
 
-function getStoredToken() {
-  const directToken = localStorage.getItem('token')
-  if (directToken) return directToken
-
+function readPersistedAuthState() {
   const authStoreRaw = localStorage.getItem('auth')
   if (!authStoreRaw) return null
 
   try {
     const parsed = JSON.parse(authStoreRaw)
-    return parsed?.token || null
+    return parsed && typeof parsed === 'object' ? parsed : null
   } catch {
     return null
   }
+}
+
+function getStoredToken() {
+  const persistedAuth = readPersistedAuthState()
+  return persistedAuth?.token || null
+}
+
+function clearStoredAuthState() {
+  localStorage.removeItem('auth')
+  // Legacy key cleanup from previous versions.
+  localStorage.removeItem('token')
 }
 
 const api = axios.create({
@@ -59,10 +67,15 @@ api.interceptors.response.use(
   (error) => {
     // Handle 401 Unauthorized
     if (error.response?.status === 401) {
-      localStorage.removeItem('token')
-      
-      // Only redirect if not on login page
-      if (!window.location.pathname.includes('/admin/login')) {
+      clearStoredAuthState()
+      delete api.defaults.headers.common['Authorization']
+
+      const requestUrl = String(error.config?.url || '')
+      const isAuthLoginRequest = requestUrl.includes('/auth/login')
+      const isAdminArea = window.location.pathname.startsWith('/admin')
+      const isLoginPage = window.location.pathname.startsWith('/admin/login')
+
+      if (!isAuthLoginRequest && isAdminArea && !isLoginPage) {
         window.location.assign('/admin/login')
       }
     }

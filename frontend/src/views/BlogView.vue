@@ -6,6 +6,9 @@
         <img 
           src="@/assets/img/RENOLIT_3000- Marbre (7).jpg" 
           alt="Blog sobre piscinas"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
           class="w-full h-full object-cover"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-midnight-800 via-midnight-800/70 to-midnight-800/40"></div>

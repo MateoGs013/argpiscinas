@@ -4,8 +4,10 @@
   "description": "Backend API para ARG Piscinas - Instalación y rehabilitación de piscinas",
   "main": "src/app.js",
   "scripts": {
-    "dev": "nodemon src/app.js",
-    "start": "node src/app.js",
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "test": "node scripts/smoke-health.js",
+    "test:smoke": "node scripts/smoke-health.js",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
