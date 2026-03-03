@@ -66,7 +66,7 @@
               <span class="text-sm text-neutral-500">{{ tag._count?.posts || 0 }}</span>
               <button 
                 @click="editTag(tag)"
-                class="ml-3 p-1 text-neutral-400 hover:text-primary-900 opacity-0 group-hover:opacity-100 transition-opacity"
+                class="ml-3 p-1 text-neutral-400 hover:text-primary-900 opacity-100 md:opacity-0 md:group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
               >
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -74,7 +74,7 @@
               </button>
               <button 
                 @click="confirmDelete(tag)"
-                class="p-1 text-neutral-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                class="p-1 text-neutral-400 hover:text-red-600 opacity-100 md:opacity-0 md:group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
               >
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
