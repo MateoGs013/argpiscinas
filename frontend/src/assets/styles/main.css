@@ -1,0 +1,318 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-midnight-800 text-silver-400 font-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold tracking-tight;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl;
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
+
+  a {
+    @apply transition-colors duration-300;
+  }
+}
+
+/* Component styles */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 font-medium rounded-boutique transition-all duration-400 focus:outline-none focus:ring-2 focus:ring-offset-2 uppercase tracking-wider text-sm;
+  }
+
+  .btn-primary {
+    @apply btn bg-midnight-800 text-white hover:bg-charcoal-600 focus:ring-charcoal-400;
+  }
+
+  .btn-secondary {
+    @apply btn bg-transparent text-white border border-white/20 hover:bg-white/5 focus:ring-white/30;
+  }
+
+  .btn-white {
+    @apply btn bg-white text-midnight-800 hover:bg-neutral-100 focus:ring-white/50;
+  }
+
+  .btn-lg {
+    @apply px-8 py-4 text-sm;
+  }
+
+  .btn-sm {
+    @apply px-4 py-2 text-xs;
+  }
+
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+
+  .card {
+    @apply bg-white rounded-boutique-lg border border-neutral-100 overflow-hidden transition-all duration-500;
+  }
+
+  .card-hover {
+    @apply hover:shadow-lg hover:-translate-y-0.5;
+  }
+
+  .input {
+    @apply w-full px-4 py-3 border border-neutral-200 rounded-boutique focus:outline-none focus:ring-2 focus:ring-midnight-800 focus:border-transparent transition-all duration-300 bg-white;
+  }
+
+  .input-error {
+    @apply border-red-500 focus:ring-red-500;
+  }
+
+  .label {
+    @apply block text-xs font-medium text-neutral-500 mb-2 uppercase tracking-wider;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium tracking-wide;
+  }
+
+  .badge-primary {
+    @apply badge bg-midnight-800/10 text-midnight-800;
+  }
+
+  .badge-success {
+    @apply badge bg-green-50 text-green-700;
+  }
+
+  .badge-warning {
+    @apply badge bg-yellow-50 text-yellow-700;
+  }
+
+  .badge-danger {
+    @apply badge bg-red-50 text-red-700;
+  }
+
+  .link {
+    @apply text-midnight-800 hover:text-charcoal-500 font-medium;
+  }
+
+  /* Prose for blog content */
+  .prose {
+    @apply text-neutral-600 leading-relaxed;
+  }
+
+  .prose h1 {
+    @apply text-3xl md:text-4xl font-bold text-neutral-900 mt-8 mb-4;
+  }
+
+  .prose h2 {
+    @apply text-2xl md:text-3xl font-bold text-neutral-900 mt-8 mb-4;
+  }
+
+  .prose h3 {
+    @apply text-xl md:text-2xl font-semibold text-neutral-900 mt-6 mb-3;
+  }
+
+  .prose p {
+    @apply mb-4;
+  }
+
+  .prose ul, .prose ol {
+    @apply mb-4 pl-6;
+  }
+
+  .prose ul {
+    @apply list-disc;
+  }
+
+  .prose ol {
+    @apply list-decimal;
+  }
+
+  .prose li {
+    @apply mb-2;
+  }
+
+  .prose a {
+    @apply text-midnight-800 hover:text-charcoal-500 underline;
+  }
+
+  .prose blockquote {
+    @apply border-l-4 border-charcoal-400/30 pl-4 italic text-neutral-500 my-4;
+  }
+
+  .prose code {
+    @apply bg-neutral-100 px-2 py-1 rounded text-sm font-mono;
+  }
+
+  .prose pre {
+    @apply bg-midnight-800 text-silver-400 p-4 rounded-boutique overflow-x-auto my-4;
+  }
+
+  .prose pre code {
+    @apply bg-transparent p-0;
+  }
+
+  .prose img {
+    @apply rounded-boutique-lg my-6 w-full;
+  }
+
+  .prose table {
+    @apply w-full border-collapse my-4;
+  }
+
+  .prose th, .prose td {
+    @apply border border-neutral-200 px-4 py-2 text-left;
+  }
+
+  .prose th {
+    @apply bg-neutral-50 font-semibold text-neutral-900;
+  }
+
+  .prose hr {
+    @apply border-neutral-200 my-8;
+  }
+
+  /* Dark prose variant */
+  .prose-dark {
+    @apply text-silver-400;
+  }
+
+  .prose-dark h1, .prose-dark h2, .prose-dark h3 {
+    @apply text-white;
+  }
+
+  .prose-dark a {
+    @apply text-silver-300 hover:text-white;
+  }
+
+  .prose-dark blockquote {
+    @apply border-charcoal-400/30 text-silver-400/70;
+  }
+
+  .prose-dark code {
+    @apply bg-charcoal-600/50 text-silver-300;
+  }
+
+  .prose-dark th {
+    @apply bg-charcoal-600/30 text-silver-300;
+  }
+
+  .prose-dark th, .prose-dark td {
+    @apply border-charcoal-400/20;
+  }
+
+  /* Section helpers */
+  .section-dark {
+    @apply bg-midnight-800 text-silver-400;
+  }
+
+  .section-light {
+    @apply bg-neutral-50 text-neutral-700;
+  }
+
+  .section-alt {
+    @apply bg-charcoal-600 text-silver-400;
+  }
+}
+
+/* Animation utilities */
+@layer utilities {
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+  .animate-delay-400 {
+    animation-delay: 400ms;
+  }
+  .animate-delay-500 {
+    animation-delay: 500ms;
+  }
+
+  /* GSAP initial states */
+  .gsap-hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-silver-400 to-white;
+  }
+
+  /* Scrollbar styling */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.charcoal.400') transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: theme('colors.charcoal.400');
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: theme('colors.silver.400');
+  }
+}
+
+/* Global moody image filter */
+img:not(.no-filter) {
+  filter: saturate(0.75) contrast(1.05) brightness(0.95);
+}
+
+/* Dark scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: theme('colors.midnight.800');
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: theme('colors.charcoal.500');
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: theme('colors.charcoal.400');
+}
