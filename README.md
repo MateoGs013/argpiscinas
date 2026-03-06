@@ -28,27 +28,44 @@ Web corporativa moderna para empresa especializada en instalación y rehabilitac
 
 ### 1. Clonar repositorio
 ```bash
-git clone https://github.com/tu-usuario/argpiscinas.git
-cd argpiscinas
+git clone https://github.com/MateoGs013/argpiscinas.git
+cd argpiscinas/frontend
 ```
 
-### 2. Configurar Backend
+### 2. Configurar variables de entorno
 ```bash
-cd backend
-npm install
-
-# Configurar variables de entorno
+# Copiar archivo de ejemplo
 cp .env.example .env
-# Editar .env con tus credenciales de MySQL
+
+# Editar .env con tu configuración
+# VITE_API_URL=https://api.argpiscinas.pegasuz.com.ar
 ```
 
-Editar `.env`:
-```env
-DATABASE_URL="mysql://usuario:contraseña@localhost:3306/argpiscinas"
-JWT_SECRET="tu-clave-secreta-muy-segura"
-JWT_EXPIRES_IN="7d"
-PORT=3001
+### 3. Instalar dependencias
+```bash
+npm install
 ```
+
+### 4. Ejecutar en desarrollo
+```bash
+npm run dev
+```
+
+### 5. Build para producción
+```bash
+npm run build
+```
+
+## 🌍 Multi-idioma
+
+El proyecto soporta automáticamente inglés (EN), español (ES) y alemán (DE):
+
+- `http://localhost:5173/` - Español (por defecto)
+- `http://localhost:5173/en/` - English
+- `http://localhost:5173/de/` - Deutsch
+
+Las traducciones estáticas están en `/public/locales/` como archivos JSON.
+El contenido dinámico (desde API) se traduce automáticamente usando MyMemory.
 
 ### 3. Configurar Base de Datos
 ```bash
