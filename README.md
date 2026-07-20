@@ -244,8 +244,8 @@ MIT
 
 ## 👥 Autor
 
-Tu Nombre - [tu@email.com](mailto:tu@email.com)
+Mateo Sonzogni - [mateogabus@gmail.com](mailto:mateogabus@gmail.com) · [@MateoGs013](https://github.com/MateoGs013)
 
 ---
 
-Desarrollado con ❤️ para ARG Piscinas
+Desarrollado con ❤️ para ARG Piscinas · **En producción: [argpiscinas.es](https://www.argpiscinas.es/)**
