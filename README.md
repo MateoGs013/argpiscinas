@@ -2,6 +2,10 @@
 
 Web corporativa moderna para empresa especializada en instalación y rehabilitación de piscinas con lámina armada.
 
+**🔗 En producción: [argpiscinas.es](https://www.argpiscinas.es/)**
+
+![ARG Piscinas — home](docs/preview-hero.jpg)
+
 ## 🚀 Tecnologías
 
 ### Frontend
